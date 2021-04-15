@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+input ,input:focus, textarea:focus, button:focus, select:focus {
+    outline: none !important;
+}
+
+body {
+    font-family: 'My-Font';
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+@font-face {
+    font-family: 'My-Font';
+    src: url('../fonts/VarelaRound-Regular.ttf');
+};

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/layouts/head') %>
+
+    <%- include('partials/layouts/styles') %>
+</head>
+
+<body>
+    <div class="admin-container">
+        <div class="admin-content">
+            <div class="admin-sidebar">
+                <div class="admin-sidebar-header">
+                    <p class="admin-title">Administrator</p>
+                </div>
+                <div class="admin-sidebar-body">
+                    <div class="admin-menu-list">
+                        <a href="" class="admin-menu-link">
+                            <p><i class="fa fa-home" aria-hidden="true"></i> Trang chủ Admin</p>
+                            <i class="fa fa-caret-down" aria-hidden="true"></i>
+                        </a>
+                        <a href="" class="admin-menu-link">
+                            <p><i class="fa fa-bars" aria-hidden="true"></i> Quản trị giao diện</p>
+                            <i class="fa fa-caret-down" aria-hidden="true"></i>
+                        </a>
+                        <a href="" class="admin-menu-link">
+                            <p><i class="fa fa-money" aria-hidden="true"></i> Quản trị thông tin</p>
+                            <i class="fa fa-caret-down" aria-hidden="true"></i>
+                        </a>
+                        <a href="" class="admin-menu-link">
+                            <p><i class="fa fa-paper-plane" aria-hidden="true"></i> Seo Website</p>
+                            <i class="fa fa-caret-down" aria-hidden="true"></i>
+                        </a>
+                        <a href="" class="admin-menu-link">
+                            <p><i class="fa fa-user" aria-hidden="true"></i> Quản lý User</p>
+                            <i class="fa fa-caret-down" aria-hidden="true"></i>
+
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="admin-form">
+                <div class="admin-form-header">
+                    <a title="Cấu hình user" href="" class="link-this-page">
+                        <p><i class="fa fa-user" aria-hidden="true"></i> Cấu hình User</p>
+                    </a>
+                    <a title="Chuyển đến trang chủ" href="/" class="link-to-web">Vào trang Web</a>
+                </div>
+                <form action="<%= user %> " method="POST">
+                    <div class="admin-form-item">
+                        <label for="">Loại tài khoản:</label>
+                        <select name="typeUser" id="">
+                            <option value="admin">Quản trị viên</option>
+                            <option value="employee">Nhân viên</option>
+                        </select>
+                    </div>
+                    <div class="admin-form-item">
+                        <label for="">Tên tài khoản:</label>
+                        <input type="text" value="" name="nameAccount">
+                    </div>
+                    <div class="admin-form-item">
+                        <label for="">Họ tên:</label>
+                        <input type="text" name="nameUser">
+                    </div>
+                    <div class="admin-form-item">
+                        <label for="">Quyền hạn:</label>
+                        <div class="check-box-form-all">
+                            <div class="check-box-form">
+                                <div class="check-box-item-header">
+                                    <p class="check-box-item-title">Quyền chức vụ</p>
+                                </div>
+                                <div class="table-check-box">
+                                    <div class="item">
+                                        <input type="checkbox" name="roleManage" id="roleManage" <% if (fullRole[5] != 0) { %>
+                                         checked
+                                        <% } %>>
+                                        <label for="roleManage">Quyền quản lý</label>
+                                    </div>
+                                    <div class="item">
+                                        <input type="checkbox" name="roleReception" id="roleReception" <% if (fullRole[1] != 0) { %>
+                                            checked
+                                           <% } %>>
+                                        <label for="roleReception">Quyền tiếp tân</label>
+                                    </div>
+                                    <div class="item">
+                                        <input type="checkbox" name="roleDoctor" id="roleDoctor" <% if (fullRole[0] != 0) { %>
+                                            checked
+                                           <% } %>>
+                                        <label for="roleDoctor">Quyền bác sĩ</label>
+                                    </div>
+                                    <div class="item">
+                                        <input type="checkbox" name="roleService" id="roleService" <% if (fullRole[2] != 0) { %>
+                                            checked
+                                           <% } %>>
+                                        <label for="roleService">Quyền nhân viên dịch vụ</label>
+                                    </div>
+                                    <div class="item">
+                                        <input type="checkbox" name="roleFinancial" id="roleFinancial" <% if (fullRole[6] != 0) { %>
+                                            checked
+                                           <% } %>>
+                                        <label for="roleFinancial">Quyền nhân viên tài vụ</label>
+                                    </div>
+                                    <div class="item">
+                                        <input type="checkbox" name="roleBuyDrug" id="roleBuyDrug" <% if (fullRole[4] != 0) { %>
+                                            checked
+                                           <% } %>>
+                                        <label for="roleBuyDrug">Quyền nhân viên bán thuốc</label>
+                                    </div>
+                                    <div class="item">
+                                        <input type="checkbox" name="roleAccountant" id="roleAccountant"<% if (fullRole[3] != 0) { %>
+                                            checked
+                                           <% } %> >
+                                        <label for="roleAccountant">Quyền nhân viên kế toán</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="check-box-form">
+                                <div class="check-box-item-header">
+                                    <p class="check-box-item-title">Quyền trên bảng</p>
+                                </div>
+                                <div class="table-check-box">
+                                    <div class="item">
+                                        <input type="checkbox" name="roleTableEmp" id="roleTableEmp">
+                                        <label for="roleTableEmp">Bảng nhân viên</label>
+                                    </div>
+                                    <div class="item">
+                                        <input type="checkbox" name="roleTablePation" id="roleTablePation">
+                                        <label for="roleTablePation">Bảng bệnh nhân</label>
+                                    </div>
+                                    <div class="item">
+                                        <input type="checkbox" name="roleTableDrug" id="roleTableDrug">
+                                        <label for="roleTableDrug">Bảng thuốc</label>
+                                    </div>
+                                    <div class="item">
+                                        <input type="checkbox" name="roleTableService" id="roleTableService">
+                                        <label for="roleTableService">Bảng dịch vụ</label>
+                                    </div>
+                                    <div class="item">
+                                        <input type="checkbox" name="roleTableRoom" id="roleTableRoom">
+                                        <label for="roleTableRoom">Bảng phòng</label>
+                                    </div>
+                                    <div class="item">
+                                        <input type="checkbox" name="roleTableBill" id="roleTableBill">
+                                        <label for="roleTableBill">Bảng hóa đơn</label>
+                                    </div>
+                                    <div class="item">
+                                        <input type="checkbox" name="roleTableFS" id="roleTableFS">
+                                        <label for="roleTableFS">Bảng hồ sơ dịch vụ</label>
+                                    </div>
+                                    <div class="item">
+                                        <input type="checkbox" name="roleTableFD" id="roleTableFD">
+                                        <label for="roleTableFD">Bảng đơn thuốc</label>
+                                    </div>
+                                    <div class="item">
+                                        <input type="checkbox" name="roleTableShift" id="roleTableShift">
+                                        <label for="roleTableShift">Bảng lịch trực</label>
+                                    </div>
+                                    <div class="item">
+                                        <input type="checkbox" name="roleTableFP" id="roleTableFP">
+                                        <label for="roleTableFP">Bảng hồ sơ bệnh nhân</label>
+                                    </div>
+                                    <div class="item">
+                                        <input type="checkbox" name="roleTableUnit" id="roleTableUnit">
+                                        <label for="roleTableUnit">Bảng đơn vị</label>
+                                    </div>
+                                    <div class="item">
+                                        <input type="checkbox" name="roleTableWork" id="roleTableWork">
+                                        <label for="roleTableWork">Bảng chấm công</label>
+                                    </div>
+                                    <div class="item">
+                                        <input type="checkbox" name="roleTableDBD" id="roleTableDBD">
+                                        <label for="roleTableDBD">Bảng chi tiết đơn thuốc</label>
+                                    </div>
+                                    <div class="item">
+                                        <input type="checkbox" name="roleTableDBD" id="roleTableDBD">
+                                        <label for="roleTableDBD">Bảng chi tiết hóa đơn</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="check-box-form chech-box-form-active">
+                                <div class="check-box-item-header">
+                                    <p class="check-box-item-title">Quyền trên cột</p>
+                                </div>
+                                <div class="box-choose">
+                                    <label for="">Bảng:</label>
+                                    <select name="" id="option-table">
+                                        <option value="Dịch vụ">Dịch vụ</option>
+                                        <option value="Nhân viên">Nhân viên</option>
+                                        <option value="Bệnh nhân">Bệnh nhân</option>
+                                        <option value="Chấm công">Chấm công</option>
+                                        <option value="Đơn thuốc">Đơn thuốc</option>
+                                        <option value="Phòng">Phòng</option>
+                                        <option value="Thuốc">Thuốc</option>
+                                        <option value="Đơn vị">Đơn vị</option>
+                                        <option value="Hóa đơn">Hóa đơn</option>
+                                        <option value="Lịch trực">Lịch trực</option>
+                                        <option value="Hồ sơ dịch vụ">Hồ sơ dịch vụ</option>
+                                        <option value="Hồ sơ bệnh nhân">Hồ sơ bệnh nhân</option>
+                                        <option value="Chi tiết đơn thuốc">Chi tiết đơn thuốc</option>
+                                        <option value="Chi tiết hóa đơn">Chi tiết hóa đơn</option>
+                                    </select>
+                                </div>
+                                <div class="scroll-box">
+                                    <div class="table-check-box display-block">
+                                        <div class="item">
+                                            <input type="checkbox" name="colService" id="colService">
+                                            <label for="colService">Cột mã dịch vụ</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colNameService" id="colNameService">
+                                            <label for="colNameService">Cột tên dịch vụ</label>
+                                        </div>                                  
+                                    </div>
+                                    <div class="table-check-box">
+                                        <div class="item">
+                                            <input type="checkbox" name="colIDEmp" id="colIDEmp" <% if (fullEmp[0] == 1) { %>
+                                                checked
+                                               <% } %>>
+                                            <label for="colIDEmp">Cột mã nhân viên</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colNameEmp" id="colNameEmp" <% if (fullEmp[1] == 1) { %>
+                                                checked
+                                               <% } %>>
+                                            <label for="colNameEmp">Cột tên nhân viên</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colUnitEmp" id="colUnitEmp" <% if (fullEmp[2] == 1) { %>
+                                                checked
+                                               <% } %>>
+                                            <label for="colUnitEmp">Cột đơn vị</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colRoleEmp" id="colRoleEmp" <% if (fullEmp[3] == 1) { %>
+                                                checked
+                                               <% } %>>
+                                            <label for="colRoleEmp">Cột vai trò</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colBirthEmp" id="colBirthEmp"<% if (fullEmp[4] == 1) { %>
+                                                checked
+                                               <% } %> >
+                                            <label for="colBirthEmp">Cột năm sinh</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colAddrEmp" id="colAddrEmp" <% if (fullEmp[5] == 1) { %>
+                                                checked
+                                               <% } %>>
+                                            <label for="colAddrEmp">Cột địa chỉ</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colPhoneEmp" id="colPhoneEmp"<% if (fullEmp[6] == 1) { %>
+                                                checked
+                                               <% } %>>
+                                            <label for="colPhoneEmp">Cột số điện thoại</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colSalEmp" id="colSalEmp" <% if (fullEmp[7] == 1) { %>
+                                                checked
+                                               <% } %>>
+                                            <label for="colSalEmp">Cột lương</label>
+                                        </div>
+                                    </div>
+                                    <div class="table-check-box">
+                                        <div class="item">
+                                            <input type="checkbox" name="colIDPat" id="colIDPat">
+                                            <label for="colIDPat">Cột mã bệnh nhân</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colNamePat" id="colNamePat">
+                                            <label for="colNamePat">Cột tên bệnh nhân</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colBirthPat" id="colBirthPat">
+                                            <label for="colBirthPat">Cột năm sinh</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colAddrPat" id="colAddrPat">
+                                            <label for="colAddrPat">Cột địa chỉ</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colPhonePat" id="colPhonePat">
+                                            <label for="colPhonePat">Cột số điện thoại</label>
+                                        </div>
+                                    </div>
+                                    <div class="table-check-box">
+                                        <div class="item">
+                                            <input type="checkbox" name="colIDWork" id="colIDWork">
+                                            <label for="colIDWork">Cột mã chấm công</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colIDEmpWork" id="colIDEmpWork">
+                                            <label for="colIDEmpWork">Cột mã nhân viên</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colDayStartWord" id="colDayStartWord">
+                                            <label for="colDayStartWord">Cột ngày bắt đầu</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colDayEndWork" id="colDayEndWork">
+                                            <label for="colDayEndWork">Cột ngày kết thúc</label>
+                                        </div>
+                                    </div>
+                                    <div class="table-check-box">                                 
+                                        <div class="item">
+                                            <input type="checkbox" name="colIDUserBillDrug" id="colIDUserBillDrug">
+                                            <label for="colIDUserBillDrug">Cột mã đơn thuốc</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colIDFPatDrug" id="colIDFPatDrug">
+                                            <label for="colIDFPatDrug">Cột mã hồ sơ bệnh nhân</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colUserNumDrug" id="colUserNumDrug">
+                                            <label for="colUserNumDrug">Cột liều dùng</label>
+                                        </div>
+                                    </div>
+                                    <div class="table-check-box">
+                                        <div class="item">
+                                            <input type="checkbox" name="colIDRoom" id="colIDRoom">
+                                            <label for="colIDRoom">Cột mã phòng</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colNameRoom id="colNameRoom">
+                                            <label for="colNameRoom">Cột tên phòng</label>
+                                        </div>
+                                    </div>
+                                    <div class="table-check-box">                                   
+                                        <div class="item">
+                                            <input type="checkbox" name="colIDDrug" id="colIDDrug">
+                                            <label for="colIDDrug">Cột mã thuốc</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colNameDrug" id="colNameDrug">
+                                            <label for="colNameDrug">Cột tên thuốc</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colUnitDrug" id="colUnitDrug">
+                                            <label for="colUnitDrug">Cột đơn vị tính</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colDirDrug" id="colDirDrug">
+                                            <label for="colDirDrug">Cột chỉ định thuốc</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colPriceDrug" id="colPriceDrug">
+                                            <label for="colPriceDrug">Cột đơn giá</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="roleTableDBD" id="roleTableDBD">
+                                            <label for="roleTableDBD">Bảng chi tiết đơn thuốc</label>
+                                        </div>
+                                    </div>
+                                    <div class="table-check-box">
+                                        <div class="item">
+                                            <input type="checkbox" name="colIDUnit" id="colIDUnit">
+                                            <label for="colIDUnit">Cột mã đơn vị</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colNameUnit" id="colNameUnit">
+                                            <label for="colNameUnit">Cột tên đơn vị</label>
+                                        </div>
+                                    </div>
+                                    <div class="table-check-box">                                   
+                                        <div class="item">
+                                            <input type="checkbox" name="colIDBill" id="colIDBill">
+                                            <label for="colIDBill">Cột mã hóa đơn</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colIDFPatBill" id="colIDFPatBill">
+                                            <label for="colIDFPatBill">Cột mã hồ sơ bệnh nhân</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colEmpSet" id="colEmpSet">
+                                            <label for="colEmpSet">Cột nhân viên lập</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colDaySet" id="colDaySet">
+                                            <label for="colDaySet">Cột ngày lập</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colSumMoney" id="colSumMoney">
+                                            <label for="colSumMoney">Tổng tiền</label>
+                                        </div>
+                                    </div>
+                                    <div class="table-check-box">  
+                                        <div class="item">
+                                            <input type="checkbox" name="colIDCen" id="colIDCen">
+                                            <label for="colIDCen">Cột mã lịch trực</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colIDRomCen" id="colIDRomCen">
+                                            <label for="colIDRomCen">Cột mã phòng</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colIDEmpCen" id="colIDEmpCen">
+                                            <label for="colIDEmpCen">Cột mã nhân viên</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colDayStartCen" id="colDayStartCen">
+                                            <label for="colDayStartCen">Cột ngày bắt đầu</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colDayEndCen" id="colDayEndCen">
+                                            <label for="colDayEndCen">Cột ngày kêt thúc</label>
+                                        </div>
+                                    </div>
+                                    <div class="table-check-box">
+                                        <div class="item">
+                                            <input type="checkbox" name="colIDDeSer" id="colIDDeSer">
+                                            <label for="colIDDeSer">Cột mã chi tiết dịch vụ</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colSer" id="colSer">
+                                            <label for="colSer">Cột mã dịch vụ</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colFPatSer" id="colFPatSer">
+                                            <label for="colFPatSer">Cột mã hồ sơ bệnh nhân</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colEmpAct" id="colEmpAct">
+                                            <label for="colEmpAct">Cột nhân viên thực hiện</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colDayAct" id="colDayAct">
+                                            <label for="colDayAct">Cột ngày thực hiện</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colRes" id="colRes">
+                                            <label for="colRes">Cột kết quả</label>
+                                        </div>
+                                    </div>
+                                    <div class="table-check-box">
+                                        <div class="item">
+                                            <input type="checkbox" name="colIDFPatSer" id="colIDFPatSer">
+                                            <label for="colIDFPatSer">Cột mã hồ sơ bệnh nhân</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colPatSer" id="colPatSer">
+                                            <label for="colPatSer">Cột mã bệnh nhân</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colDoctor" id="colDoctor">
+                                            <label for="colDoctor">Cột bác sĩ điều trị</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colEmpSup" id="colEmpSup">
+                                            <label for="colEmpSup">Cột nhân viên điều phối</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colStatus" id="colStatus">
+                                            <label for="colStatus">Cột tình trạng ban đầu</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colDayExam" id="colDayExam">
+                                            <label for="colDayExam">Cột ngày khám</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colResDoctor" id="colResDoctor">
+                                            <label for="colResDoctor">Cột kết luận của bác sĩ</label>
+                                        </div>
+                                    </div>
+                                    <div class="table-check-box">
+                                        <div class="item">
+                                            <input type="checkbox" name="colIDDeDrug" id="colIDDeDrug">
+                                            <label for="colIDDeDrug">Cột mã chi tiết đơn thuốc</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colFBilDrug" id="colFBilDrug">
+                                            <label for="colFBilDrug">Cột mã đơn thuốc</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colIDFDrug" id="colIDFDrug">
+                                            <label for="colIDFDrug">Cột mã thuốc</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colCountDrug" id="colCountDrug">
+                                            <label for="colCountDrug">Cột số lượng</label>
+                                        </div>
+                                    </div>
+                                    <div class="table-check-box">
+                                        <div class="item">
+                                            <input type="checkbox" name="colDeBill" id="colDeBill">
+                                            <label for="colDeBill">Cột mã chi tiết hóa đơn</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colDeSer" id="colDeSer">
+                                            <label for="colDeSer">Cột mã chi tiết dịch vụ</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colBill" id="colBill">
+                                            <label for="colIDFDrug">Cột mã hóa đơn</label>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="colUnitBill" id="colUnitBill">
+                                            <label for="colUnitBill">Cột đơn giá</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <div class="box-btn">
+                        <button type="submit" class="user-role-submit">Lưu thay đổi</button>
+                        <a href="../user" class="exit-link">Thoát</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <% if (message == 'true') { %>
+        <div class="message-container">
+            <div class="message-title">
+                <% if (saveSuccess == 'true') { %>
+                    <p class="title"><i class="fa fa-check" aria-hidden="true"></i> Lưu thành công</p>
+                <% } else { %>
+                    <p class="title-fail"><i class="fa fa-times" aria-hidden="true"></i> Lưu thất bại</p>
+                 <% } %> 
+    
+            </div>
+        </div>
+    <% } %>
+    
+    
+
+    <%- include('partials/layouts/scripts') %>
+</body>
+
+</html>

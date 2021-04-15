@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/layouts/head') %> 
+    <%- include('partials/layouts/styles') %> 
+
+</head>
+<body>
+    <%- include('partials/layouts/header') %>
+
+    <div class="login-container">
+        <div class="login-header">
+            <p class="login-title">Đăng nhập để sử dụng dịch vụ</p>
+        </div>
+        <div class="login-body">
+            <form action="admin/user" class="form-group" method="POST">
+                <div class="login-form">
+                    <label for="">Nhập tên</label>
+                    <input type="text" name="user" placeholder="Tên của bạn"required> 
+                    <p class="login-message <% if (statusLogin == 'false') { %> opacity-1 <% } %>">Vui lòng nhập lại email</p>
+                    <label for="">Nhập mật khẩu</label>
+                    <input name="password" placeholder="Mật khẩu của bạn" type="password" name="password" required>
+                    <p class="login-message <% if (statusLogin == 'false') { %> opacity-1 <% } %>">Vui lòng nhập lại mật khẩu</p>
+                    <button type="submit" class="login-submit">Đăng nhập</button>
+                    <a href="" class="login-forgot-link">Quên mật khẩu ?</a>
+                </div> 
+            </form>     
+        </div>
+    </div>
+
+    <%- include('partials/layouts/scripts')  %> 
+</body>
+</html>
