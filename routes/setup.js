@@ -1,6 +1,26 @@
+var jwt = require('jsonwebtoken');
+
 module.exports = {
+
+
+    User: function (userName, passWord) {
+        this.userName = userName;
+        this.passWord = passWord;
+    },
+
+    checkToken: function (token) {
+        let tokenFlag = jwt.verify(token, 'vychuoi123', function (err, result) {
+            if (err) {
+                return 0;
+            }
+            else {
+                return 1;
+            }
+        });
+    },
+
     getUserName: function (string) {
-        return string.slice(3, string.length);
+        return string != '' ? string.slice(3, string.length) : 'alalal';
     },
 
     setUserName: function (string) {
@@ -9,22 +29,24 @@ module.exports = {
 
     getUserNameObject: function (obj) {
         for (let item in obj) {
-            obj[item]['nameaccount'] = this.getUserName(obj[item]['nameaccount'])
+            obj[item]['GRANTEE'] = this.getUserName(obj[item]['GRANTEE'])
         }
     },
 
     createArr: function (number) {
         let arr = [];
-        for(let i = 0; i < number; i++) {
+        for (let i = 0; i < number; i++) {
             arr.push(0);
         }
         return arr;
     },
 
+    
+
     tableEmp: function (obj) {
         let arr = this.createArr(8);
 
-        for(let item of obj) {
+        for (let item of obj) {
             switch (item.COLUMN_NAME) {
                 case 'IDNHANVIEN': {
                     arr[0] = 1;
@@ -67,7 +89,7 @@ module.exports = {
     tablePat: function (obj) {
         let arr = this.createArr(5);
 
-        for(let item of obj) {
+        for (let item of obj) {
             switch (item.COLUMN_NAME) {
                 case 'IDBENHNHAN': {
                     arr[0] = 1;
@@ -98,7 +120,7 @@ module.exports = {
     tableSer: function (obj) {
         let arr = this.createArr(2);
 
-        for(let item of obj) {
+        for (let item of obj) {
             switch (item.COLUMN_NAME) {
                 case 'IDDICHVU': {
                     arr[0] = 1;
@@ -117,7 +139,7 @@ module.exports = {
     tableWork: function (obj) {
         let arr = this.createArr(4);
 
-        for(let item of obj) {
+        for (let item of obj) {
             switch (item.COLUMN_NAME) {
                 case 'IDCHAMCONG': {
                     arr[0] = 1;
@@ -144,7 +166,7 @@ module.exports = {
     tableDetailBillDrug: function (obj) {
         let arr = this.createArr(4);
 
-        for(let item of obj) {
+        for (let item of obj) {
             switch (item.COLUMN_NAME) {
                 case 'IDCHITIETDONTHUOC': {
                     arr[0] = 1;
@@ -171,7 +193,7 @@ module.exports = {
     tableDetailBill: function (obj) {
         let arr = this.createArr(4);
 
-        for(let item of obj) {
+        for (let item of obj) {
             switch (item.COLUMN_NAME) {
                 case 'IDCHITIETHOADON': {
                     arr[0] = 1;
@@ -198,7 +220,7 @@ module.exports = {
     tableBillDrug: function (obj) {
         let arr = this.createArr(3);
 
-        for(let item of obj) {
+        for (let item of obj) {
             switch (item.COLUMN_NAME) {
                 case 'IDDONTHUOC': {
                     arr[0] = 1;
@@ -221,7 +243,7 @@ module.exports = {
     tableUnit: function (obj) {
         let arr = this.createArr(2);
 
-        for(let item of obj) {
+        for (let item of obj) {
             switch (item.COLUMN_NAME) {
                 case 'IDDONVI': {
                     arr[0] = 1;
@@ -240,7 +262,7 @@ module.exports = {
     tableBill: function (obj) {
         let arr = this.createArr(5);
 
-        for(let item of obj) {
+        for (let item of obj) {
             switch (item.COLUMN_NAME) {
                 case 'IDHOADON': {
                     arr[0] = 1;
@@ -271,7 +293,7 @@ module.exports = {
     tableFilePat: function (obj) {
         let arr = this.createArr(7);
 
-        for(let item of obj) {
+        for (let item of obj) {
             switch (item.COLUMN_NAME) {
                 case 'IDHOSOBENHNHAN': {
                     arr[0] = 1;
@@ -310,7 +332,7 @@ module.exports = {
     tableFillSer: function (obj) {
         let arr = this.createArr(6);
 
-        for(let item of obj) {
+        for (let item of obj) {
             switch (item.COLUMN_NAME) {
                 case 'IDCHITIETDICHVU': {
                     arr[0] = 1;
@@ -345,7 +367,7 @@ module.exports = {
     tableCel: function (obj) {
         let arr = this.createArr(5);
 
-        for(let item of obj) {
+        for (let item of obj) {
             switch (item.COLUMN_NAME) {
                 case 'IDLICHTRUC': {
                     arr[0] = 1;
@@ -376,7 +398,7 @@ module.exports = {
     tableRoom: function (obj) {
         let arr = this.createArr(2);
 
-        for(let item of obj) {
+        for (let item of obj) {
             switch (item.COLUMN_NAME) {
                 case 'IDPHONG': {
                     arr[0] = 1;
@@ -395,7 +417,7 @@ module.exports = {
     tableDrug: function (obj) {
         let arr = this.createArr(5);
 
-        for(let item of obj) {
+        for (let item of obj) {
             switch (item.COLUMN_NAME) {
                 case 'IDTHUOC': {
                     arr[0] = 1;
@@ -426,7 +448,7 @@ module.exports = {
     role: function (obj) {
         let arr = this.createArr(7);
 
-        for(let item of obj) {
+        for (let item of obj) {
             switch (item.GRANTED_ROLE) {
                 case 'DOCTOR_ROLE': {
                     arr[0] = 1;
