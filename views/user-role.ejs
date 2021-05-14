@@ -49,7 +49,7 @@
                     </a>
                     <a title="Chuyển đến trang chủ" href="/" class="link-to-web">Vào trang Web</a>
                 </div>
-                <form action="<%= user %> " method="POST">
+                <form action="<%= tableName %> " method="POST">
                     <div class="admin-form-item">
                         <label for="">Loại tài khoản:</label>
                         <select name="typeUser" id="">
@@ -68,1542 +68,278 @@
                     <div class="admin-form-item">
                         <label for="">Quyền hạn:</label>
                         <div class="check-box-form-all">
-                            <div class="check-box-form">
-                                <div class="check-box-item-header">
-                                    <p class="check-box-item-title">Quyền chức vụ</p>
+                            <div class="check-box-item">
+                                <div class="title-check-box-item">
+                                    <a href="/admin/user/<%= user %>/detail/role" class="link-detail-item">Quyền chức vụ</a>
                                 </div>
-                                <div class="table-check-box">
-                                    <div class="item">
-                                        <input type="checkbox" name="roleManage" id="roleManage" <% if (fullRole[5] !=0)
-                                            { %>
-                                        checked
-                                        <% } %>>
+                                <% if (type == 1) { %>
+                                    <div class="table-check-box">
+                                        <div class="item">
+                                            <input type="checkbox" name="roleManage" id="roleManage" <% if (fullRole[5] !=0) { %>
+                                            checked
+                                            <% } %>>
                                             <label for="roleManage">Quyền quản lý</label>
-                                    </div>
-                                    <div class="item">
-                                        <input type="checkbox" name="roleReception" id="roleReception" <% if
-                                            (fullRole[1] !=0) { %>
-                                        checked
-                                        <% } %>>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="roleReception" id="roleReception" <% if (fullRole[1] !=0) { %>
+                                            checked
+                                            <% } %>>
                                             <label for="roleReception">Quyền tiếp tân</label>
-                                    </div>
-                                    <div class="item">
-                                        <input type="checkbox" name="roleDoctor" id="roleDoctor" <% if (fullRole[0] !=0)
-                                            { %>
-                                        checked
-                                        <% } %>>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="roleDoctor" id="roleDoctor" <% if (fullRole[0] !=0) { %>
+                                            checked
+                                            <% } %>>
                                             <label for="roleDoctor">Quyền bác sĩ</label>
-                                    </div>
-                                    <div class="item">
-                                        <input type="checkbox" name="roleService" id="roleService" <% if (fullRole[2]
-                                            !=0) { %>
-                                        checked
-                                        <% } %>>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="roleService" id="roleService" <% if (fullRole[2]!=0) { %>
+                                            checked
+                                            <% } %>>
                                             <label for="roleService">Quyền nhân viên dịch vụ</label>
-                                    </div>
-                                    <div class="item">
-                                        <input type="checkbox" name="roleFinancial" id="roleFinancial" <% if
-                                            (fullRole[6] !=0) { %>
-                                        checked
-                                        <% } %>>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="roleFinancial" id="roleFinancial" <% if (fullRole[6] !=0) { %>
+                                            checked
+                                            <% } %>>
                                             <label for="roleFinancial">Quyền nhân viên tài vụ</label>
-                                    </div>
-                                    <div class="item">
-                                        <input type="checkbox" name="roleBuyDrug" id="roleBuyDrug" <% if (fullRole[4]
-                                            !=0) { %>
-                                        checked
-                                        <% } %>>
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="roleBuyDrug" id="roleBuyDrug" <% if (fullRole[4]!=0) { %>
+                                            checked
+                                            <% } %>>
                                             <label for="roleBuyDrug">Quyền nhân viên bán thuốc</label>
-                                    </div>
-                                    <div class="item">
-                                        <input type="checkbox" name="roleAccountant" id="roleAccountant" <% if
-                                            (fullRole[3] !=0) { %>
-                                        checked
-                                        <% } %> >
+                                        </div>
+                                        <div class="item">
+                                            <input type="checkbox" name="roleAccountant" id="roleAccountant" <% if(fullRole[3] !=0) { %>
+                                            checked
+                                            <% } %>>
                                             <label for="roleAccountant">Quyền nhân viên kế toán</label>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            </div>
+                            <div class="check-box-item">
+                                <div class="title-check-box-item">
+                                    <p>Quyền trên bảng</p>
+                                </div>
+                                <div class="container-check-box-item">
+                                    <div class="detail-check-box-item">
+                                        <a href="/admin/user/<%= user %>/detail/nhanvien" class="link-detail-item <% if (tableName == 'nhanvien') { %>
+                                         active-link
+                                        <% } %>">Nhân viên</a>
+                                        <a href="/admin/user/<%= user %>/detail/thuoc" class="link-detail-item <% if (tableName == 'thuoc') { %>
+                                         active-link
+                                        <% } %>">Thuốc</a>
+                                        <a href="/admin/user/<%= user %>/detail/dichvu" class="link-detail-item <% if (tableName == 'dichvu') { %>
+                                            active-link
+                                        <% } %>">Dịch vụ</a>
+                                        <a href="/admin/user/<%= user %>/detail/benhnhan" class="link-detail-item <% if (tableName == 'benhnhan') { %>
+                                            active-link
+                                           <% } %>">Bệnh nhân</a>
+                                        <a href="/admin/user/<%= user %>/detail/hoadon" class="link-detail-item <% if (tableName == 'hoadon') { %>
+                                            active-link
+                                           <% } %>">Hóa đơn</a>
+                                        <a href="/admin/user/<%= user %>/detail/chamcong" class="link-detail-item <% if (tableName == 'chamcong') { %>
+                                            active-link
+                                           <% } %>">Chấm công</a>
+                                        <a href="/admin/user/<%= user %>/detail/chitiethoadon" class="link-detail-item <% if (tableName == 'chitiethoadon') { %>
+                                            active-link
+                                           <% } %>">Chi tiết hóa đơn</a>
+                                        <a href="/admin/user/<%= user %>/detail/donthuoc" class="link-detail-item <% if (tableName == 'donthuoc') { %>
+                                            active-link
+                                           <% } %>">Đơn thuốc</a>
+                                        <a href="/admin/user/<%= user %>/detail/phong" class="link-detail-item <% if (tableName == 'phong') { %>
+                                            active-link
+                                           <% } %>">Phòng</a>
+                                        <a href="/admin/user/<%= user %>/detail/donvi" class="link-detail-item <% if (tableName == 'donvi') { %>
+                                            active-link
+                                           <% } %>">Đơn vị</a>
+                                        <a href="/admin/user/<%= user %>/detail/lichtruc" class="link-detail-item <% if (tableName == 'lichtruc') { %>
+                                            active-link
+                                           <% } %>">Lịch trực</a>
+                                        <a href="/admin/user/<%= user %>/detail/hosobenhan" class="link-detail-item <% if (tableName == 'hosobenhnhan') { %>
+                                            active-link
+                                           <% } %>">Hồ sơ bệnh án</a>
+                                        <a href="/admin/user/<%= user %>/detail/chitietdonthuoc" class="link-detail-item <% if (tableName == 'chitietdonthuoc') { %>
+                                            active-link
+                                           <% } %>">Chi tiết đơn thuốc</a>
+                                        <a href="/admin/user/<%= user %>/detail/hosodichvu" class="link-detail-item <% if (tableName == 'hosodichvu') { %>
+                                            active-link
+                                           <% } %>">Hồ sơ dịch vụ</a>
+                                    </div>
+                                    <div class="table-check-box">
+                                        <% if (type == 2) { %>
+                                            <div class="item">
+                                                <label for="">Bảng <%= tableHasSign %> </label>
+                                                <div class="item-checkbox">
+                                                    <div class="item-checkbox-content">
+                                                        <div class="detail-item-checkbox-content">
+                                                            <input type="checkbox" name="delete-table" id="delete" class="role" <% if (allRole[0]['PRIVILEGE']) { %>
+                                                                checked
+                                                            <% } %>>
+                                                            <label for="delete">Delete</label>
+                                                        </div>
+                                                        <div class="detail-item-checkbox-content">
+                                                            <input type="checkbox" name="pdelete-table" id="pdelete" class="grant-role" <% if (allRole[0]['GRANTABLE']) { %>
+                                                                checked
+                                                            <% } %>>
+                                                            <label for="pdelete">Delete</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="item-checkbox-content">
+                                                        <div class="detail-item-checkbox-content">
+                                                            <input type="checkbox" name="insert-table" id="insert" class="role" <% if (allRole[1]['PRIVILEGE']) { %>
+                                                                checked
+                                                            <% } %>>
+                                                            <label for="insert">Insert</label>
+                                                        </div>
+                                                        <div class="detail-item-checkbox-content">
+                                                            <input type="checkbox" name="pinsert-table" id="pinsert" class="grant-role" <% if (allRole[1]['GRANTABLE']) { %>
+                                                                checked
+                                                            <% } %>>
+                                                            <label for="pinsert">Insert</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="item-checkbox-content">
+                                                        <div class="detail-item-checkbox-content">
+                                                            <input type="checkbox" name="select-table" id="select" class="role" <% if (allRole[2]['PRIVILEGE']) { %>
+                                                                checked
+                                                            <% } %>>
+                                                            <label for="select">Select</label>
+                                                        </div>
+                                                        <div class="detail-item-checkbox-content">
+                                                            <input type="checkbox" name="pselect-table" id="pselect" class="grant-role" <% if (allRole[2]['GRANTABLE']) { %>
+                                                                checked
+                                                            <% } %>>
+                                                            <label for="pselect">Select</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="item-checkbox-content">
+                                                        <div class="detail-item-checkbox-content">
+                                                            <input type="checkbox" name="update-table" id="update" class="role" <% if (allRole[3]['PRIVILEGE']) { %>
+                                                                checked
+                                                            <% } %> >
+                                                            <label for="update">Update</label>
+                                                        </div>
+                                                        <div class="detail-item-checkbox-content">
+                                                            <input type="checkbox" name="pupdate-table" id="pupdate" class="grant-role" <% if (allRole[3]['GRANTABLE']) { %>
+                                                                checked
+                                                            <% } %>>
+                                                            <label for="pupdate">Update</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% } %>
                                     </div>
                                 </div>
                             </div>
-                            <div class="check-box-form">
-                                <div class="check-box-item-header">
-                                    <p class="check-box-item-title">Quyền trên bảng</p>
+                            <div class="check-box-item chech-box-item-active">
+                                <div class="title-check-box-item">
+                                    <p>Quyền trên cột</p>
                                 </div>
-                                <div class="table-check-box">
-                                    <div class="item">
-                                        <label for="">Bảng nhân viên</label>
-                                        <div class="item-checkbox">
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="stableEmp" id="stableEmp" 
-                                                <% allRole[0].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'SELECT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="stableEmp">Select</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="utableEmp" id="utableEmp"
-                                                <% allRole[0].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'UPDATE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="utableEmp">Update</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="itableEmp" id="itableEmp"
-                                                <% allRole[0].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'INSERT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="itableEmp">Insert</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="dtableEmp" id="dtableEmp"
-                                                <% allRole[0].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'DELECT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="dtableEmp">Delete</label>
-                                            </div>
-                                        </div>
+                                <div class="container-check-box-item">
+                                    <div class="detail-check-box-item">
+                                        <a href="/admin/user/<%= user %>/detail/nhanviencol" class="link-detail-item <% if (tableName == 'nhanviencol') { %>
+                                         active-link
+                                        <% } %>">Nhân viên</a>
+                                        <a href="/admin/user/<%= user %>/detail/thuoccol" class="link-detail-item <% if (tableName == 'thuoccol') { %>
+                                         active-link
+                                        <% } %>">Thuốc</a>
+                                        <a href="/admin/user/<%= user %>/detail/dichvucol" class="link-detail-item <% if (tableName == 'dichvucol') { %>
+                                            active-link
+                                        <% } %>">Dịch vụ</a>
+                                        <a href="/admin/user/<%= user %>/detail/benhnhancol" class="link-detail-item <% if (tableName == 'benhnhancol') { %>
+                                            active-link
+                                           <% } %>">Bệnh nhân</a>
+                                        <a href="/admin/user/<%= user %>/detail/hoadoncol" class="link-detail-item <% if (tableName == 'hoadoncol') { %>
+                                            active-link
+                                           <% } %>">Hóa đơn</a>
+                                        <a href="/admin/user/<%= user %>/detail/chamcongcol" class="link-detail-item <% if (tableName == 'chamcongcol') { %>
+                                            active-link
+                                           <% } %>">Chấm công</a>
+                                        <a href="/admin/user/<%= user %>/detail/chitiethoadoncol" class="link-detail-item <% if (tableName == 'chitiethoadoncol') { %>
+                                            active-link
+                                           <% } %>">Chi tiết hóa đơn</a>
+                                        <a href="/admin/user/<%= user %>/detail/donthuoccol" class="link-detail-item <% if (tableName == 'donthuoccol') { %>
+                                            active-link
+                                           <% } %>">Đơn thuốc</a>
+                                        <a href="/admin/user/<%= user %>/detail/phongcol" class="link-detail-item <% if (tableName == 'phongcol') { %>
+                                            active-link
+                                           <% } %>">Phòng</a>
+                                        <a href="/admin/user/<%= user %>/detail/donvicol" class="link-detail-item <% if (tableName == 'donvicol') { %>
+                                            active-link
+                                           <% } %>">Đơn vị</a>
+                                        <a href="/admin/user/<%= user %>/detail/lichtruccol" class="link-detail-item <% if (tableName == 'lichtruccol') { %>
+                                            active-link
+                                           <% } %>">Lịch trực</a>
+                                        <a href="/admin/user/<%= user %>/detail/hosobenhancol" class="link-detail-item <% if (tableName == 'hosobenhnhancol') { %>
+                                            active-link
+                                           <% } %>">Hồ sơ bệnh án</a>
+                                        <a href="/admin/user/<%= user %>/detail/chitietdonthuoccol" class="link-detail-item <% if (tableName == 'chitietdonthuoccol') { %>
+                                            active-link
+                                           <% } %>">Chi tiết đơn thuốc</a>
+                                        <a href="/admin/user/<%= user %>/detail/hosodichvucol" class="link-detail-item <% if (tableName == 'hosodichvucol') { %>
+                                            active-link
+                                           <% } %>">Hồ sơ dịch vụ</a>
                                     </div>
-                                    <div class="item">
-                                        <label for="">Bảng bệnh nhân</label>
-                                        <div class="item-checkbox">
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="stablePat" id="stablePat"
-                                                <% allRole[1].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'SELECT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="stablePat">Select</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="utablePat" id="utablePat"
-                                                <% allRole[1].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'UPDATE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="utablePat">Update</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="itablePat" id="itablePat"
-                                                <% allRole[1].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'INSERT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="itablePat">Insert</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="dtablePat" id="dtablePat"
-                                                <% allRole[1].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'DELETE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="dtablePat">Delete</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <label for="">Bảng thuốc</label>
-                                        <div class="item-checkbox">
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="stableDrug" id="stableDrug"
-                                                <% allRole[2].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'SELECT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="stableDrug">Select</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="utableDrug" id="utableDrug"
-                                                <% allRole[2].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'UPDATE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="utableDrug">Update</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="itableDrug" id="itableDrug"
-                                                <% allRole[2].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'INSERT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="itableDrug">Insert</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="dtableDrug" id="dtableDrug"
-                                                <% allRole[2].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'DELETE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="dtableDrug">Delete</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <label for="">Bảng dịch vụ</label>
-                                        <div class="item-checkbox">
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="stableSer" id="stableSer"
-                                                <% allRole[3].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'SELECT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="stableSer">Select</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="utableSer" id="utableSer"
-                                                <% allRole[3].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'UPDATE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="utableSer">Update</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="itableSer" id="itableSer"
-                                                <% allRole[3].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'INSERT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="itableSer">Insert</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="dtableSer" id="dtableSer"
-                                                <% allRole[3].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'DELETE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="dtableSer">Delete</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <label for="">Bảng phòng</label>
-                                        <div class="item-checkbox">
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="stableRoom" id="stableRoom"
-                                                <% allRole[4].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'SELECT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="stableRoom">Select</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="utableRoom" id="utableRoom"
-                                                <% allRole[4].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'UPDATE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="utableRoom">Update</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="itableRoom" id="itableRoom"
-                                                <% allRole[4].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'INSERT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="itableRoom">Insert</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="dtableRoom" id="dtableRoom"
-                                                <% allRole[4].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'DELETE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="dtableRoom">Delete</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <label for="">Bảng hóa đơn</label>
-                                        <div class="item-checkbox">
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="stableBill" id="stableBill"
-                                                <% allRole[5].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'SELECT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="stableBill">Select</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="utableBill" id="utableBill"
-                                                <% allRole[5].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'UPDATE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="utableBill">Update</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="itableBill" id="itableBill"
-                                                <% allRole[5].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'INSERT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="itableBill">Insert</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="dtableBill" id="dtableBill"
-                                                <% allRole[5].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'DELETE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="dtableBill">Delete</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <label for="">Bảng hồ sơ dịch vụ</label>
-                                        <div class="item-checkbox">
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="stableFileSer" id="stableFileSer"
-                                                <% allRole[6].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'SELECT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="stableFileSer">Select</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="utableFileSer" id="utableFileSer"
-                                                <% allRole[6].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'UPDATE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="utableFileSer">Update</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="itableFileSer" id="itableFileSer"
-                                                <% allRole[6].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'INSERT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="itableFileSer">Insert</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="dtableFileSer" id="dtableFileSer"
-                                                <% allRole[6].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'DELETE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="dtableFileSer">Delete</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <label for="">Bảng đơn thuốc</label>
-                                        <div class="item-checkbox">
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="stableBillDrug" id="stableBillDrug"
-                                                <% allRole[7].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'SELECT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="stableBillDrug">Select</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="utableBillDrug" id="utableBillDrug"
-                                                <% allRole[7].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'UPDATE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="utableBillDrug">Update</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="itableBillDrug" id="itableBillDrug"
-                                                <% allRole[7].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'INSERT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="itableBillDrug">Insert</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="dtableBillDrug" id="dtableBillDrug"
-                                                <% allRole[7].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'DELETE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="dtableBillDrug">Delete</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <label for="">Bảng lịch trực</label>
-                                        <div class="item-checkbox">
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="stableSchedule" id="stableSchedule"
-                                                <% allRole[8].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'SELECT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="stableSchedule">Select</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="utableSchedule" id="utableSchedule"
-                                                <% allRole[8].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'UPDATE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="utableSchedule">Update</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="itableSchedule" id="itableSchedule"
-                                                <% allRole[8].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'INSERT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="itableSchedule">Insert</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="dtableSchedule" id="dtableSchedule"
-                                                <% allRole[8].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'DELETE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="dtableSchedule">Delete</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <label for="">Bảng hồ sơ bệnh nhân</label>
-                                        <div class="item-checkbox">
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="stableFilePat" id="stableFilePat"
-                                                <% allRole[9].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'SELECT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="stableFilePat">Select</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="utableFilePat" id="utableFilePat"
-                                                <% allRole[9].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'UPDATE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="utableFilePat">Update</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="itableFilePat" id="itableFilePat"
-                                                <% allRole[9].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'INSERT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="itableFilePat">Insert</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="dtableFilePat" id="dtableFilePat"
-                                                <% allRole[9].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'DELETE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="dtableFilePat">Delete</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <label for="">Bảng đơn vị</label>
-                                        <div class="item-checkbox">
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="stableUnit" id="stableUnit"
-                                                <% allRole[10].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'SELECT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="stableUnit">Select</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="utableUnit" id="utableUnit"
-                                                <% allRole[10].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'UPDATE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="utableUnit">Update</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="itableUnit" id="itableUnit"
-                                                <% allRole[10].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'INSERT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="itableUnit">Insert</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="dtableUnit" id="dtableUnit"
-                                                <% allRole[10].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'DELETE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="dtableUnit">Delete</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <label for="">Bảng chấm công</label>
-                                        <div class="item-checkbox">
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="stableWorkP" id="stableWorkP"
-                                                <% allRole[11].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'SELECT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="stableWorkP">Select</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="utableWorkP" id="utableWorkP"
-                                                <% allRole[11].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'UPDATE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="utableWorkP">Update</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="itableWorkP" id="itableWorkP"
-                                                <% allRole[11].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'INSERT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="itableWorkP">Insert</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="dtableWorkP" id="dtableWorkP"
-                                                <% allRole[11].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'DELETE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="dtableWorkP">Delete</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <label for="">Bảng chi tiết đơn thuốc</label>
-                                        <div class="item-checkbox">
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="stableDeBillDrug" id="stableDeBillDrug"
-                                                <% allRole[12].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'SELECT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="stableDeBillDrug">Select</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="utableDeBillDrug" id="utableDeBillDrug"
-                                                <% allRole[12].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'UPDATE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="utableDeBillDrug">Update</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="itableDeBillDrug" id="itableDeBillDrug"
-                                                <% allRole[12].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'INSERT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="itableDeBillDrug">Insert</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="dtableDeBillDrug" id="dtableDeBillDrug"
-                                                <% allRole[12].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'DELETE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="dtableDeBillDrug">Delete</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <label for="">Bảng chi tiết hóa đơn</label>
-                                        <div class="item-checkbox">
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="stableDeBill" id="stableDeBill"
-                                                <% allRole[13].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'SELECT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="stableDeBill">Select</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="utableDeBill" id="utableDeBill"
-                                                <% allRole[13].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'UPDATE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="utableDeBill">Update</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="itableDeBill" id="itableDeBill"
-                                                <% allRole[13].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'INSERT') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="itableDeBill">Insert</label>
-                                            </div>
-                                            <div class="item-checkbox-content">
-                                                <input type="checkbox" name="dtableDeBill" id="dtableDeBill"
-                                                <% allRole[13].forEach(item => { %>
-                                                    <% if (item['PRIVILEGE'] == 'DELETE') { %>
-                                                        checked
-                                                    <% } %>
-                                                <% }) %>>
-                                                <label for="dtableDeBill">Delete</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="check-box-form chech-box-form-active">
-                                <div class="check-box-item-header">
-                                    <p class="check-box-item-title">Quyền trên cột</p>
-                                </div>
-                                <div class="box-choose">
-                                    <label for="">Bảng:</label>
-                                    <select name="" id="option-table">
-                                        <option value="Dịch vụ">Dịch vụ</option>
-                                        <option value="Nhân viên">Nhân viên</option>
-                                        <option value="Bệnh nhân">Bệnh nhân</option>
-                                        <option value="Chấm công">Chấm công</option>
-                                        <option value="Đơn thuốc">Đơn thuốc</option>
-                                        <option value="Phòng">Phòng</option>
-                                        <option value="Thuốc">Thuốc</option>
-                                        <option value="Đơn vị">Đơn vị</option>
-                                        <option value="Hóa đơn">Hóa đơn</option>
-                                        <option value="Lịch trực">Lịch trực</option>
-                                        <option value="Hồ sơ dịch vụ">Hồ sơ dịch vụ</option>
-                                        <option value="Hồ sơ bệnh nhân">Hồ sơ bệnh nhân</option>
-                                        <option value="Chi tiết đơn thuốc">Chi tiết đơn thuốc</option>
-                                        <option value="Chi tiết hóa đơn">Chi tiết hóa đơn</option>
-                                    </select>
-                                </div>
-                                <div class="scroll-box">
-                                    <div class="table-check-box display-block">
-                                        <div class="item">
-                                            <label for="">Cột mã dịch vụ</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolService" id="scolService">
-                                                    <label for="scolService">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolService" id="ucolService">
-                                                    <label for="ucolService">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột tên dịch vụ</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolNameService" id="scolNameService">
-                                                    <label for="scolNameService">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolNameService" id="ucolNameService">
-                                                    <label for="ucolNameService">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="table-check-box">
-                                        <div class="item">
-                                            <label for="">Cột mã nhân viên</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolIDEmp" id="scolIDEmp">
-                                                    <label for="scolIDEmp">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolIDEmp" id="ucolIDEmp">
-                                                    <label for="ucolIDEmp">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột tên nhân viên</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolNameEmp" id="scolNameEmp">
-                                                    <label for="scolNameEmp">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolNameEmp" id="ucolNameEmp">
-                                                    <label for="ucolNameEmp">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột đơn vị</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolUnitEmp" id="scolUnitEmp">
-                                                    <label for="scolUnitEmp">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolUnitEmp" id="ucolUnitEmp">
-                                                    <label for="ucolUnitEmp">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột vai trò</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolRoleEmp" id="scolRoleEmp">
-                                                    <label for="scolRoleEmp">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolRoleEmp" id="ucolRoleEmp">
-                                                    <label for="ucolRoleEmp">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột năm sinh</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolBirthEmp" id="scolBirthEmp">
-                                                    <label for="scolBirthEmp">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolBirthEmp" id="ucolBirthEmp">
-                                                    <label for="ucolBirthEmp">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột địa chỉ</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolAddrEmp" id="scolAddrEmp">
-                                                    <label for="scolAddrEmp">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolAddrEmp" id="ucolAddrEmp">
-                                                    <label for="ucolAddrEmp">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột số điện thoại</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolPhoneEmp" id="scolPhoneEmp">
-                                                    <label for="scolPhoneEmp">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolPhoneEmp" id="ucolPhoneEmp">
-                                                    <label for="ucolPhoneEmp">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột lương</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolSalEmp" id="scolSalEmp">
-                                                    <label for="scolSalEmp">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolSalEmp" id="ucolSalEmp">
-                                                    <label for="ucolSalEmp">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="table-check-box">
-                                        <div class="item">
-                                            <label for="">Cột mã bệnh nhân</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolIDPat" id="scolIDPat">
-                                                    <label for="scolIDPat">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolIDPat" id="ucolIDPat">
-                                                    <label for="ucolIDPat">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột tên bệnh nhân</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolNamePat" id="scolNamePat">
-                                                    <label for="scolNamePat">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolNamePat" id="ucolNamePat">
-                                                    <label for="ucolNamePat">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột năm sinh</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolBirthPat" id="scolBirthPat">
-                                                    <label for="scolBirthPat">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolBirthPat" id="ucolBirthPat">
-                                                    <label for="ucolBirthPat">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột địa chỉ</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolAddrPat" id="scolAddrPat">
-                                                    <label for="scolAddrPat">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolAddrPat" id="ucolAddrPat">
-                                                    <label for="ucolAddrPat">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột số điện thoại</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolPhonePat" id="scolPhonePat">
-                                                    <label for="scolPhonePat">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolAddrPat" id="ucolPhonePat">
-                                                    <label for="ucolPhonePat">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="table-check-box">
-                                        <div class="item">
-                                            <label for="">Cột mã chấm công</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolIDWork" id="scolIDWork">
-                                                    <label for="scolIDWork">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolIDWork" id="ucolIDWork">
-                                                    <label for="ucolIDWork">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột mã nhân viên</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolIDEmpWork" id="scolIDEmpWork">
-                                                    <label for="scolIDEmpWork">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolIDEmpWork" id="ucolIDEmpWork">
-                                                    <label for="ucolIDEmpWork">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột ngày bắt đầu</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolDayStartWork"
-                                                        id="scolDayStartWork">
-                                                    <label for="scolDayStartWork">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolDayStartWork"
-                                                        id="ucolDayStartWork">
-                                                    <label for="ucolDayStartWork">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột ngày kết thúc</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolDayEndWork" id="scolDayEndWork">
-                                                    <label for="scolDayEndWork">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolDayEndWork" id="ucolDayEndWork">
-                                                    <label for="ucolDayEndWork">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="table-check-box">
-                                        <div class="item">
-                                            <label for="">Cột mã đơn thuốc</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolIDUserBillDrug"
-                                                        id="scolIDUserBillDrug">
-                                                    <label for="scolIDUserBillDrug">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolIDUserBillDrug"
-                                                        id="ucolIDUserBillDrug">
-                                                    <label for="ucolIDUserBillDrug">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột mã hồ sơ bệnh nhân</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolIDFPatDrug" id="scolIDFPatDrug">
-                                                    <label for="scolIDFPatDrug">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolIDFPatDrug" id="ucolIDFPatDrug">
-                                                    <label for="ucolIDFPatDrug">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột liều dùng</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolUserNumDrug" id="scolUserNumDrug">
-                                                    <label for="scolUserNumDrug">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolUserNumDrug" id="ucolUserNumDrug">
-                                                    <label for="ucolIDFPatDrug">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="table-check-box">
-                                        <div class="item">
-                                            <label for="">Cột mã phòng</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolIDRoom" id="scolIDRoom">
-                                                    <label for="scolIDRoom">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolIDRoom" id="ucolIDRoom">
-                                                    <label for="ucolIDRoom">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột tên phòng</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolNameRoom" id="scolNameRoom">
-                                                    <label for="scolNameRoom">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolNameRoom" id="ucolNameRoom">
-                                                    <label for="ucolNameRoom">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="table-check-box">
-                                        <div class="item">
-                                            <label for="">Cột mã thuốc</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolIDDrug" id="scolIDDrug">
-                                                    <label for="scolIDDrug">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolIDDrug" id="ucolIDDrug">
-                                                    <label for="ucolIDDrug">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột tên thuốc</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolNameDrug" id="scolNameDrug">
-                                                    <label for="scolNameDrug">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolNameDrug" id="ucolNameDrug">
-                                                    <label for="ucolNameDrug">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột đơn vị tính</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolUnitDrug" id="scolUnitDrug">
-                                                    <label for="scolUnitDrug">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolUnitDrug" id="ucolUnitDrug">
-                                                    <label for="ucolUnitDrug">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột chỉ định thuốc</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolDirDrug" id="scolDirDrug">
-                                                    <label for="scolDirDrug">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolDirDrug" id="ucolDirDrug">
-                                                    <label for="ucolDirDrug">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột đơn giá</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolPriceDrug" id="scolPriceDrug">
-                                                    <label for="scolPriceDrug">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolPriceDrug" id="ucolPriceDrug">
-                                                    <label for="ucolPriceDrug">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Bảng chi tiết đơn thuốc</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolTableDBD" id="scolTableDBD">
-                                                    <label for="scolTableDBD">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolTableDBD" id="ucolTableDBD">
-                                                    <label for="ucolTableDBD">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="table-check-box">
-                                        <div class="item">
-                                            <label for="">Cột mã đơn vị</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolIDUnit" id="scolIDUnit">
-                                                    <label for="scolIDUnit">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolIDUnit" id="ucolIDUnit">
-                                                    <label for="ucolIDUnit">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột tên đơn vị</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolNameUnit" id="scolNameUnit">
-                                                    <label for="scolNameUnit">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolNameUnit" id="ucolNameUnit">
-                                                    <label for="ucolNameUnit">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="table-check-box">
-                                        <div class="item">
-                                            <label for="">Cột mã hóa đơn</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolIDBill" id="scolIDBill">
-                                                    <label for="scolIDBill">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolIDBill" id="ucolIDBill">
-                                                    <label for="ucolIDBill">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột mã hồ sơ bệnh nhân</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolIDFPatBill" id="scolIDFPatBill">
-                                                    <label for="scolIDFPatBill">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolIDFPatBill" id="ucolIDFPatBill">
-                                                    <label for="ucolIDFPatBill">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột nhân viên lập</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolEmpSet" id="scolEmpSet">
-                                                    <label for="scolEmpSet">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolEmpSet" id="ucolEmpSet">
-                                                    <label for="ucolEmpSet">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột ngày lập</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolDaySet" id="scolDaySet">
-                                                    <label for="scolDaySet">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolDaySet" id="ucolDaySet">
-                                                    <label for="ucolDaySet">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Tổng tiền</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolSumMoney" id="scolSumMoney">
-                                                    <label for="scolSumMoney">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolSumMoney" id="ucolSumMoney">
-                                                    <label for="ucolSumMoney">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="table-check-box">
-                                        <div class="item">
-                                            <label for="">Cột mã lịch trực</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolIDCen" id="scolIDCen">
-                                                    <label for="scolIDCen">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolIDCen" id="ucolIDCen">
-                                                    <label for="ucolIDCen">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột mã phòng</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolIDRoomCen" id="scolIDRoomCen">
-                                                    <label for="scolIDRoomCen">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolIDRoomCen" id="ucolIDRoomCen">
-                                                    <label for="ucolIDRoomCen">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột mã nhân viên</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolIDEmpCen" id="scolIDEmpCen">
-                                                    <label for="scolIDEmpCen">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolIDEmpCen" id="ucolIDEmpCen">
-                                                    <label for="ucolIDEmpCen">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột ngày bắt đầu</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolDayStartCen" id="scolDayStartCen">
-                                                    <label for="scolDayStartCen">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolDayStartCen" id="ucolDayStartCen">
-                                                    <label for="ucolDayStartCen">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột ngày kêt thúc</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolDayEndCen" id="scolDayEndCen">
-                                                    <label for="scolDayEndCen">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolDayEndCen" id="ucolDayEndCen">
-                                                    <label for="ucolDayEndCen">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="table-check-box">
-                                        <div class="item">
-                                            <label for="">Cột mã chi tiết dịch vụ</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolIDDeSer" id="scolIDDeSer">
-                                                    <label for="scolIDDeSer">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolIDDeSer" id="ucolIDDeSer">
-                                                    <label for="ucolIDDeSer">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột mã dịch vụ</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolSer" id="scolSer">
-                                                    <label for="scolSer">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolSer" id="ucolSer">
-                                                    <label for="ucolSer">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột mã hồ sơ bệnh nhân</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolFPatSer" id="scolFPatSer">
-                                                    <label for="scolFPatSer">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolFPatSer" id="ucolFPatSer">
-                                                    <label for="ucolFPatSer">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột nhân viên thực hiện</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolEmpAct" id="scolEmpAct">
-                                                    <label for="scolEmpAct">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolEmpAct" id="ucolEmpAct">
-                                                    <label for="ucolEmpAct">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột ngày thực hiện</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolDayAct" id="scolDayAct">
-                                                    <label for="scolDayAct">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolDayAct" id="ucolDayAct">
-                                                    <label for="ucolDayAct">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột kết quả</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolRes" id="scolRes">
-                                                    <label for="scolRes">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolRes" id="ucolRes">
-                                                    <label for="ucolRes">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="table-check-box">
-                                        <div class="item">
-                                            <label for="">Cột mã hồ sơ bệnh nhân</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolIDFPatSer" id="scolIDFPatSer">
-                                                    <label for="scolIDFPatSer">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolIDFPatSer" id="ucolIDFPatSer">
-                                                    <label for="ucolIDFPatSer">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột mã bệnh nhân</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolPatSer" id="scolPatSer">
-                                                    <label for="scolPatSer">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolPatSer" id="ucolPatSer">
-                                                    <label for="ucolPatSer">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột bác sĩ điều trị</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolDoctor" id="scolDoctor">
-                                                    <label for="scolDoctor">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolDoctor" id="ucolDoctor">
-                                                    <label for="ucolDoctor">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột nhân viên điều phối</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolEmpSup" id="scolEmpSup">
-                                                    <label for="scolEmpSup">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolEmpSup" id="ucolEmpSup">
-                                                    <label for="ucolEmpSup">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột tình trạng ban đầu</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolStatus" id="scolStatus">
-                                                    <label for="scolStatus">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolStatus" id="ucolStatus">
-                                                    <label for="ucolStatus">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột ngày khám</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolDayExam" id="scolDayExam">
-                                                    <label for="scolDayExam">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolDayExam" id="ucolDayExam">
-                                                    <label for="ucolDayExam">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột kết luận của bác sĩ</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolResDoctor" id="scolResDoctor">
-                                                    <label for="scolResDoctor">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolResDoctor" id="ucolResDoctor">
-                                                    <label for="ucolResDoctor">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="table-check-box">
-                                        <div class="item">
-                                            <label for="">Cột mã chi tiết đơn thuốc</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolIDDeDrug" id="scolIDDeDrug">
-                                                    <label for="scolIDDeDrug">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolIDDeDrug" id="ucolIDDeDrug">
-                                                    <label for="ucolIDDeDrug">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột mã đơn thuốc</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolFBilDrug" id="scolFBilDrug">
-                                                    <label for="scolFBilDrug">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolFBilDrug" id="ucolFBilDrug">
-                                                    <label for="ucolFBilDrug">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột mã thuốc</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolIDFDrug" id="scolIDFDrug">
-                                                    <label for="scolIDFDrug">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolIDFDrug" id="ucolIDFDrug">
-                                                    <label for="ucolIDFDrug">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột số lượng</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolCountDrug" id="scolCountDrug">
-                                                    <label for="scolCountDrug">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolCountDrug" id="ucolCountDrug">
-                                                    <label for="ucolCountDrug">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="table-check-box">
-                                        <div class="item">
-                                            <label for="">Cột mã chi tiết hóa đơn</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolDeBill" id="scolDeBill">
-                                                    <label for="scolDeBill">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolDeBill" id="ucolDeBill">
-                                                    <label for="ucolDeBill">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột mã chi tiết dịch vụ</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolDeSer" id="scolDeSer">
-                                                    <label for="scolDeSer">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolDeSer" id="ucolDeSer">
-                                                    <label for="ucolDeSer">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột mã hóa đơn</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolIDFDrug" id="scolIDFDrug">
-                                                    <label for="scolIDFDrug">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolIDFDrug" id="ucolIDFDrug">
-                                                    <label for="ucolIDFDrug">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <label for="">Cột đơn giá</label>
-                                            <div class="item-checkbox">
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="scolUnitBill" id="scolUnitBill">
-                                                    <label for="scolUnitBill">Select</label>
-                                                </div>
-                                                <div class="item-checkbox-content">
-                                                    <input type="checkbox" name="ucolUnitBill" id="ucolUnitBill">
-                                                    <label for="ucolUnitBill">Update</label>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="scroll-box">
+                                        <% if (type == 3) { %>
+                                            <div class="table-check-box">
+                                                <% for( let i = 0; i < arrColRol[1].length; i++ ) { %>
+                                                    <div class="item">
+                                                        <label for="">Cột <%= arrColRol[0][0]['col_' + (i + 1)] %></label>
+                                                        <div class="item-checkbox">
+                                                            <div class="item-checkbox-content">
+                                                                <div class="detail-item-checkbox-content">
+                                                                    <input type="checkbox" name="scol<%= arrColRol[1][i]['column'] %>" class="role" id="scol<%= arrColRol[1][i]['column'] %>" <% if (arrColRol[1][i]['select']) { %> checked <% } %>>
+                                                                    <label for="scol<%= arrColRol[1][i]['column'] %>">Select</label>    
+                                                                </div>
+                                                                <div class="detail-item-checkbox-content">
+                                                                    <input type="checkbox" name="gscol<%= arrColRol[1][i]['column'] %>" class="grant-role" id="gscol<%= arrColRol[1][i]['column'] %>" <% if (arrColRol[1][i]['grantS']) { %> checked <% } %>>
+                                                                    <label for="gscol<%= arrColRol[1][i]['column'] %>">Grant</label>    
+                                                                </div>
+                                                            </div>
+                                                            <div class="item-checkbox-content">
+                                                                <div class="detail-item-checkbox-content">
+                                                                    <input type="checkbox" name="ucol<%= arrColRol[1][i]['column'] %>" class="role" id="ucol<%= arrColRol[1][i]['column'] %>" <% if (arrColRol[1][i]['update']) { %> checked <% } %>>
+                                                                    <label for="ucol<%= arrColRol[1][i]['column'] %>">Update</label>
+                                                                </div>
+                                                                <div class="detail-item-checkbox-content">
+                                                                    <input type="checkbox" name="gucol<%= arrColRol[1][i]['column'] %>" class="grant-role" id="gucol<%= arrColRol[1][i]['column'] %>" <% if (arrColRol[1][i]['grantU']) { %> checked <% } %>>
+                                                                    <label for="gucol<%= arrColRol[1][i]['column'] %>">Grant</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <% } %>
+                                                
+                                            </div>
+                                        <% } %>        
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
-                    <div class="box-btn">
-                        <button type="submit" class="user-role-submit">Lưu thay đổi</button>
-                        <a href="../../user/<%= user %>/role-back" class="exit-link">Thoát</a>
-                    </div>
-                </form>
+            <div class="box-btn">
+                <button type="submit" class="user-role-submit">Lưu thay đổi</button>
+                <a href="/admin/user" class="exit-link">Thoát</a>
             </div>
+            </form>
         </div>
     </div>
+    </div>
 
-    <% if (message=='true' ) { %>
+    <% if (message == 'true' ) { %>
         <div class="message-container">
             <div class="message-title">
-                <% if (saveSuccess=='true' ) { %>
+                <% if (saveSuccess == 'true' ) { %>
                     <p class="title"><i class="fa fa-check" aria-hidden="true"></i> Lưu thành công</p>
                     <% } else { %>
-                        <p class="title-fail"><i class="fa fa-times" aria-hidden="true"></i> Lưu thất bại</p>
-                        <% } %>
-
+                    <p class="title-fail"><i class="fa fa-times" aria-hidden="true"></i> Lưu thất bại</p>
+                    <% } %>
             </div>
         </div>
         <% } %>

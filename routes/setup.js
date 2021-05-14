@@ -19,8 +19,141 @@ module.exports = {
         });
     },
 
+    getArrCol: function (arr) {
+        let result = [];
+        for (let i in arr) {
+            if (i.indexOf('col') > -1) {
+                result.push(i.slice(4));
+            }
+        }
+        return result;
+    },
+    // 0: không có, 1: select, 2: select grant
+    createArr: function (arr) {
+        let obj = {
+            col: '',
+            dml: '',
+            grant: 0,
+        };
+        arr.push(obj);
+    },
+
+    getArrDML: function (arr) {
+        let result = [];
+        console.log(arr)
+        for (let i in arr) {
+            if (i.indexOf('col') > -1) {
+                let flag = i.slice(0, 1), obj;
+                if (flag != 'g') {
+                    if (flag == 's') {
+                        obj = {
+                            col: i.slice(4),
+                            dml: 'select',
+                            grant: 0,
+                        };
+                    }
+                    else if (flag == 'u') {
+                        obj = {
+                            col: i.slice(4),
+                            dml: 'update',
+                            grant: 0,
+                        };
+                    }
+                }
+                else if (flag == 'g') {
+                    flag = i.slice(1, 2);
+                    if (flag == 's') {
+                        obj = {
+                            col: i.slice(5),
+                            dml: 'select',
+                            grant: 1,
+                        };
+                    }
+                    else if (flag == 'u') {
+                        obj = {
+                            col: i.slice(5),
+                            dml: 'update',
+                            grant: 1,
+                        };
+                    }
+                }
+                result.push(obj);
+            }
+        }
+        return result;
+    },
+
+    getTableArrDML: function (arr) {
+        let result = [];
+        for (let i in arr) {
+            if (i.indexOf('table') > -1) {
+                let flag = i.slice(0, 1), obj;
+                if (flag != 'p') {
+                    if (flag == 's') {
+                        obj = {
+                            dml: 'select',
+                            grant: 0,
+                        };
+                    }
+                    else if (flag == 'u') {
+                        obj = {
+                            dml: 'update',
+                            grant: 0,
+                        };
+                    }
+                    else if (flag == 'i') {
+                        obj = {
+                            dml: 'insert',
+                            grant: 0,
+                        };
+                    }
+                    else if (flag == 'd') {
+                        obj = {
+                            dml: 'delete',
+                            grant: 0,
+                        };
+                    }
+                }
+                else if (flag == 'p') {
+                    flag = i.slice(1, 2);
+                    if (flag == 's') {
+                        obj = {
+                            dml: 'select',
+                            grant: 1,
+                        };
+                    }
+                    else if (flag == 'u') {
+                        obj = {
+                            dml: 'update',
+                            grant: 1,
+                        };
+                    }
+                    else if (flag == 'i') {
+                        obj = {
+                            dml: 'insert',
+                            grant: 1,
+                        };
+                    }
+                    else if (flag == 'd') {
+                        obj = {
+                            dml: 'delete',
+                            grant: 1,
+                        };
+                    }
+                }
+                result.push(obj);
+            }
+        }
+        return result;
+    },
+
+    checkInput: function (string) {
+        let format = /[ !@#$%^&*()_+\-=\[\]{};':"\|,.<>\/?]/;
+        return format.test(string) ? true : false;
+    },
+
     getUserName: function (string) {
-        return string != '' ? string.slice(3, string.length) : 'alalal';
+        return string != '' ? string.slice(3, string.length) : '';
     },
 
     setUserName: function (string) {
@@ -41,7 +174,7 @@ module.exports = {
         return arr;
     },
 
-    
+
 
     tableEmp: function (obj) {
         let arr = this.createArr(8);

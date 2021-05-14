@@ -525,81 +525,238 @@ $color_primary_b: #08974b;
                     .check-box-form-all {
                         width: 85%;
 
-                        .check-box-form {
-                            padding: 16px 32px;
-    
+                        .check-box-item {
+
+                            padding: 16px 0;
+
                             &:nth-child(1) {
-                                background-color: #ffdadf;
+
+                                .title-check-box-item {
+
+                                    a {
+                                        text-align: center;
+                                        display: block;
+                                        width: 150px;
+                                        margin: 0 auto;
+                                        padding: 8px 0;
+                                        border: 1px solid $color_primary_b;
+                                        border-radius: 5px;
+                                        background-color: #fff;
+                                        color: $color_primary_b;
+                                        transition: 0.2s;
+
+                                        &:hover {
+                                            background-color: $color_primary_b;
+                                            color: #fff;
+                                        }
+                                    }
+                                }
+
+                                .table-check-box {
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    padding: 32px;
+                                    background-color: #eeff0070;
+                                    margin-top: 16px;
+
+                                    
+
+                                    .item {
+                                        width: 25%;
+                                        display: flex;
+                                        
+                                        label {
+                                            padding: 0 12px 0 6px;
+                                            cursor: pointer;
+                                        }
+
+                                        input {
+                                            cursor: pointer;
+                                        }
+                                    }
+                                }
                             }
 
                             &:nth-child(2) {
-                                background-color: #d5f7ff;
-                            }
+                                .title-check-box-item {
+                                    p {
+                                        text-align: center;
+                                        display: block;
+                                        width: 150px;
+                                        margin: 0 auto;
+                                        padding: 8px 0;
+                                        border: 1px solid $color_primary_b;
+                                        border-radius: 5px;
+                                        background-color: $color_primary_b;
+                                        color: #fff;
+                                        transition: 0.2s;
+                                        cursor: pointer;
 
-                            &:nth-child(3) {
-                                background-color: #bdffb7;
-
-                                .table-check-box {
-                                    display: none;
+                                    }
                                 }
 
-                                .display-block {
+                                .container-check-box-item {
                                     display: flex;
                                 }
-                            }
 
-                            .box-choose {
-                                padding-bottom: 16px;
-                                border-bottom: 1px solid #00ac50;
-                            }
+                                .detail-check-box-item {
+                                    padding: 16px 0;
+                                    width: 60%;
 
-                            .scroll-box {
-                                height: 200px;
-                                
-                            }
-    
-                            .check-box-item-header {
-                                
-                                .check-box-item-title {
-                                    display: block !important;
-                                    text-align: center;
-                                    padding: 8px 0;
-                                    color: #00AC4F;
-                                }
-                            }
-    
-                            .table-check-box {
-                                display: flex;
-                                flex-wrap: wrap;
-                                padding: 8px 0;
-    
-                                .item {
-                                    width: 25%;
-                                    padding: 8px 0;
+                                    a {
+                                        display: inline-block;
+                                        padding: 4px 16px;
+                                        border: 1px solid $color_primary_b;
+                                        border-radius: 5px;
+                                        background-color: #fff;
+                                        color: $color_primary_b;
+                                        transition: 0.2s;
+                                        margin: 4px;
 
-                                    .item-checkbox {
-
-                                        .item-checkbox-content {
-                                            display: flex;
-                                            align-items: center;
-                                            padding: 8px 0 4px 16px;
+                                        &:hover {
+                                            background-color: $color_primary_b;
+                                            color: #fff;
                                         }
                                     }
 
-                                    input[type="checkbox"] {
-                                        cursor: pointer;
-                                    }
-            
-                                    label {
-                                        cursor: pointer;
-                                        font-size: 14px;
-                                        padding: 0 8px;
+                                    .active-link {
+                                        background-color: $color_primary_b;
+                                        color: #fff;
                                     }
                                 }
-    
+                                .table-check-box {
+                                    width: 40%;
+                                    padding: 20px 32px;
+                                    background-color: #00ffff70;
+                                    margin-top: 16px;
+                                    border-radius: 50%;
+
+                                    .item {
+                                        &>label {
+                                            display: block;
+                                            text-align: center;
+                                            margin-bottom: 16px;
+                                        }
+
+                                        .item-checkbox {
+                                            margin: 0 auto;
+                                            padding-top: 12px;
+
+                                            .item-checkbox-content {
+                                                display: flex;
+                                                justify-content: center;
+
+                                                .detail-item-checkbox-content {
+                                                    padding: 0 4px;
+                                                }
+                                            }
+                                        }
+                                        
+                                        label {
+                                            padding: 0 12px 0 6px;
+                                            cursor: pointer;
+                                        }
+
+                                        input {
+                                            cursor: pointer;
+                                        }
+                                    }
+                                }
                             }
-        
-                            
+
+                            &:nth-child(3) {
+                                .title-check-box-item {
+                                    p {
+                                        text-align: center;
+                                        display: block;
+                                        width: 150px;
+                                        margin: 0 auto;
+                                        padding: 8px 0;
+                                        border: 1px solid $color_primary_b;
+                                        border-radius: 5px;
+                                        background-color: $color_primary_b;
+                                        color: #fff;
+                                        transition: 0.2s;
+                                        cursor: pointer;
+
+                                    }
+                                }
+                                .container-check-box-item {
+                                    display: flex;
+                                    justify-content: space-between;
+                                    padding: 16px 0;
+                                    .detail-check-box-item {
+                                        width: 25%;
+                                        display: flex;
+                                        flex-direction: column;
+    
+                                        a {
+                                            display: inline-block;
+                                            padding: 4px 16px;
+                                            border: 1px solid $color_primary_b;
+                                            border-radius: 5px;
+                                            background-color: #fff;
+                                            color: $color_primary_b;
+                                            transition: 0.2s;
+                                            margin: 4px;
+    
+                                            &:hover {
+                                                background-color: $color_primary_b;
+                                                color: #fff;
+                                            }
+                                        }
+    
+                                        .active-link {
+                                            background-color: $color_primary_b;
+                                            color: #fff;
+                                        }
+                                    }
+
+                                    .scroll-box {
+                                        
+                                        height: 250px;
+                                        width: 70%;
+                                        padding: 32px 16px;
+                                        background-color: #ff000028;
+                                        position: relative;
+
+                                        .table-check-box {
+                                            text-align: center;
+                                            display: flex;
+                                            width: 100%;
+                                            flex-wrap: wrap;
+                                            position: absolute;
+                                            top: 50%;
+                                            left: 50%;
+                                            transform: translate(-50%, -50%);
+
+                                            .item {
+                                                width: calc(100%/3);
+                                                padding: 8px 0;
+                                                .item-checkbox {
+                                                    padding: 4px 0;
+                                                    input {
+                                                        cursor: pointer;
+                                                    }
+
+                                                    label {
+                                                        cursor: pointer;
+                                                    }
+
+                                                    .item-checkbox-content {
+                                                        display: flex;
+                                                        justify-content: center;
+
+                                                        .detail-item-checkbox-content {
+                                                            padding: 0 4px;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
     

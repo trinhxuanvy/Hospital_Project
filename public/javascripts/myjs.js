@@ -192,4 +192,42 @@ $(document).ready(function () {
             });
         });
     });
+
+    $(function () {
+        let itemG = $('.detail-item-checkbox-content input.grant-role');
+        let itemR = $('.detail-item-checkbox-content input.role');
+        for (let i = 0; i < itemG.length; i++) {
+            $(itemG[i]).change(function (e) { 
+                e.preventDefault();
+                if (itemR[i].checked == false) {
+                    itemG[i].checked = false;
+                } 
+            });
+            $(itemR[i]).change(function (e) { 
+                e.preventDefault();
+                if (itemR[i].checked == false) {
+                    itemG[i].checked = false;
+                } 
+            });
+        }
+    });
+
+    $(function () {
+        let itemG = $('.detail-item-checkbox-content input.grant-role');
+        let itemR = $('.detail-item-checkbox-content input.role');
+        for (let i = 0; i < itemG.length; i++) {
+            $(itemG[i]).change(function (e) { 
+                e.preventDefault();
+                if (itemR[i].checked == false) {
+                    itemG[i].checked = false;
+                } 
+            });
+            $(itemR[i]).change(function (e) { 
+                e.preventDefault();
+                if (itemR[i].checked == false) {
+                    itemG[i].checked = false;
+                } 
+            });
+        }
+    });
 });
