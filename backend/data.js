@@ -102,7 +102,6 @@ module.exports = {
                 select distinct us.* from ${item['GRANTEE']}_VIEW us, user_tab_privs vi where 
                 instr(vi.table_name, us.username) > 0
             `);
-            console.log(data);
         }*/
         let result = await this.getData(`
             select vi.grantee from sys.user_tab_privs vi where vi.grantee like 'C##MYUSERS%'
@@ -119,8 +118,8 @@ module.exports = {
     },
 
     allRole: [
-        'roleService', 'roleDoctor', 'roleFinancial', 'roleReception', 'roleBuyDrug',
-        'roleManage', 'roleAccountant'
+        'MANAGERMENT_ROLE', 'PRECEPTIONIST_ROLE', 'DOCTOR_ROLE', 'PARAMEDIC_ROLE', 'FINANCE_ROLE',
+        'PHARMACY_ROLE', 'ACCOUNTANCE_ROLE'
     ],
 
     allTable: ['NHANVIEN', 'BENHNHAN', 'THUOC', 'DICHVU',
@@ -272,7 +271,6 @@ module.exports = {
         let data = await this.getData(`select column_name from DBA_COL_PRIVS where grantee = '${user.toUpperCase()}' and table_name = '${this.allTable[pos]}'`);
         let allCol = await this.getData(`select column_name from all_tab_columns where table_name = '${this.allTable[pos]}' and owner = 'C##ADMIN'`);
         let grantCol = await this.getData(`select column_name from DBA_COL_PRIVS where grantee = '${user.toUpperCase()}' and table_name = '${this.allTable[pos]}' and grantable = 'YES'`)
-        console.log(grantCol)
         let objData = [], objAllCol = [], objGrant = [];
         let arr = this.createOBJ(allCol.length, this.allColumn[pos]);
         num = allCol.length;
@@ -288,7 +286,6 @@ module.exports = {
             let temp = JSON.stringify(grantCol[i]);
             objGrant.push(temp);
         }
-        console.log(objGrant)
         for (let i = 0; i < objAllCol.length; i++) {
             pos = objAllCol.indexOf(objData[i]);
             arr[1][i]['column'] = allCol[i]['COLUMN_NAME'];
@@ -303,30 +300,39 @@ module.exports = {
         return arr;
     },
 
-    setUpdateRolCol: async function (user, table, arrCol, arrDML) {
+    setUpdateRolCol: async function (user, table, arrDML) {
         let pos = this.allTableCol.indexOf(table.toUpperCase());
-        let mergeData = [];
-        console.log(arrDML)
+        let decode;
+        let saveData = await this.getData(`select privilege, grantable from sys.DBA_TAB_PRIVS
+        where grantee = '${user}' and table_name = '${this.allTable[pos]}'`);
+        console.log(saveData, 'tesst')
         if (pos > -1) {
             let count = 0;
             let data = await this.getData(`select column_name, privilege from DBA_COL_PRIVS where grantee = '${user.toUpperCase()}' and table_name = '${this.allTable[pos]}'`);
-            let decode = await this.checkData(`revoke update on C##ADMIN.${this.allTable[pos]} from ${user}`);
+            decode = await this.checkData(`revoke update on C##ADMIN.${this.allTable[pos]} from ${user}`);
             for (let i = 0; i < arrDML.length; i++) {
                 if (arrDML[i]['grant']) {
-                    console.log()
                     decode = await this.checkData(`grant update (${arrDML[i]['col']}) on C##ADMIN.${this.allTable[pos]} to ${user} with grant option`);
                 }
                 else {
                     decode = await this.checkData(`grant update (${arrDML[i]['col']}) on C##ADMIN.${this.allTable[pos]} to ${user}`);
                 }
             }
-            return count;
+        }
+        
+        for (let i = 0; i < saveData.length; i++) {
+            if (saveData[i]['GRANTABLE'] == 'YES') {
+                decode = this.checkData(`grant ${saveData[i]['PRIVILEGE']} on C##ADMIN.${this.allTable[pos]} to ${user} with grant option`);
+            }
+            else {
+                decode = this.checkData(`grant ${saveData[i]['PRIVILEGE']} on C##ADMIN.${this.allTable[pos]} to ${user}`);
+            }
         }
     },
 
     createOBJTable: function () {
         let arr = [];
-        for(let i = 0; i < 4; i++) {
+        for (let i = 0; i < 4; i++) {
             let obj = {
                 PRIVILEGE: 0,
                 GRANTABLE: 0
@@ -358,14 +364,19 @@ module.exports = {
         else return [];
     },
 
-    getAllRole: async function (user, table) {
-        let data;
-        if (table == 'role') {
-            let query = `select GRANTED_ROLE from DBA_ROLE_PRIVS where grantee = upper('${user}')`;
-            data = await this.getData(query);
-            return data;
+    getAllRole: async function (user) {
+        let result = this.createOBJRole();
+        let data = await this.getData(`select GRANTED_ROLE, ADMIN_OPTION from dba_role_privs where grantee = '${user}'`);
+        for (let i = 0; i < data.length; i++) {
+            let pos = this.allRole.indexOf(data[i]['GRANTED_ROLE']);
+            if (pos > -1) {
+                result[pos]['GRANTED_ROLE'] = 1;
+                if (data[i]['ADMIN_OPTION'] == 'YES') {
+                    result[pos]['ADMIN_OPTION'] = 1;
+                }
+            }
         }
-        else return [];
+        return result;
     },
 
     updateData: async function (query) {
@@ -396,10 +407,12 @@ module.exports = {
     },
 
     setUpdateRoleTable: async function (user, table, arr) {
+        let saveData = await this.getData(`select column_name, privilege, grantable from DBA_COL_PRIVS where grantee = '${user}' and table_name = '${table}'`);
         let decode = this.checkData(`revoke insert on C##ADMIN.${table} from ${user}`);
         decode = this.checkData(`revoke delete on C##ADMIN.${table} from ${user}`);
         decode = this.checkData(`revoke update on C##ADMIN.${table} from ${user}`);
         decode = this.checkData(`revoke select on C##ADMIN.${table} from ${user}`);
+
         for (let i = 0; i < arr.length; i++) {
             if (arr[i]['grant']) {
                 decode = this.checkData(`grant ${arr[i]['dml']} on C##ADMIN.${table} to ${user} with grant option`)
@@ -408,25 +421,44 @@ module.exports = {
                 decode = this.checkData(`grant ${arr[i]['dml']} on C##ADMIN.${table} to ${user}`)
             }
         }
-        
-    },
 
-    setUpdateRole: async function (user, table, arrGr, arrRe) {
-        let data = await this.getAllRole(user, table);
-        console.log(arrGr, arrRe, data);
-        let text = JSON.stringify(data);
-        let query = '';
-        for (let item of arrGr) {
-            if (text.indexOf(item.toUpperCase()) < 0) {
-                query = `grant ${item} to ${user.toUpperCase()}`;
-                console.log(await this.updateData(query));
+        for (let i = 0; i < saveData.length; i++) {
+            if (saveData[i]['PRIVILEGE'] != 'SELECT' && saveData[i]['PRIVILEGE'] != 'UPDATE') {
+                if (saveData[i]['GRANTABLE'] == 'YES') {
+                    decode = await this.checkData(`grant ${saveData[i]['PRIVILEGE']} (${saveData[i]['COLUMN_NAME']}) on C##ADMIN.${table} to ${user} with grant option`);
+                }
+                else {
+                    decode = await this.checkData(`grant ${saveData[i]['PRIVILEGE']} (${saveData[i]['COLUMN_NAME']}) on C##ADMIN.${table} to ${user}`);
+                }
             }
         }
-        for (let item of arrRe) {
-            if (text.indexOf(item.toUpperCase()) > -1) {
-                query = `revoke ${item} from ${user.toUpperCase()}`;
-                console.log(query);
-                console.log(await this.updateData(query));
+    },
+
+    createOBJRole: function () {
+        let arr = [];
+        for (let i = 0; i < 7; i++) {
+            let obj = {
+                GRANTED_ROLE: 0,
+                ADMIN_OPTION: 0
+            };
+            arr.push(obj);
+        }
+        return arr;
+    },
+
+    setUpdateRole: async function (user, arr) {
+        let decode;
+        for (let i of this.allRole) {
+            decode = await this.checkData(`revoke ${i} from ${user}`);
+        }
+        for (let i = 0; i < arr.length; i++) {
+            decode = await this.checkData(`grant ${arr[i]} to ${user}`);
+            let check = arr[i].slice(0, 1);
+            if (check != 'g') {
+                decode = await this.checkData(`grant ${arr[i]} to ${user}`);
+            }
+            else {
+                decode = await this.checkData(`grant ${arr[i].slice(1)} to ${user} with admin option`);
             }
         }
     },

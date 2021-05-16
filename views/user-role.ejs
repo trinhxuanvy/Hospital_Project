@@ -75,46 +75,102 @@
                                 <% if (type == 1) { %>
                                     <div class="table-check-box">
                                         <div class="item">
-                                            <input type="checkbox" name="roleManage" id="roleManage" <% if (fullRole[5] !=0) { %>
-                                            checked
-                                            <% } %>>
-                                            <label for="roleManage">Quyền quản lý</label>
+                                            <div class="detail-item">
+                                                <input type="checkbox" name="MANAGERMENT_ROLE" class="role" id="MANAGERMENT_ROLE" <% if (fullRole[0]['GRANTED_ROLE'] !=0) { %>
+                                                checked
+                                                <% } %>>
+                                                <label for="MANAGERMENT_ROLE">Quyền quản lý</label>
+                                            </div>
+                                            <div class="detail-item">
+                                                <input type="checkbox" name="gMANAGERMENT_ROLE" class="grant-role" id="gMANAGERMENT_ROLE" <% if (fullRole[0]['ADMIN_OPTION'] !=0) { %>
+                                                checked
+                                                <% } %>>
+                                                <label for="gMANAGERMENT_ROLE">Grant</label>
+                                            </div>
                                         </div>
                                         <div class="item">
-                                            <input type="checkbox" name="roleReception" id="roleReception" <% if (fullRole[1] !=0) { %>
-                                            checked
-                                            <% } %>>
-                                            <label for="roleReception">Quyền tiếp tân</label>
+                                            <div class="detail-item">
+                                                <input type="checkbox" name="PRECEPTIONIST_ROLE" class="role" id="PRECEPTIONIST_ROLE" <% if (fullRole[1]['GRANTED_ROLE'] !=0) { %>
+                                                checked
+                                                <% } %>>
+                                                <label for="PRECEPTIONIST_ROLE">Quyền tiếp tân</label>
+                                            </div>
+                                            <div class="detail-item">
+                                                <input type="checkbox" name="gPRECEPTIONIST_ROLE" class="grant-role" id="gPRECEPTIONIST_ROLE" <% if (fullRole[1]['ADMIN_OPTION'] !=0) { %>
+                                                checked
+                                                <% } %>>
+                                                <label for="gPRECEPTIONIST_ROLE">Grant</label>
+                                            </div>
                                         </div>
                                         <div class="item">
-                                            <input type="checkbox" name="roleDoctor" id="roleDoctor" <% if (fullRole[0] !=0) { %>
-                                            checked
-                                            <% } %>>
-                                            <label for="roleDoctor">Quyền bác sĩ</label>
+                                            <div class="detail-item">
+                                                <input type="checkbox" name="DOCTOR_ROLE" class="role" id="DOCTOR_ROLE" <% if (fullRole[2]['GRANTED_ROLE'] !=0) { %>
+                                                checked
+                                                <% } %>>
+                                                <label for="DOCTOR_ROLE">Quyền bác sĩ</label>
+                                            </div>
+                                            <div class="detail-item">
+                                                <input type="checkbox" name="gDOCTOR_ROLE" class="grant-role" id="gDOCTOR_ROLE" <% if (fullRole[2]['ADMIN_OPTION'] !=0) { %>
+                                                checked
+                                                <% } %>>
+                                                <label for="gDOCTOR_ROLE">Grant</label>
+                                            </div>
                                         </div>
                                         <div class="item">
-                                            <input type="checkbox" name="roleService" id="roleService" <% if (fullRole[2]!=0) { %>
-                                            checked
-                                            <% } %>>
-                                            <label for="roleService">Quyền nhân viên dịch vụ</label>
+                                            <div class="detail-item">
+                                                <input type="checkbox" name="PARAMEDIC_ROLE" class="role" id="PARAMEDIC_ROLE" <% if (fullRole[3]['GRANTED_ROLE'] !=0) { %>
+                                                checked
+                                                <% } %>>
+                                                <label for="PARAMEDIC_ROLE">Quyền nhân viên dịch vụ</label>
+                                            </div>
+                                            <div class="detail-item">
+                                                <input type="checkbox" name="gPARAMEDIC_ROLE" class="grant-role" id="gPARAMEDIC_ROLE" <% if (fullRole[3]['ADMIN_OPTION'] !=0) { %>
+                                                checked
+                                                <% } %>>
+                                                <label for="gPARAMEDIC_ROLE">Grant</label>
+                                            </div>
                                         </div>
                                         <div class="item">
-                                            <input type="checkbox" name="roleFinancial" id="roleFinancial" <% if (fullRole[6] !=0) { %>
-                                            checked
-                                            <% } %>>
-                                            <label for="roleFinancial">Quyền nhân viên tài vụ</label>
+                                            <div class="detail-item">
+                                                <input type="checkbox" name="FINANCE_ROLE" class="role" id="FINANCE_ROLE" <% if (fullRole[4]['GRANTED_ROLE'] !=0) { %>
+                                                checked
+                                                <% } %>>
+                                                <label for="FINANCE_ROLE">Quyền nhân viên tài vụ</label>
+                                            </div>
+                                            <div class="detail-item">
+                                                <input type="checkbox" name="gFINANCE_ROLE" class="grant-role" id="gFINANCE_ROLE" <% if (fullRole[4]['ADMIN_OPTION'] !=0) { %>
+                                                checked
+                                                <% } %>>
+                                                <label for="gFINANCE_ROLE">Grant</label>
+                                            </div>
                                         </div>
                                         <div class="item">
-                                            <input type="checkbox" name="roleBuyDrug" id="roleBuyDrug" <% if (fullRole[4]!=0) { %>
-                                            checked
-                                            <% } %>>
-                                            <label for="roleBuyDrug">Quyền nhân viên bán thuốc</label>
+                                            <div class="detail-item">
+                                                <input type="checkbox" name="PHARMACY_ROLE" class="role" id="PHARMACY_ROLE" <% if (fullRole[5]['GRANTED_ROLE'] !=0) { %>
+                                                checked
+                                                <% } %>>
+                                                <label for="PHARMACY_ROLE">Quyền nhân viên bán thuốc</label>
+                                            </div>
+                                            <div class="detail-item">
+                                                <input type="checkbox" name="gPHARMACY_ROLE" class="grant-role" id="gPHARMACY_ROLE" <% if (fullRole[5]['ADMIN_OPTION'] !=0) { %>
+                                                checked
+                                                <% } %>>
+                                                <label for="gPHARMACY_ROLE">Grant</label>
+                                            </div>
                                         </div>
                                         <div class="item">
-                                            <input type="checkbox" name="roleAccountant" id="roleAccountant" <% if(fullRole[3] !=0) { %>
-                                            checked
-                                            <% } %>>
-                                            <label for="roleAccountant">Quyền nhân viên kế toán</label>
+                                            <div class="detail-item">
+                                                <input type="checkbox" name="ACCOUNTANCE_ROLE" class="role" id="ACCOUNTANCE_ROLE" <% if(fullRole[6] !=0) { %>
+                                                checked
+                                                <% } %>>
+                                                <label for="ACCOUNTANCE_ROLE">Quyền nhân viên kế toán</label>
+                                            </div>
+                                            <div class="detail-item">
+                                                <input type="checkbox" name="gACCOUNTANCE_ROLE" class="grant-role" id="gACCOUNTANCE_ROLE" <% if (fullRole[6]['ADMIN_OPTION'] !=0) { %>
+                                                checked
+                                                <% } %>>
+                                                <label for="gACCOUNTANCE_ROLE">Grant</label>
+                                            </div>
                                         </div>
                                     </div>
                                 <% } %>
@@ -184,7 +240,7 @@
                                                             <input type="checkbox" name="pdelete-table" id="pdelete" class="grant-role" <% if (allRole[0]['GRANTABLE']) { %>
                                                                 checked
                                                             <% } %>>
-                                                            <label for="pdelete">Delete</label>
+                                                            <label for="pdelete">Grant</label>
                                                         </div>
                                                     </div>
                                                     <div class="item-checkbox-content">
@@ -198,7 +254,7 @@
                                                             <input type="checkbox" name="pinsert-table" id="pinsert" class="grant-role" <% if (allRole[1]['GRANTABLE']) { %>
                                                                 checked
                                                             <% } %>>
-                                                            <label for="pinsert">Insert</label>
+                                                            <label for="pinsert">Grant</label>
                                                         </div>
                                                     </div>
                                                     <div class="item-checkbox-content">
@@ -212,7 +268,7 @@
                                                             <input type="checkbox" name="pselect-table" id="pselect" class="grant-role" <% if (allRole[2]['GRANTABLE']) { %>
                                                                 checked
                                                             <% } %>>
-                                                            <label for="pselect">Select</label>
+                                                            <label for="pselect">Grant</label>
                                                         </div>
                                                     </div>
                                                     <div class="item-checkbox-content">
@@ -226,7 +282,7 @@
                                                             <input type="checkbox" name="pupdate-table" id="pupdate" class="grant-role" <% if (allRole[3]['GRANTABLE']) { %>
                                                                 checked
                                                             <% } %>>
-                                                            <label for="pupdate">Update</label>
+                                                            <label for="pupdate">Grant</label>
                                                         </div>
                                                     </div>
                                                 </div>

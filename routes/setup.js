@@ -19,6 +19,16 @@ module.exports = {
         });
     },
 
+    getRole: function (arr) {
+        let result = [];
+        for (let i in arr) {
+            if (i.indexOf('_ROLE') > -1) {
+                result.push(i);
+            }
+        }
+        return result
+    },
+
     getArrCol: function (arr) {
         let result = [];
         for (let i in arr) {

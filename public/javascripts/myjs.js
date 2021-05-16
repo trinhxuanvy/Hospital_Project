@@ -213,8 +213,8 @@ $(document).ready(function () {
     });
 
     $(function () {
-        let itemG = $('.detail-item-checkbox-content input.grant-role');
-        let itemR = $('.detail-item-checkbox-content input.role');
+        let itemG = $('input.grant-role');
+        let itemR = $('input.role');
         for (let i = 0; i < itemG.length; i++) {
             $(itemG[i]).change(function (e) { 
                 e.preventDefault();

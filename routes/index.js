@@ -104,7 +104,6 @@ router.get('/admin/user', async function (req, res, next) {
 });
 
 router.get('/admin/user/:username/detail/:tablename', async function (req, res, next) {
-  let ok = [];
   let flag = req.cookies.flag;
   let tokenFlag = jwt.verify(flag, 'vychuoi123', function (err, result) {
     if (err) {
@@ -122,14 +121,9 @@ router.get('/admin/user/:username/detail/:tablename', async function (req, res, 
     let tableHasSign = '';
     let type = 0;
     let arrColRol = [];
-    let numColRol = 0;
     if (tableName == 'role') {
       // Lấy role
-      role = await oracledb.getRoleUser(
-        `select GRANTED_ROLE from DBA_ROLE_PRIVS where grantee = upper('${setup.setUserName(user)}')`
-      );
-      tokenRole = await jwt.verify(role, 'Vychuoi123', { algorithms: 'HS256' });
-      fullRole = setup.role(tokenRole.data);
+      fullRole = await oracledb.getAllRole(setup.setUserName(user).toUpperCase());
       // Tạo biến typeR
       res.cookie('typeR', 1);
       type = 1;
@@ -146,15 +140,11 @@ router.get('/admin/user/:username/detail/:tablename', async function (req, res, 
       res.cookie('typeR', 3);
       type = 3;
     }
-    console.log(arrColRol)
     let saveSuccess = await req.cookies.saveSuccess;
     let message = await req.cookies.message;
 
     res.cookie('message', '');
-    console.log(message, saveSuccess);
-    let oo = oracledb.allColumn[1];
-    console.log(arrColRol);
-    res.render('user-role', { user, saveSuccess, message, fullRole, allRole, tableName, tableHasSign, type, arrColRol, oo });
+    res.render('user-role', { user, saveSuccess, message, fullRole, allRole, tableName, tableHasSign, type, arrColRol});
   }
   else {
     res.redirect('/login');
@@ -168,59 +158,16 @@ router.post('/admin/user/:username/detail/:tablename', async function (req, res,
     typeRole = req.cookies.typeR,
     arrCol, arrDML;
   if (typeRole == 1) {
-    if (getIn['roleDoctor']) {
-      arrGr.push('DOCTOR_ROLE');
-    }
-    else {
-      arrRe.push('DOCTOR_ROLE');
-    }
-    if (getIn['roleReception']) {
-      arrGr.push('PRECEPTIONIST_ROLE');
-    }
-    else {
-      arrRe.push('PRECEPTIONIST_ROLE');
-    }
-    if (getIn['roleManage']) {
-      arrGr.push('MANAGERMENT_ROLE');
-    }
-    else {
-      arrRe.push('MANAGERMENT_ROLE');
-    }
-    if (getIn['roleService']) {
-      arrGr.push('PARAMEDIC_ROLE');
-    }
-    else {
-      arrRe.push('PARAMEDIC_ROLE');
-    }
-    if (getIn['roleFinancial']) {
-      arrGr.push('FINANCE_ROLE');
-    }
-    else {
-      arrRe.push('FINANCE_ROLE');
-    }
-    if (getIn['roleAccountant']) {
-      arrGr.push('ACCOUNTANCE_ROLE');
-    }
-    else {
-      arrRe.push('ACCOUNTANCE_ROLE');
-    }
-    if (getIn['roleBuyDrug']) {
-      arrGr.push('PHARMACY_ROLE');
-    }
-    else {
-      arrRe.push('PHARMACY_ROLE');
-    }
+    let arr = setup.getRole(getIn);
     try {
-      let run = await oracledb.setUpdateRole(setup.setUserName(userName).toUpperCase(), tableName, arrGr, arrRe);
+      let run = await oracledb.setUpdateRole(setup.setUserName(userName).toUpperCase(), arr);
       res.cookie('saveSuccess', true);
     } catch (error) {
       res.cookie('saveSuccess', false);
     }
   }
   else if (typeRole == 2) {
-    console.log(getIn)
     let arr = setup.getTableArrDML(getIn);
-    console.log(arr)
     try {
       let decode = await oracledb.setUpdateRoleTable(setup.setUserName(userName).toUpperCase(), tableName.toUpperCase(), arr);
       res.cookie('saveSuccess', true);
@@ -229,11 +176,8 @@ router.post('/admin/user/:username/detail/:tablename', async function (req, res,
     }
   }
   else if (typeRole == 3) {
-    arrCol = setup.getArrCol(getIn);
     arrDML = setup.getArrDML(getIn);
-    console.log(arrDML)
-    let l = await oracledb.setUpdateRolCol(setup.setUserName(userName).toUpperCase(), tableName, arrCol, arrDML);
-    
+    let run = await oracledb.setUpdateRolCol(setup.setUserName(userName).toUpperCase(), tableName.toUpperCase(), arrDML);
   }
 
   res.cookie('message', true);
