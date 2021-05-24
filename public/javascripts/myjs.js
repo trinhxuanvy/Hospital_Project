@@ -230,4 +230,24 @@ $(document).ready(function () {
             });
         }
     });
+
+    // Hàm sử lý user
+    $(function () {
+        let item = $('.container-user');
+        let isClick = $('.btn-show-user');
+        let boxUser = $('.content-user');
+        
+        $(isClick[0]).click(function (e) { 
+            e.preventDefault();
+            let hasClass = $('.container-user').hasClass('show');
+            if (hasClass == 0) {
+                $(item[0]).addClass('show');
+                $(boxUser[0]).css('opacity', '1');
+            }
+            else {
+                $(item[0]).removeClass('show');
+                $(boxUser[0]).css('opacity', '0.5');
+            }
+        });
+    });
 });

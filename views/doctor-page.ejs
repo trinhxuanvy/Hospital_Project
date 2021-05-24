@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/layouts/head') %>
+
+    <%- include('partials/layouts/styles') %>
+</head>
+
+<body>
+    <%- include('partials/layouts/header') %>
+
+    <div class="container-user">
+        <div class="box-user">
+            <div class="content-user">
+                <div class="logo-user">
+                    <img src="/images/no-user.jpg" alt="">
+                </div>
+                <a href="" class="link-detail-user">Trang cá nhân</a>
+                <a href="" class="link-logout-user">Đăng xuất</a>
+            </div>
+            <div class="btn-show-user">
+                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-item">
+        <div class="categories-1">
+            <div class="content">
+                <div class="header">
+                    <p class="title">Bác sĩ</p>
+                    <p class="theme">"Lương y như từ mẫu"</p>
+                </div>
+            </div>
+        </div>
+        <div class="categories-2">
+            <div class="sidebar">
+                <div class="item">
+                    <div class="header">
+                        <p class="title">Danh mục</p>
+                    </div>
+                    <div class="menu-item">
+                        <a href="" class="link-item"><p>Bệnh nhân đang điều trị</p></a>
+                        <a href="" class="link-item"><p>Bệnh nhân đã điều trị</p></a>
+                    </div>
+                    
+                </div>
+                <div class="item">
+                    <div class="header">
+                        <p class="title">Tìm kiếm theo tên</p>
+                    </div>
+                    <div class="box-search">
+                        <form action="/page/doctor" method="GET">
+                            <label for="search"></label>
+                            <input type="search" name="search" id="search">
+                            <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="body-item">
+                <div class="item">
+                    <div class="header-body">
+                        <a href=""><i class="fa fa-filter" aria-hidden="true"></i> Lọc</a>
+                    </div>
+                    <div class="menu-item">
+                        <% data.forEach(item => { %>
+                            <div class="box-item">
+                                <a title="<%= item['TENBENHNHAN'] %> - <%= item['IDBENHNHAN'] %> " href="/page/doctor/pation/<%= item['IDBENHNHAN'] %> " class="box-item-link">
+                                    <div class="logo-item"><img src="/images/no-user.jpg" alt=""></div>
+                                    <p class="infor-1">Mã bệnh: <%= item['IDBENHNHAN'] %> </p>
+                                    <p class="infor-2">Họ tên: <%= item['TENBENHNHAN'] %> </p>
+                                </a>
+                            </div>
+                        <% }) %>                                                                                                                                                                                                                                                                                                                                                                                                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <%- include('partials/layouts/scripts') %>
+</body>
+
+</html>

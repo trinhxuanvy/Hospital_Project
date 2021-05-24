@@ -8,15 +8,21 @@ const { json } = require('body-parser');
 module.exports = {
 
 
-    getUser: function (query) {
+    allData: function (query) {
         return new Promise(async function (resolve, reject) {
             let connection;
 
             try {
-                connection = await oracledb.connect('sys', 'Vychuoi123');
+                connection = await oracledb.connect('C##ADMIN', 'abcd1234');
 
                 const result = await connection.execute(
-                    query
+                    `update C##ADMIN.NHANVIEN set Username = ':user'
+                    where idnhanvien = :id
+                    returning id, rowid into :ids, :rids`,
+                    {
+                        id:    1,
+                        user: 'USER2121211',
+                    }
                 );
                 resolve(result.rows);
             } catch (error) {
@@ -73,7 +79,6 @@ module.exports = {
                 const result = await connection.execute(
                     query
                 );
-
                 resolve(result.rows);
 
             } catch (error) {
@@ -91,23 +96,13 @@ module.exports = {
         });
     },
 
-    getAllofUser: async function (query) {
-        let obj = [];
-        /*let result = await this.getData(`
-            select vi.grantee from sys.user_tab_privs vi
-            where vi.grantee like 'C##MYUSERS%' and instr(vi.table_name, vi.grantee) > 0
-        `);
-        for(let item of result) {
-            let data = await this.getData(`
-                select distinct us.* from ${item['GRANTEE']}_VIEW us, user_tab_privs vi where 
-                instr(vi.table_name, us.username) > 0
-            `);
-        }*/
-        let result = await this.getData(`
-            select vi.grantee from sys.user_tab_privs vi where vi.grantee like 'C##MYUSERS%'
-        `);
-
-        return result;
+    getCheckData: async function (query) { 
+        try {
+            let result = await this.getData(query);
+            return result;
+        } catch (error) {
+            return [];
+        }
     },
 
     userLogin: async (user, password) => {

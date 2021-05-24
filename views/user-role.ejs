@@ -4,7 +4,7 @@
 <head>
     <%- include('partials/layouts/head') %>
 
-        <%- include('partials/layouts/styles') %>
+    <%- include('partials/layouts/styles') %>
 </head>
 
 <body>
@@ -38,7 +38,7 @@
                         </a>
                     </div>
                     <div class="admin-log-out">
-                        <a href="../logout" class="link-log-out">Đăng xuất</a>
+                        <a href="/admin/logout" class="link-log-out">Đăng xuất</a>
                     </div>
                 </div>
             </div>
@@ -160,7 +160,7 @@
                                         </div>
                                         <div class="item">
                                             <div class="detail-item">
-                                                <input type="checkbox" name="ACCOUNTANCE_ROLE" class="role" id="ACCOUNTANCE_ROLE" <% if(fullRole[6] !=0) { %>
+                                                <input type="checkbox" name="ACCOUNTANCE_ROLE" class="role" id="ACCOUNTANCE_ROLE" <% if(fullRole[6]['GRANTED_ROLE'] !=0) { %>
                                                 checked
                                                 <% } %>>
                                                 <label for="ACCOUNTANCE_ROLE">Quyền nhân viên kế toán</label>
@@ -398,11 +398,11 @@
                     <% } %>
             </div>
         </div>
-        <% } %>
+    <% } %>
 
 
 
-            <%- include('partials/layouts/scripts') %>
+    <%- include('partials/layouts/scripts') %>
 </body>
 
 </html>

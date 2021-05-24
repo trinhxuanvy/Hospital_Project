@@ -2,7 +2,7 @@ var express = require('express');
 var oracledb = require('../backend/data');
 var jwt = require('jsonwebtoken');
 var setup = require('./setup');
-const { allTable } = require('../backend/data');
+const { render } = require('ejs');
 
 var router = express.Router();
 
@@ -67,7 +67,7 @@ router.get('/admin/user', async function (req, res, next) {
 
     isCheck = function (err) {
       try {
-        return setup.getUserName(reCheck.view[0]['USERNAME']);
+        return reCheck.view[0]['USERNAME'];
       } catch (error) {
         return '';
       }
@@ -93,9 +93,9 @@ router.get('/admin/user', async function (req, res, next) {
   });
 
   if (tokenFlag != 0) {
-    let getUser = await oracledb.getAllofUser(`select username from all_users where username like 'C##MYUSERS%'`)
 
-    setup.getUserNameObject(getUser);
+    let getUser = await oracledb.getCheckData(`select idnhanvien, username, tennhanvien, vaitro from C##ADMIN.NHANVIEN`);
+    //setup.getUserNameObject(getUser);
     res.render('user', { user: getUser, isCheck: isCheck(), view: view() });
   }
   else {
@@ -144,7 +144,7 @@ router.get('/admin/user/:username/detail/:tablename', async function (req, res, 
     let message = await req.cookies.message;
 
     res.cookie('message', '');
-    res.render('user-role', { user, saveSuccess, message, fullRole, allRole, tableName, tableHasSign, type, arrColRol});
+    res.render('user-role', { user, saveSuccess, message, fullRole, allRole, tableName, tableHasSign, type, arrColRol });
   }
   else {
     res.redirect('/login');
@@ -191,12 +191,25 @@ router.get('/admin/logout', function (req, res, next) {
 
 router.get('/admin/user/:username/info', async function (req, res, next) {
   let user = req.params.username;
-  let query = `select * from ${setup.setUserName(user).toUpperCase() + '_VIEW'}`;
+  let query = `select * from C##ADMIN.NHANVIEN where USERNAME = '${user}'`;
   let view = await oracledb.getData(query);
-  console.log(view)
   let token = jwt.sign({ view }, 'Vychuoi123', { algorithm: 'HS256', expiresIn: '3h' })
   res.cookie('check', token);
-  res.redirect('/admin/user');
+  res.redirect(`/admin/user/${user}/detail/role`);
+});
+
+router.get('/page/doctor', async function (req, res, next) {
+  let getItem = '';
+  getItem = req.query;
+  let data;
+  if (getItem != '') {
+    data = await oracledb.getData(`select * from C##ADMIN.BENHNHAN where FN_CONVERT_TO_VN(lower(TENBENHNHAN)) like '%${setup.removeVietnameseTones(getItem['search']).toLowerCase()}%'`);
+  }
+  else {
+    data = await oracledb.getData(`select * from C##ADMIN.BENHNHAN`);
+  }
+    data = data.slice(0, 8);
+  res.render('doctor-page', { data });
 });
 
 module.exports = router;

@@ -54,16 +54,27 @@
                     <table class="">
                         <thead>
                             <tr>
-                                <th>Tên người dùng</th>
-                            </tr>
+                                <th>Tên nhân viên</th>
+                                <th>Tên tài khoản</th>
+                                <th>Vai trò</th>
+                                <th>Cài đặt</th>
+                            </tr>    
                         </thead>
                         <tbody>
                             
                             <% user.forEach(item => { %>
                                 <tr>
                                     <td>
-                                        <a href="user/<%= item['GRANTEE'] %>/info">
-                                            <%= item['GRANTEE'] %>
+                                        <%= item['TENNHANVIEN'] %></td>
+                                    <td>
+                                        <%= item['USERNAME'] %>
+                                    </td>
+                                    <td>
+                                        <%= item['VAITRO'] %>
+                                    </td>
+                                    <td>
+                                        <a href="/admin/user/<%= item['USERNAME'] %>/info">
+                                            <i class="fas fa-user-cog"></i>
                                         </a>
                                     </td>
                                 </tr>
@@ -72,18 +83,6 @@
                         </tbody>
                     </table>
 
-                    <div class="detail-info">
-                        <div class="detail-item">
-                            <p class="detail-content">Tên tài khoản : <span><%= isCheck %></span> </p>
-                        </div>
-                        <div class="detail-item">
-                            <p class="detail-content">Tên người dùng : <span><%= view['TENNHANVIEN'] %></span></p>
-                        </div>
-                        <div class="detail-item">
-                            <p class="detail-content">Chức vụ : <span><%= view['VAITRO'] %></span></p>
-                        </div>
-                        <a href="user/<%= isCheck %>/detail/role" class="detail-link">Chỉnh sửa</a>
-                    </div>
                 </div>
             </div>
         </div>
