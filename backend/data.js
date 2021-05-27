@@ -2,7 +2,7 @@ const oracledb = require('./oracledb');
 const jwt = require('jsonwebtoken');
 const setup = require('../routes/setup');
 const { json } = require('body-parser');
-
+const oracledb2 = require('oracledb');
 
 
 module.exports = {
@@ -56,6 +56,31 @@ module.exports = {
                 resolve(newData);
 
             } catch (error) {
+                reject(error);
+            } finally {
+                if (connection) {
+                    try {
+                        await connection.release();
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+            }
+        });
+    },
+
+    getDataTest: function (query, obj) {
+        return new Promise(async function (resolve, reject) {
+            let connection;
+
+            try {
+                connection = await oracledb.connect('C##ADMIN', 'abcd1234');
+                const result = await connection.execute(query, obj);
+                await connection.commit();
+                resolve(1);
+                
+            } catch (error) {
+
                 reject(error);
             } finally {
                 if (connection) {

@@ -250,4 +250,22 @@ $(document).ready(function () {
             }
         });
     });
+
+    // Hàm xử lý đơn thuốc
+    $(function () {
+        let input = $('.input-des');
+        let select = $('.select-des');
+        for (let i = 0; i < select.length; i++) {
+            $(select[i]).val($(input[i]).val());
+            $(select[i]).change(function (e) { 
+                e.preventDefault();
+                $(input[i]).val($(select[i]).val());
+            });
+            let temp = $(input[i]).val();
+            $(input[i]).keyup(function (e) {
+                alert('Bạn không thể nhập vào đó')
+                $(input[i]).val($(select[i]).val());
+            });
+        }
+    });
 });

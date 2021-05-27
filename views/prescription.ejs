@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/layouts/head') %>
+
+    <%- include('partials/layouts/styles') %>
+</head>
+
+<body>
+    <%- include('partials/layouts/header') %>
+
+    <div class="box-item-detail">
+        <div class="menu-box-item">
+            <div class="header">
+                <p class="title">Tất cả đơn thuốc</p>
+            </div>
+            <div class="menu-item-detail">
+                <% allBillDrug.forEach(item => { %>
+                    <a title="<%= item['NGAYKHAM'] %>" href="/doctor/patient/<%= id %>/bill-drug-<%= item['IDHOSOBENHAN'] %> " class="link-item"><%= item['NGAYKHAM'] %></a>
+                <% }) %>
+            </div>
+        </div>
+        <div class="form-box-detail">
+            <form action="/doctor/patient/<%= id %>/bill-drug-<%= number %>" method="POST">
+                <div class="form-item">
+                    <p class="title-item">Tên bệnh nhân</p>
+                    <label for="idPat"></label>
+                    <input type="text" name="idPat" id="idPat" value="<%= id %>" placeholder="Lê Văn A">
+                </div>
+                <div class="form-item">
+                    <p class="title-item">Chi tiết đơn thuốc</p>
+                    <% deDes.forEach(item => { %>
+                        <div class="item-detail">
+                            <p class="title-item-detail">Tên thuốc</p>
+                            <div class="detail">
+                                <label for="<%='idDrug_' + item['IDCHITIETDONTHUOC'] %>"></label>
+                                <input class="input-des" type="text" value="<%= item['TENTHUOC'] + ' - ' + item['IDTHUOC'] %>" id="<%='idDrug_' + item['IDCHITIETDONTHUOC'] %>" name="<%='idDrug_' + item['IDCHITIETDONTHUOC'] %>">
+                                <select class="select-des">
+                                    <% drug.forEach(item1 => { %>
+                                        <option value="<%= item1['TENTHUOC'] + ' - ' + item1['IDTHUOC'] %>"><%= item1['TENTHUOC'] + ' - ' + item1['IDTHUOC'] %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                            <div class="detail">
+                                <p class="title-detail">Liều lượng</p>
+                                <label for="<%= 'numberUse_' + item['IDTHUOC'] %>"></label>
+                                <input type="text" id="<%= 'numberUse_' + item['IDTHUOC'] %>" name="<%= 'numberUse_' + item['IDTHUOC'] %>" value="<%= item['SOLUONG'] %>">
+                                <p class="unit">Đơn vị tính: <%= item['DONVITINH'] %></p>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+                <div class="form-item">
+                    <p class="title-item">Chuẩn đoán</p>
+                    <label for="diagnose"></label>
+                    <textarea name="diagnose" id="diagnose" cols="30" rows="10"><%= cmtDoc[0]['KETLUANBS'] %></textarea>
+                </div>
+                <button type="submit">Lưu</button>
+            </form>
+        </div>
+        
+    </div>
+    <a href="/doctor/patient/page-1" class="btn-link-back">Quay lại</a>
+    <%- include('partials/layouts/scripts') %>
+</body>
+
+</html>

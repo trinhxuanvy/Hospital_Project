@@ -158,7 +158,7 @@ module.exports = {
     },
 
     checkInput: function (string) {
-        let format = /[ !@#$%^&*()_+\-=\[\]{};':"\|,.<>\/?]/;
+        let format = /[!@#$%^&*()_+-=\[\]{};':"\|,.<>\/?]/;
         return format.test(string) ? true : false;
     },
 

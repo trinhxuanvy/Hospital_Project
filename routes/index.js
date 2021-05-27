@@ -198,18 +198,107 @@ router.get('/admin/user/:username/info', async function (req, res, next) {
   res.redirect(`/admin/user/${user}/detail/role`);
 });
 
-router.get('/page/doctor', async function (req, res, next) {
-  let getItem = '';
-  getItem = req.query;
-  let data;
-  if (getItem != '') {
-    data = await oracledb.getData(`select * from C##ADMIN.BENHNHAN where FN_CONVERT_TO_VN(lower(TENBENHNHAN)) like '%${setup.removeVietnameseTones(getItem['search']).toLowerCase()}%'`);
+router.get('/doctor/patient/page-:number', async function (req, res, next) {
+  let getItem = req.query;
+  let page = req.params.number;
+  if (page < 1) {
+    page = 1;
+  }
+  let data, isSearch = 0, search;
+  if ((search = getItem['search']) != null) {
+    isSearch = 1;
+    data = await oracledb.getCheckData(`select * from C##ADMIN.BENHNHAN where FN_CONVERT_TO_VN(lower(TENBENHNHAN)) like '%${setup.removeVietnameseTones(getItem['search']).toLowerCase()}%' order by IDBENHNHAN`);
   }
   else {
-    data = await oracledb.getData(`select * from C##ADMIN.BENHNHAN`);
+    data = await oracledb.getCheckData(`select * from C##ADMIN.BENHNHAN order by IDBENHNHAN`);
   }
-    data = data.slice(0, 8);
-  res.render('doctor-page', { data });
+  let r = data.length % 8;
+  let numPage = Math.floor(data.length / 8);
+  if (data.length != 0) {
+    if (r > 0) {
+      numPage += 1;
+    }
+    if (page > numPage) {
+      page = numPage;
+    }
+    let startPage = (page - 1) * 8;
+    let endPage = page * 8;
+    data = data.slice(startPage, endPage);
+  }
+  else {
+    page = req.params.number * 1;
+  }
+  let billDrug = await oracledb.getCheckData(`select bn.*, dt.iddonthuoc from hosobenhan hsba, benhnhan bn, donthuoc dt
+  where hsba.idbenhnhan = bn.idbenhnhan and hsba.idhosobenhan = dt.idhosobenhan`)
+  res.render('doctor-page', { data, page, numPage, isSearch, search });
+});
+
+router.post('/doctor/patient/page-:number', async function (req, res, next) {
+  console.log(req.body.drugOfPatient);
+  res.redirect(`/doctor/patient/page-${req.params.number}`);
+});
+
+router.get('/doctor/patient/:id/bill-drug-:number', async function (req, res, next) {
+  let id = req.params.id;
+  let number = req.params.number;
+  let allBillDrug = await oracledb.getCheckData(`select * from C##ADMIN.HOSOBENHAN where IDBENHNHAN = ${id}`);
+  let deDes = await oracledb.getCheckData(`select ctdt.*, t.TENTHUOC, t.DONVITINH from C##ADMIN.CHITIETDONTHUOC ctdt, C##ADMIN.THUOC t where ctdt.IDDONTHUOC = ${number} and ctdt.IDTHUOC = t.IDTHUOC`);
+  let drug = await oracledb.getCheckData(`select * from C##ADMIN.THUOC order by tenthuoc`);
+  let cmtDoc = await oracledb.getCheckData(`select KETLUANBS from C##ADMIN.HOSOBENHAN hsba, C##ADMIN.DONTHUOC dt where hsba.IDBENHNHAN = ${id} and hsba.IDHOSOBENHAN = dt.IDHOSOBENHAN and dt.IDDONTHUOC = ${number}`);
+  if (number == 0) {
+    allBillDrug[0]['KETLUANBS'] = '';
+  }
+  if (cmtDoc.length == 0) {
+    cmtDoc = [];
+    cmtDoc.push({ KETLUANBS: '' });
+  }
+  res.render('prescription', { drug, id, allBillDrug, deDes, number, cmtDoc });
+});
+
+router.post('/doctor/patient/:id/bill-drug-:number', async function (req, res, next) {
+  let reqBody = req.body;
+  let id = req.params.id;
+  let number = req.params.number;
+  let idDrug = [], numberUse = [], idFile = [], diagnose = '';
+  for (let i in reqBody) {
+    if (i.indexOf('idDrug') > -1) {
+
+      let pos = i.indexOf('_');
+      idFile.push(i.slice(pos + 1))
+      pos = reqBody[`${i}`].indexOf('-');
+      idDrug.push(reqBody[`${i}`].slice(pos + 2));
+    }
+    if (i.indexOf('numberUse') > -1) {
+      if ((reqBody[`${i}`]*1) >= 0) {
+        numberUse.push(reqBody[`${i}`]);
+      }
+      else {
+        idDrug = [], numberUse = [], idFile = [], diagnose = '';
+        break;
+      }
+    }
+    if (i.indexOf('diagnose') > -1) {
+      if (setup.checkInput(reqBody[`${i}`]) == true) {
+        idDrug = [], numberUse = [], idFile = [], diagnose = '';
+        break;
+      }
+      else {
+        diagnose = reqBody[`${i}`];
+      }
+    }
+  }
+  for (let i = 0; i < idDrug.length; i++) {
+    let update = await oracledb.getDataTest(`update C##ADMIN.CHITIETDONTHUOC set IDTHUOC = :idt, SOLUONG = :sl 
+    where IDCHITIETDONTHUOC = :idct`,
+      { idt: idDrug[i], sl: numberUse[i], idct: idFile[i] });
+  }
+  let paFile = await oracledb.getCheckData(`select IDHOSOBENHAN from C##ADMIN.DONTHUOC where IDDONTHUOC = ${number}`);
+  if (diagnose != '' && paFile.length > 0) {
+    let update = await oracledb.getDataTest(`update C##ADMIN.HOSOBENHAN set KETLUANBS = :kl
+    where IDHOSOBENHAN = :idhsba`,
+      { kl: diagnose, idhsba: paFile[0]['IDHOSOBENHAN'] });
+  }
+  res.redirect(`/doctor/patient/${id}/bill-drug-${number}`);
 });
 
 module.exports = router;
