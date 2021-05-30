@@ -435,125 +435,6 @@ $color_primary_b: #08974b;
         background-color: #56AB2F;
     }
 }
-// Page Bill Drug
-.box-item-detail {
-    box-shadow: 0 0 5px #000026;
-    width: 80%;
-    border: 1px solid #c9c9c9;
-    border-radius: 5px;
-    margin: 20px auto 0;
-    display: flex;
-    justify-content: space-between;
-    .menu-box-item {
-        width: 50%;
-        padding: 20px;
-        border-right: 1px solid #c9c9c9;
-        .header {
-            padding-bottom: 10px;
-            .title {
-                font-size: 18px;
-                color: #56AB2F;
-                text-transform: uppercase;
-                font-weight: bolder;
-            }
-        }
-        .menu-item-detail {
-            padding: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            .link-item {
-                width: 100%;
-                height: 50px;
-                line-height: 50px;
-                border-radius: 5px;
-                background-color: #A8E063;
-                text-align: center;
-                padding: 0 1.5%;
-                margin: 0 1% 1%;
-                color: #fff;
-                font-size: 14px;
-                transition: 0.2s;
-                &:hover {
-                    box-shadow: 0 0 5px #000026;
-                    transform: translateY(-2px);
-                }
-            }
-        }
-    }
-    .form-box-detail {
-        width: 50%;
-        padding: 20px 20px 20px 0;
-        form {
-            .form-item {
-                    padding: 0 20px 16px;
-                .title-item {
-                    color: #56AB2F;
-                    padding-bottom: 4px;
-                }
-                input {
-                    padding: 8px;
-                    border: 1px solid #acacac;
-                    border-radius: 5px;
-                    width: 100%;
-                }
-                .detail {
-                    &:last-child {
-                        input {
-                            width: 100px;
-                        }
-                    }
-                    padding-bottom: 8px;
-                    .title-detail {
-                        color: #A8E063;
-                        font-size: 14px;
-                    }
-                    .unit {
-                        font-size: 10px;
-                        padding: 4px 0;
-                    }
-                }
-                .item-detail {
-                    padding-bottom: 8px;
-                    .title-item-detail {
-                        font-size: 14px;
-                        color: #A8E063;
-                    }
-                }
-                select {
-                    padding: 8px;
-                    border-radius: 5px;
-                    border: 1px solid #acacac;
-                    margin-top: 4px;
-                    width: 50%;
-                }
-                textarea {
-                    width: 100%;
-                    border-radius: 5px;
-                    border: 1px solid #acacac;
-                    padding: 8px;
-                }
-            }
-            button {
-                width: 150px;
-                display: block;
-                text-align: center;
-                padding: 12px;
-                border-radius: 5px;
-                border: none;
-                margin: 0 auto;
-                background-color: #A8E063;
-                color: #fff;
-                transition: 0.2s;
-                cursor: pointer;
-                font-size: 18px;
-                font-weight: bolder;
-                &:hover {
-                    background-color: #56AB2F;
-                }
-            }
-        }
-    }
-}
 
 // Component Header
 .header-container {
@@ -709,6 +590,229 @@ $color_primary_b: #08974b;
 
                 .bar-3 {
                     width: 30px !important;
+                }
+            }
+        }
+    }
+}
+
+// Page Bill Drug
+.box-item-detail {
+    box-shadow: 0 0 5px #000026;
+    width: 80%;
+    border: 1px solid #c9c9c9;
+    border-radius: 5px;
+    margin: 20px auto 0;
+    display: flex;
+    justify-content: space-between;
+    .menu-box-item {
+        width: 50%;
+        padding: 20px;
+        border-right: 1px solid #c9c9c9;
+        .header {
+            padding-bottom: 10px;
+            .title {
+                font-size: 18px;
+                color: #56AB2F;
+                text-transform: uppercase;
+                font-weight: bolder;
+            }
+        }
+        .menu-item-detail {
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            .link-item {
+                width: 100%;
+                height: 50px;
+                line-height: 50px;
+                border-radius: 5px;
+                background-color: #A8E063;
+                text-align: center;
+                padding: 0 1.5%;
+                margin: 0 1% 1%;
+                color: #fff;
+                font-size: 14px;
+                transition: 0.2s;
+                &:hover {
+                    box-shadow: 0 0 5px #000026;
+                    transform: translateY(-2px);
+                }
+            }
+        }
+    }
+    .form-box-detail {
+        width: 50%;
+        padding: 20px;
+        form {
+            .form-item {
+                display: flex;
+                flex-direction: column;
+                .btn-add-item {
+                    margin: 8px 0 16px;
+                }
+                .name {
+                    padding: 8px;
+                    border-radius: 5px;
+                    border: 1px solid #808080;
+                }
+                textarea {
+                    border-radius: 5px;
+                    border: 1px solid #808080;
+                    font-family: 'My-Font';
+                    padding: 8px;
+                }
+                .title-item {
+                    color: #56AB2F;
+                    font-weight: bolder;
+                    padding: 4px 0;
+                }
+                .item-detail {
+                    z-index: 0;
+                    position: relative;
+                    cursor: pointer;
+                    margin-top: 20px;
+                    &:hover {
+                        .delete {
+                            opacity: 1;
+                        }
+                    }
+                    .delete {
+                        cursor: pointer;
+                        content: 'x';
+                        top: -20px;
+                        right: 0;
+                        position: absolute;
+                        display: block;
+                        opacity: 0;
+                        color: #ff0000;
+                        width: 20px;
+                        height: 20px;
+                        font-size: 12px;
+                        transition: 0.2s;
+                        border: 1px solid #ff0000;
+                        background-color: #fff;
+                        border-radius: 50%;
+                        text-align: center;
+                        z-index: 1;
+                        &:hover {
+                            background-color: #ff0000 !important;
+                            color: #fff;
+                        }
+                    }
+                    .title-item-detail {
+                        color: #A8E063;
+                        padding: 4px 0;
+                    }
+                    .detail {
+                        display: flex;
+                        flex-direction: column;
+                        label {
+                            display: none;
+                        }
+                        .number {
+                            padding: 8px;
+                            width: 100px;
+                            border-radius: 5px;
+                            border: 1px solid #808080;
+                        }
+                        .box-detail {
+                            display: flex;
+                            justify-content: space-between;
+                            input {
+                                width: 47%;
+                                padding: 8px;
+                                border: 1px solid #808080;
+                                border-radius: 5px;
+                            }
+                            select {
+                                width: 47%;
+                                padding: 8px;
+                                border: 1px solid #808080;
+                                border-radius: 5px;
+                            }
+                        }
+                        .title-detail {
+                            color: #A8E063;
+                            padding: 4px 0;
+                        }
+                        .unit {
+                            font-size: 10px;
+                            padding: 4px 0;
+                        }
+                    }
+                }
+                .delete {
+                    position: relative;
+                }
+                .btn-add-item {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    width: 140px;
+                    background-color: #ffffff00;
+                    border: none;
+                    cursor: pointer;
+                    margin: 0 auto;
+                    .fa {
+                        width: 25px;
+                        height: 25px;
+                        line-height: 25px;
+                        color: #56AB2F;
+                        border-radius: 50%;
+                        border: 3px solid #56AB2F;
+                        background-color: #fff;
+                        font-size: 18px;
+                        transition: 0.2s;
+                        text-align: center;
+                    }
+                    .title-btn {
+                        color: #56AB2F;
+                        padding: 8px 0;
+                        position: relative;
+                        font-size: 14px;
+                        &::after {
+                            position: absolute;
+                            content: '';
+                            display: block;
+                            height: 2px;
+                            width: 0%;
+                            background-color: #56AB2F;
+                            bottom: 0;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            transition: 0.2s;
+                        }
+                    }
+                    &:hover {
+                        .fa {
+                            background-color: #56AB2F;
+                            color: #fff;
+                        }
+                        .title-btn {
+                            &::after {
+                                width: 100%;
+                            }
+                        }
+                    }
+                }
+            }
+            .btn-submit {
+                width: 150px;
+                display: block;
+                text-align: center;
+                padding: 12px;
+                border-radius: 5px;
+                border: none;
+                margin: 16px auto;
+                background-color: #A8E063;
+                color: #fff;
+                transition: 0.2s;
+                cursor: pointer;
+                font-size: 18px;
+                font-weight: bolder;
+                &:hover {
+                    background-color: #56AB2F;
                 }
             }
         }

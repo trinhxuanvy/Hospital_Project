@@ -259,31 +259,57 @@ router.post('/doctor/patient/:id/bill-drug-:number', async function (req, res, n
   let reqBody = req.body;
   let id = req.params.id;
   let number = req.params.number;
-  let idDrug = [], numberUse = [], idFile = [], diagnose = '';
+  let idDrug = [], numberUse = [], idFile = [], idNewDrug = [], numberNewUse = [], diagnose = '';
+  let count = 0;
+  console.log(reqBody)
   for (let i in reqBody) {
     if (i.indexOf('idDrug') > -1) {
-
-      let pos = i.indexOf('_');
-      idFile.push(i.slice(pos + 1))
-      pos = reqBody[`${i}`].indexOf('-');
-      idDrug.push(reqBody[`${i}`].slice(pos + 2));
-    }
-    if (i.indexOf('numberUse') > -1) {
-      if ((reqBody[`${i}`]*1) >= 0) {
-        numberUse.push(reqBody[`${i}`]);
+      if (reqBody[`${i}`] != '') {
+        let pos = i.indexOf('_');
+        idFile.push(i.slice(pos + 1))
+        pos = reqBody[`${i}`].indexOf('-');
+        idDrug.push(reqBody[`${i}`].slice(pos + 2));
       }
       else {
-        idDrug = [], numberUse = [], idFile = [], diagnose = '';
+        idDrug = [], numberUse = [], idFile = [], idNewDrug = [], numberNewUse = [], diagnose = '';
         break;
       }
     }
-    if (i.indexOf('diagnose') > -1) {
+    else if (i.indexOf('numberUse') > -1) {
+      if ((reqBody[`${i}`]*1) >= 0 && reqBody[`${i}`] != '') {
+        numberUse.push(reqBody[`${i}`]);
+      }
+      else {
+        idDrug = [], numberUse = [], idFile = [], idNewDrug = [], numberNewUse = [], diagnose = '';
+        break;
+      }
+    }
+    else if (i.indexOf('diagnose') > -1) {
       if (setup.checkInput(reqBody[`${i}`]) == true) {
-        idDrug = [], numberUse = [], idFile = [], diagnose = '';
+        idDrug = [], numberUse = [], idFile = [], idNewDrug = [], numberNewUse = [], diagnose = '';
         break;
       }
       else {
         diagnose = reqBody[`${i}`];
+      }
+    }
+    else if (i.indexOf('idNewDrug') > -1) {
+      if (reqBody[`${i}`] != '') {
+        let pos = reqBody[`${i}`].indexOf('-');
+        idNewDrug.push(reqBody[`${i}`].slice(pos + 2));
+      }
+      else {
+        idDrug = [], numberUse = [], idFile = [], idNewDrug = [], numberNewUse = [], diagnose = '';
+        break;
+      }
+    }
+    else if (i.indexOf('numberNewUse') > -1 && reqBody[`${i}`] != '') {
+      if ((reqBody[`${i}`]*1) >= 0) {
+        numberNewUse.push(reqBody[`${i}`]);
+      }
+      else {
+        idDrug = [], numberUse = [], idFile = [], idNewDrug = [], numberNewUse = [], diagnose = '';
+        break;
       }
     }
   }
@@ -291,6 +317,11 @@ router.post('/doctor/patient/:id/bill-drug-:number', async function (req, res, n
     let update = await oracledb.getDataTest(`update C##ADMIN.CHITIETDONTHUOC set IDTHUOC = :idt, SOLUONG = :sl 
     where IDCHITIETDONTHUOC = :idct`,
       { idt: idDrug[i], sl: numberUse[i], idct: idFile[i] });
+  }
+  console.log(idNewDrug, numberNewUse, idDrug, idFile)
+  for (let i = 0; i < idNewDrug.length; i++) {
+    let insert = await oracledb.getDataTest(`insert into C##ADMIN.chitietdonthuoc(IDDONTHUOC, IDTHUOC, SOLUONG) values (:iddt, :idt, :sl)`,
+      { iddt: number, idt: idNewDrug[i], sl: numberNewUse[i]});
   }
   let paFile = await oracledb.getCheckData(`select IDHOSOBENHAN from C##ADMIN.DONTHUOC where IDDONTHUOC = ${number}`);
   if (diagnose != '' && paFile.length > 0) {

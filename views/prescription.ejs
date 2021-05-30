@@ -27,7 +27,7 @@
                 <div class="form-item">
                     <p class="title-item">Tên bệnh nhân</p>
                     <label for="idPat"></label>
-                    <input type="text" name="idPat" id="idPat" value="<%= id %>" placeholder="Lê Văn A">
+                    <input class="name" type="text" name="idPat" id="idPat" value="<%= id %>" placeholder="Lê Văn A">
                 </div>
                 <div class="form-item">
                     <p class="title-item">Chi tiết đơn thuốc</p>
@@ -36,28 +36,34 @@
                             <p class="title-item-detail">Tên thuốc</p>
                             <div class="detail">
                                 <label for="<%='idDrug_' + item['IDCHITIETDONTHUOC'] %>"></label>
-                                <input class="input-des" type="text" value="<%= item['TENTHUOC'] + ' - ' + item['IDTHUOC'] %>" id="<%='idDrug_' + item['IDCHITIETDONTHUOC'] %>" name="<%='idDrug_' + item['IDCHITIETDONTHUOC'] %>">
-                                <select class="select-des">
-                                    <% drug.forEach(item1 => { %>
-                                        <option value="<%= item1['TENTHUOC'] + ' - ' + item1['IDTHUOC'] %>"><%= item1['TENTHUOC'] + ' - ' + item1['IDTHUOC'] %></option>
-                                    <% }) %>
-                                </select>
+                                <div class="box-detail">
+                                    <input class="input-des" type="text" value="<%= item['TENTHUOC'] + ' - ' + item['IDTHUOC'] %>" id="<%='idDrug_' + item['IDCHITIETDONTHUOC'] %>" name="<%='idDrug_' + item['IDCHITIETDONTHUOC'] %>">
+                                    <select class="select-des">
+                                        <% drug.forEach(item1 => { %>
+                                            <option value="<%= item1['TENTHUOC'] + ' - ' + item1['IDTHUOC'] + ' - ' + item1['DONVITINH'] %>"><%= item1['TENTHUOC'] + ' - ' + item1['IDTHUOC'] + ' - ' + item1['DONVITINH'] %></option>
+                                        <% }) %>
+                                    </select>
+                                </div>
                             </div>
                             <div class="detail">
                                 <p class="title-detail">Liều lượng</p>
                                 <label for="<%= 'numberUse_' + item['IDTHUOC'] %>"></label>
-                                <input type="text" id="<%= 'numberUse_' + item['IDTHUOC'] %>" name="<%= 'numberUse_' + item['IDTHUOC'] %>" value="<%= item['SOLUONG'] %>">
+                                <input class="number" type="text" id="<%= 'numberUse_' + item['IDTHUOC'] %>" name="<%= 'numberUse_' + item['IDTHUOC'] %>" value="<%= item['SOLUONG'] %>">
                                 <p class="unit">Đơn vị tính: <%= item['DONVITINH'] %></p>
                             </div>
                         </div>
                     <% }) %>
+                    <button type="button" class="btn-add-item">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        <p class="title-btn">Thêm loại thuốc</p>
+                    </button>
                 </div>
                 <div class="form-item">
                     <p class="title-item">Chuẩn đoán</p>
                     <label for="diagnose"></label>
                     <textarea name="diagnose" id="diagnose" cols="30" rows="10"><%= cmtDoc[0]['KETLUANBS'] %></textarea>
                 </div>
-                <button type="submit">Lưu</button>
+                <button class="btn-submit" type="submit">Lưu</button>
             </form>
         </div>
         

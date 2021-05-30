@@ -94,6 +94,15 @@ module.exports = {
         });
     },
 
+    checkDataTest: async function (query, obj) {
+        try {
+            let result = await this.getDataTest(query);
+            return result;
+        } catch (error) {
+            return [];
+        }
+    },
+
     getData: function (query) {
         return new Promise(async function (resolve, reject) {
             let connection;
@@ -325,7 +334,6 @@ module.exports = {
         let decode;
         let saveData = await this.getData(`select privilege, grantable from sys.DBA_TAB_PRIVS
         where grantee = '${user}' and table_name = '${this.allTable[pos]}'`);
-        console.log(saveData, 'tesst')
         if (pos > -1) {
             let count = 0;
             let data = await this.getData(`select column_name, privilege from DBA_COL_PRIVS where grantee = '${user.toUpperCase()}' and table_name = '${this.allTable[pos]}'`);

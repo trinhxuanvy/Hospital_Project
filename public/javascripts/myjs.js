@@ -1,4 +1,4 @@
-src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+src = "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
 
 $(document).ready(function () {
     // Xử lý header fixed
@@ -6,7 +6,7 @@ $(document).ready(function () {
         var header = $('.header-container');
         var offset = $(header).offset();
         var topHeader = offset.top;
-        
+
 
         $(window).scroll(function () {
             let topWindow = $(this).scrollTop();;
@@ -148,13 +148,13 @@ $(document).ready(function () {
 
     // Hàm bỏ dấu tiếng Việt
     function removeVietnameseTones(str) {
-        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a"); 
-        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e"); 
-        str = str.replace(/ì|í|ị|ỉ|ĩ/g,"i"); 
-        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o"); 
-        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u"); 
-        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y"); 
-        str = str.replace(/đ/g,"d");
+        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+        str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+        str = str.replace(/đ/g, "d");
         str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
         str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
         str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
@@ -168,11 +168,11 @@ $(document).ready(function () {
         str = str.replace(/\u02C6|\u0306|\u031B/g, ""); // ˆ ̆ ̛  Â, Ê, Ă, Ơ, Ư
         // Remove extra spaces
         // Bỏ các khoảng trắng liền nhau
-        str = str.replace(/ + /g," ");
+        str = str.replace(/ + /g, " ");
         str = str.trim();
         // Remove punctuations
         // Bỏ dấu câu, kí tự đặc biệt
-        str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g," ");
+        str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, " ");
         return str;
     }
 
@@ -197,17 +197,17 @@ $(document).ready(function () {
         let itemG = $('.detail-item-checkbox-content input.grant-role');
         let itemR = $('.detail-item-checkbox-content input.role');
         for (let i = 0; i < itemG.length; i++) {
-            $(itemG[i]).change(function (e) { 
+            $(itemG[i]).change(function (e) {
                 e.preventDefault();
                 if (itemR[i].checked == false) {
                     itemG[i].checked = false;
-                } 
+                }
             });
-            $(itemR[i]).change(function (e) { 
+            $(itemR[i]).change(function (e) {
                 e.preventDefault();
                 if (itemR[i].checked == false) {
                     itemG[i].checked = false;
-                } 
+                }
             });
         }
     });
@@ -216,17 +216,17 @@ $(document).ready(function () {
         let itemG = $('input.grant-role');
         let itemR = $('input.role');
         for (let i = 0; i < itemG.length; i++) {
-            $(itemG[i]).change(function (e) { 
+            $(itemG[i]).change(function (e) {
                 e.preventDefault();
                 if (itemR[i].checked == false) {
                     itemG[i].checked = false;
-                } 
+                }
             });
-            $(itemR[i]).change(function (e) { 
+            $(itemR[i]).change(function (e) {
                 e.preventDefault();
                 if (itemR[i].checked == false) {
                     itemG[i].checked = false;
-                } 
+                }
             });
         }
     });
@@ -236,8 +236,8 @@ $(document).ready(function () {
         let item = $('.container-user');
         let isClick = $('.btn-show-user');
         let boxUser = $('.content-user');
-        
-        $(isClick[0]).click(function (e) { 
+
+        $(isClick[0]).click(function (e) {
             e.preventDefault();
             let hasClass = $('.container-user').hasClass('show');
             if (hasClass == 0) {
@@ -251,21 +251,84 @@ $(document).ready(function () {
         });
     });
 
-    // Hàm xử lý đơn thuốc
+    // Hàm delete item
+    function DeleteBillDrug () {
+        let del = $('.form-box-detail .form-item .delete');
+        let item = $('.form-box-detail .form-item .item-delete');
+        for (let i = 0; i < del.length; i++) {
+            $(del[i]).click(function (e) { 
+                e.preventDefault();
+                $(item[i]).remove();
+            });
+        }
+    }
+    // Hàm thêm item khi nhấn btn
     $(function () {
+        let btn = $('.form-box-detail .form-item .btn-add-item');      
+        let select = $('.form-box-detail .form-item .select-des');
+        let count = 0;
+        
+        $(btn[0]).click(function (e) {
+            e.preventDefault();0
+            console.log(btn[0], 'aaa')
+            let itemPar = $('.form-box-detail .form-item:nth-child(2)');
+            let itemChi = `<div class="item-detail item-delete">
+                <p class="title-item-detail">Tên thuốc</p>
+                <div class="detail">
+                    <label for="idNewDrug_${count}"></label>
+                    <div class="box-detail">
+                        <input class="input-des" type="text" value="" id="idNewDrug_${count}" name="idNewDrug_${count}">
+                        <select class="select-des">
+                            ${$(select[0]).html()}
+                        </select>
+                    </div>
+                </div>
+                <div class="detail">
+                    <p class="title-detail">Liều lượng</p>
+                    <label for="numberNewUse_${count}"></label>
+                    <input class="number" type="text" id="numberNewUse_${count}" name="numberNewUse_${count}" value="0">
+                    <p class="unit">Đơn vị tính:</p>
+                </div>
+                <button title="xóa" type="button" class="delete"><i class="fa fa-times" aria-hidden="true"></i></button>
+            </div>`;
+            $(btn).before(itemChi);
+            count++;
+            console.log()
+            return [ HandleBillDrug(), DeleteBillDrug() ];
+        });
+    });
+
+    // Hàm xử lý đơn thuốc
+    function HandleBillDrug() {
         let input = $('.input-des');
         let select = $('.select-des');
+        let unit = $('.form-box-detail .unit');
+        let arr = [];
+        for (let i = 0; i< select.length; i++) {
+            arr.push($(input[i]).val())
+        }
         for (let i = 0; i < select.length; i++) {
             $(select[i]).val($(input[i]).val());
-            $(select[i]).change(function (e) { 
+            $(select[i]).change(function (e) {
                 e.preventDefault();
-                $(input[i]).val($(select[i]).val());
+                let val = $(select[i]).val();
+                $(input[i]).val(val.slice(0, val.length - 7));
+                $(unit[i]).html('Đon vị tính: ' + val.slice(val.length - 5));
             });
             let temp = $(input[i]).val();
             $(input[i]).keyup(function (e) {
-                alert('Bạn không thể nhập vào đó')
-                $(input[i]).val($(select[i]).val());
+                let val = $(select[i]).val();
+                if (val != null) {
+                    $(input[i]).val(val.slice(0, val.length - 7));
+                    $(unit[i]).html('Đơn vị tính: ' + val.slice(val.length - 5));
+                }
+                else {
+                    $(input[i]).val(arr[i]);
+                    $(unit[i]).html('Đơn vị tính: ');
+                }
             });
         }
-    });
+    };
+
+    HandleBillDrug();
 });
