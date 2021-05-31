@@ -17,8 +17,8 @@
                 <p class="title">Tất cả đơn thuốc</p>
             </div>
             <div class="menu-item-detail">
-                <% allBillDrug.forEach(item => { %>
-                    <a title="<%= item['NGAYKHAM'] %>" href="/doctor/patient/<%= id %>/bill-drug-<%= item['IDHOSOBENHAN'] %> " class="link-item"><%= item['NGAYKHAM'] %></a>
+                <% bill.forEach(item => { %>
+                    <a title="<%= item['NGAYTAO'] %>" href="/doctor/patient/<%= id %>/bill-drug-<%= item['IDDONTHUOC'] %> " class="link-item"><%= item['NGAYTAO'] %></a>
                 <% }) %>
             </div>
         </div>
@@ -27,7 +27,7 @@
                 <div class="form-item">
                     <p class="title-item">Tên bệnh nhân</p>
                     <label for="idPat"></label>
-                    <input class="name" type="text" name="idPat" id="idPat" value="<%= id %>" placeholder="Lê Văn A">
+                    <input class="name" type="text" name="idPat" id="idPat" value="<%= patient[0]['TENBENHNHAN'] %>" placeholder="Lê Văn A">
                 </div>
                 <div class="form-item">
                     <p class="title-item">Chi tiết đơn thuốc</p>

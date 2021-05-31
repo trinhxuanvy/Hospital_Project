@@ -241,7 +241,9 @@ router.post('/doctor/patient/page-:number', async function (req, res, next) {
 router.get('/doctor/patient/:id/bill-drug-:number', async function (req, res, next) {
   let id = req.params.id;
   let number = req.params.number;
+  let patient = await oracledb.getCheckData(`select * from C##ADMIN.BENHNHAN where IDBENHNHAN = ${id}`);
   let allBillDrug = await oracledb.getCheckData(`select * from C##ADMIN.HOSOBENHAN where IDBENHNHAN = ${id}`);
+  let bill = await oracledb.getCheckData(`select dt.* from C##ADMIN.HOSOBENHAN hs, C##ADMIN.DONTHUOC dt where dt.iDHOSOBENHAN = hs.IDHOSOBENHAN and hs.IDBENHNHAN = ${id}`);
   let deDes = await oracledb.getCheckData(`select ctdt.*, t.TENTHUOC, t.DONVITINH from C##ADMIN.CHITIETDONTHUOC ctdt, C##ADMIN.THUOC t where ctdt.IDDONTHUOC = ${number} and ctdt.IDTHUOC = t.IDTHUOC`);
   let drug = await oracledb.getCheckData(`select * from C##ADMIN.THUOC order by tenthuoc`);
   let cmtDoc = await oracledb.getCheckData(`select KETLUANBS from C##ADMIN.HOSOBENHAN hsba, C##ADMIN.DONTHUOC dt where hsba.IDBENHNHAN = ${id} and hsba.IDHOSOBENHAN = dt.IDHOSOBENHAN and dt.IDDONTHUOC = ${number}`);
@@ -252,7 +254,8 @@ router.get('/doctor/patient/:id/bill-drug-:number', async function (req, res, ne
     cmtDoc = [];
     cmtDoc.push({ KETLUANBS: '' });
   }
-  res.render('prescription', { drug, id, allBillDrug, deDes, number, cmtDoc });
+  console.log(bill);
+  res.render('prescription', { drug, id, allBillDrug, deDes, number, cmtDoc, patient, bill });
 });
 
 router.post('/doctor/patient/:id/bill-drug-:number', async function (req, res, next) {
