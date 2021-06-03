@@ -142,7 +142,6 @@ module.exports = {
     userLogin: async (user, password) => {
         let createUser = setup.setUserName(user);
         let connection = await oracledb.connect(createUser, password);
-
         return connection ? true : false;
     },
 

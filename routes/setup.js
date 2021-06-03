@@ -158,7 +158,7 @@ module.exports = {
     },
 
     checkInput: function (string) {
-        let format = /[!@#$%^&*()_+-=\[\]{};':"\|,.<>\/?]/;
+        let format = /[!@#$%^&*()_+-=\[]{};':"\|,.<>\/?]/;
         return format.test(string) ? true : false;
     },
 
@@ -167,7 +167,7 @@ module.exports = {
     },
 
     setUserName: function (string) {
-        return 'c##' + string;
+        return 'C##' + string;
     },
 
     getUserNameObject: function (obj) {

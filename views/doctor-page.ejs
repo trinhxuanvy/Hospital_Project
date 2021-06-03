@@ -17,7 +17,8 @@
                     <img src="/images/no-user.jpg" alt="">
                 </div>
                 <a href="" class="link-detail-user">Trang cá nhân</a>
-                <a href="" class="link-logout-user">Đăng xuất</a>
+                <a href="/doctor/<%= iddoctor %>/patient/page-1" class="link-detail-user">Quản lý bệnh nhân</a>
+                <a href="/logout" class="link-detail-user">Đăng xuất</a>
             </div>
             <div class="btn-show-user">
                 <i class="fa fa-angle-double-left" aria-hidden="true"></i>
@@ -41,7 +42,7 @@
                         <p class="title">Danh mục</p>
                     </div>
                     <div class="menu-item">
-                        <a href="/doctor/patient/page-1" class="link-item"><p>Tất cả bệnh nhân</p></a>
+                        <a href="/doctor/<%= iddoctor %>/patient/page-1" class="link-item"><p>Tất cả bệnh nhân</p></a>
                         <a href="" class="link-item"><p>Bệnh nhân đang điều trị</p></a>
                         <a href="" class="link-item"><p>Bệnh nhân đã điều trị</p></a>
                     </div>
@@ -52,7 +53,7 @@
                         <p class="title">Tìm kiếm theo tên</p>
                     </div>
                     <div class="box-search">
-                        <form action="/doctor/patient/page-<%= page %>" method="GET">
+                        <form action="/doctor/<%= iddoctor %>/patient/page-<%= page %>" method="GET">
                             <label for="search"></label>
                             <input type="search" name="search" id="search">
                             <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
@@ -65,13 +66,13 @@
                 <div class="item">
                     <div class="header-body">
                         <a href="" class="link-filter"><p><i class="fa fa-filter" aria-hidden="true"></i> Lọc</p></a>
-                        <a href="/doctor/patient/page-<% if (page == 1) { %><%= 1 %><% } else { %><%= page*1 - 1 %><% } if (isSearch) { %><%= '?search=' + search %><% } else { %><%= '' %><% } %>" title="trang trước" class="link-prev-page"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
-                        <a href="/doctor/patient/page-<% if (page == numPage) { %><%= numPage %><% } else { %><%= page*1 + 1 %><% } if (isSearch) { %><%= '?search=' + search %><% } else { %><%= '' %><% } %>" title="trang sau" class="link-next-page"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                        <a href="/doctor/<%= iddoctor %>/patient/page-<% if (page == 1) { %><%= 1 %><% } else { %><%= page*1 - 1 %><% } if (isSearch) { %><%= '?search=' + search %><% } else { %><%= '' %><% } %>" title="trang trước" class="link-prev-page"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
+                        <a href="/doctor/<%= iddoctor %>/patient/page-<% if (page == numPage) { %><%= numPage %><% } else { %><%= page*1 + 1 %><% } if (isSearch) { %><%= '?search=' + search %><% } else { %><%= '' %><% } %>" title="trang sau" class="link-next-page"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
                     </div>
                     <div class="menu-item">
                         <% data.forEach(item => { %>
                             <div class="box-item">
-                                <a href="/doctor/patient/<%= item['IDBENHNHAN'] %>/bill-drug-0" title="<%= item['TENBENHNHAN'] %> - <%= item['IDBENHNHAN'] %> " class="box-item-link">
+                                <a href="/doctor/<%= iddoctor %>/patient/<%= item['IDBENHNHAN'] %>/bill-drug/0" title="<%= item['TENBENHNHAN'] %> - <%= item['IDBENHNHAN'] %> " class="box-item-link">
                                     <div class="logo-item"><img src="/images/no-user.jpg" alt=""></div>
                                     <p class="infor-1">Mã bệnh: <%= item['IDBENHNHAN'] %> </p>
                                     <p class="infor-2">Họ tên: <%= item['TENBENHNHAN'] %> </p>

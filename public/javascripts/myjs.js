@@ -251,6 +251,19 @@ $(document).ready(function () {
         });
     });
 
+    // Hàm remove
+    // $(function () {
+    //     let content = $('.container-item .categories-2 .body-item .item .menu-item .box-item');
+    //     switch (content.length) {
+    //         case 2,3,5,6:
+                
+    //             break;
+        
+    //         default:
+    //             break;
+    //     }
+    // });
+
     // Hàm delete item
     function DeleteBillDrug () {
         let del = $('.form-box-detail .form-item .delete');
@@ -266,10 +279,10 @@ $(document).ready(function () {
     $(function () {
         let btn = $('.form-box-detail .form-item .btn-add-item');      
         let select = $('.form-box-detail .form-item .select-des');
-        let count = 0;
+        let count = 1;
         
         $(btn[0]).click(function (e) {
-            e.preventDefault();0
+            e.preventDefault();
             console.log(btn[0], 'aaa')
             let itemPar = $('.form-box-detail .form-item:nth-child(2)');
             let itemChi = `<div class="item-detail item-delete">
@@ -295,6 +308,34 @@ $(document).ready(function () {
             count++;
             console.log()
             return [ HandleBillDrug(), DeleteBillDrug() ];
+        });
+    });
+
+    $(function () {
+        let btn = $('.menu-box-item .btn-add-item');
+        $(btn[0]).click(function (e) {
+            e.preventDefault();
+            let box = $('.menu-box-item .box-add-item');
+            let isClass = $(box[0]).hasClass('display');
+            if (isClass) {
+                $(box[0]).removeClass('display');
+            }
+            else {
+                $(box[0]).addClass('display');
+            }
+        });
+
+        let btnClose = $('.menu-box-item .close');
+        $(btnClose[0]).click(function (e) {
+            e.preventDefault();
+            let box = $('.menu-box-item .box-add-item');
+            let isClass = $(box[0]).hasClass('display');
+            if (isClass) {
+                $(box[0]).removeClass('display');
+            }
+            else {
+                $(box[0]).addClass('display');
+            }
         });
     });
 
