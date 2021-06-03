@@ -9,7 +9,28 @@ var router = express.Router();
 
 // GET home page
 router.get('/', async function (req, res, next) {
-  res.render('index');
+  let iddoctor = '';
+  try {
+    let tokenIdUser = await req.cookies.is_;
+    let isCheck = jwt.verify(tokenIdUser, 'vychuoi123', function (err, result) {
+      if (err) {
+        return 0;
+      }
+      else {
+        return result;
+      }
+    });
+    if (isCheck == 0) {
+      res.clearCookie('flag'); 
+    }
+    else {
+      iddoctor = tokenIdUser.slice(tokenIdUser.length - 8, tokenIdUser.length);
+    }
+    res.render('index', { iddoctor });
+  } catch (error) {
+    res.clearCookie('flag');
+    res.render('index', { iddoctor });
+  }
 });
 
 // GET login page
@@ -47,6 +68,25 @@ router.post('/admin/user', async function (req, res, next) {
       let roleUser = await getUsername.length > 0 ? getUsername[0]['VAITRO'] : '';
       if (roleUser == 'Bác sĩ') {
         res.redirect(`/doctor/${sliceToken}/patient/page-1`);
+      }
+      else if (roleUser == 'NV Kế Toán') {
+        res.redirect(`/`);
+      }
+      else if (roleUser == 'NV Bán Thuốc') {
+        res.redirect(`/`);
+      }
+      else if (roleUser == 'NV Tài Vụ') {
+        res.redirect(`/`);
+      }
+      else if (roleUser == 'NV Điều Phối') {
+        res.redirect(`/`);
+      }
+      else if (roleUser == 'Quản Lý') {
+        res.redirect(`/`);
+      }
+      else if (roleUser == 'NV Dịch Vụ')
+      {
+        res.redirect(`/`);
       }
       else {
         res.cookie('flag', tokenMegreUser);
@@ -222,36 +262,39 @@ router.get('/doctor/:iddoctor/patient/page-:number', async function (req, res, n
     if (tokenIdUser.slice(tokenIdUser.length - 8, tokenIdUser.length) == iddoctor) {
       let reTokenIdUser = jwt.verify(tokenIdUser, 'vychuoi123');
       iddoctor = reTokenIdUser['getId'];
-      console.log(reTokenIdUser)
-      if (page < 1) {
-        page = 1;
-      }
-      let data, isSearch = 0, search;
-      if ((search = getItem['search']) != null) {
-        isSearch = 1;
-        data = await oracledb.getCheckData(`select distinct bn.* from C##ADMIN.BENHNHAN bn, C##ADMIN.hosobenhan hsba where hsba.bsdieutri = ${iddoctor} and hsba.idbenhnhan = bn.idbenhnhan and FN_CONVERT_TO_VN(lower(bn.TENBENHNHAN)) like '%${setup.removeVietnameseTones(getItem['search']).toLowerCase()}%' order by bn.IDBENHNHAN asc`);
-      }
-      else {
-        data = await oracledb.getCheckData(`select distinct bn.*  from C##ADMIN.hosobenhan hsbn, C##ADMIN.benhnhan bn where hsbn.bsdieutri = ${iddoctor} and hsbn.idbenhnhan = bn.idbenhnhan order by bn.idbenhnhan asc`);
-      }
-      let r = data.length % 8;
-      let numPage = Math.floor(data.length / 8);
-      if (data.length != 0) {
-        if (r > 0) {
-          numPage += 1;
+      let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${iddoctor}`);
+      console.log(staff)
+      if(staff[0]['VAITRO'] == 'Bác sĩ') {
+        if (page < 1) {
+          page = 1;
         }
-        if (page > numPage) {
-          page = numPage;
+        let data, isSearch = 0, search;
+        if ((search = getItem['search']) != null) {
+          isSearch = 1;
+          data = await oracledb.getCheckData(`select distinct bn.* from C##ADMIN.BENHNHAN bn, C##ADMIN.hosobenhan hsba where hsba.bsdieutri = ${iddoctor} and hsba.idbenhnhan = bn.idbenhnhan and FN_CONVERT_TO_VN(lower(bn.TENBENHNHAN)) like '%${setup.removeVietnameseTones(getItem['search']).toLowerCase()}%' order by bn.IDBENHNHAN asc`);
         }
-        let startPage = (page - 1) * 8;
-        let endPage = page * 8;
-        data = data.slice(startPage, endPage);
+        else {
+          data = await oracledb.getCheckData(`select distinct bn.*  from C##ADMIN.hosobenhan hsbn, C##ADMIN.benhnhan bn where hsbn.bsdieutri = ${iddoctor} and hsbn.idbenhnhan = bn.idbenhnhan order by bn.idbenhnhan asc`);
+        }
+        let r = data.length % 8;
+        let numPage = Math.floor(data.length / 8);
+        if (data.length != 0) {
+          if (r > 0) {
+            numPage += 1;
+          }
+          if (page > numPage) {
+            page = numPage;
+          }
+          let startPage = (page - 1) * 8;
+          let endPage = page * 8;
+          data = data.slice(startPage, endPage);
+        }
+        else {
+          page = req.params.number * 1;
+        }
+        iddoctor = req.params.iddoctor;
+        res.render('doctor-page', { data, page, numPage, isSearch, search, iddoctor });
       }
-      else {
-        page = req.params.number * 1;
-      }
-      iddoctor = req.params.iddoctor;
-      res.render('doctor-page', { data, page, numPage, isSearch, search, iddoctor });
     }
     else {
       res.clearCookie('flag');
@@ -270,7 +313,6 @@ router.post('/doctor/:iddoctor/patient/page-:number', async function (req, res, 
 });
 
 router.get('/doctor/:iddoctor/patient/:id/bill-drug/:number', async function (req, res, next) {
-  console.log('kềafa');
   try {
     let tokenIdUser = await req.cookies.is_;
     let iddoctor = req.params.iddoctor;
@@ -402,7 +444,7 @@ router.post('/doctor/:iddoctor/patient/:id/bill-drug/:number', async function (r
         for (let i = 0; i < idDrug.length; i++) {
           let update = await oracledb.getDataTest(`update C##ADMIN.CHITIETDONTHUOC set IDTHUOC = :idt, SOLUONG = :sl 
           where IDCHITIETDONTHUOC = :idct`,
-          { idt: idDrug[i], sl: numberUse[i], idct: idFile[i] });
+            { idt: idDrug[i], sl: numberUse[i], idct: idFile[i] });
         }
 
         for (let i = 0; i < idNewDrug.length; i++) {
@@ -414,7 +456,7 @@ router.post('/doctor/:iddoctor/patient/:id/bill-drug/:number', async function (r
         if (diagnose != '' && paFile.length > 0) {
           let update = await oracledb.getDataTest(`update C##ADMIN.HOSOBENHAN set KETLUANBS = :kl
           where IDHOSOBENHAN = :idhsba`,
-          { kl: diagnose, idhsba: paFile[0]['IDHOSOBENHAN'] });
+            { kl: diagnose, idhsba: paFile[0]['IDHOSOBENHAN'] });
         }
       }
       iddoctor = req.params.iddoctor;

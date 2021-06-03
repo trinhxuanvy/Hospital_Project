@@ -20,6 +20,48 @@ $(document).ready(function () {
         });
     });
 
+    // Xử lý slide
+    $(function () {
+        $('.index-page .categories-1 .owl-carousel').owlCarousel({
+            loop: true,
+            nav: true,
+            autoplay: true,
+            dots: false,
+            responsive: {
+                0: {
+                    items: 1,
+                },
+                600: {
+                    items: 1
+                },
+                1000: {
+                    items: 1
+                }
+            }
+        })
+    });
+
+    $(function () {
+        $('.index-page .categories-2 .owl-carousel').owlCarousel({
+            loop: true,
+            nav: true,
+            margin: 20,
+            autoplay: true,
+            dots: false,
+            responsive: {
+                0: {
+                    items: 1,
+                },
+                600: {
+                    items: 2
+                },
+                1000: {
+                    items: 4
+                }
+            }
+        })
+    });
+
     // Xử lý menu responsive opacity 1
     $(function () {
         let menuTop = $('.menu-top');

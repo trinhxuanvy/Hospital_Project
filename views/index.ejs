@@ -1,12 +1,169 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <link rel='stylesheet' href='/stylesheets/style.css' />
+    <%- include('partials/layouts/head') %>
+
+        <%- include('partials/layouts/styles') %>
 </head>
 
 <body>
+    <%- include('partials/layouts/header') %>
 
+    <div class="container-user">
+        <div class="box-user">
+            <div class="content-user">
+                <div class="logo-user">
+                    <img src="images/no-user.jpg" alt="">
+                </div>
+                <% if (iddoctor != '') { %>
+                    <a href="" class="link-detail-user">Trang cá nhân</a>
+                    <a href="/doctor/<%= iddoctor %>/patient/page-1" class="link-detail-user">Quản lý bệnh nhân</a>
+                <% } else { %>
+                    <a href="/login" class="link-detail-user">Trang cá nhân</a>
+                    <a href="/login" class="link-detail-user">Quản lý bệnh nhân</a>
+                <% } %>
+                 
+                <a href="/logout" class="link-detail-user">Đăng xuất</a>
+            </div>
+            <div class="btn-show-user">
+                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="index-page">
+        <div class="categories-1">
+            <div class="owl-carousel own-theme slide">
+                <div class="item wow bounce" data-wow-delay="1s">
+                    <a href=""><img src="images/8fd3534f1a07d50a0a6fd0b068d78617.jpg" alt=""></a>
+                </div>
+                <div class="item wow bounce">
+                    <a href=""><img src="images/wel002.jpg" alt=""></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="categories-2">
+            <div class="team-container">
+                <div class="team-header">
+                    <p class="title">Đội ngũ bác sĩ</p>
+                </div>
+                <div class="team-body">
+                    <div class="owl-carousel own-theme slide">
+                        <div class="item wow bounce" data-wow-delay="1s">
+                            <div class="item">
+                                <div class="image">
+                                    <img src="images/AG4A3113-scaled-e1598948344512-230x230.jpg" alt="">
+                                    <div class="detail">
+                                        <a href="" class="link">Thông tin bác sĩ</a>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <p class="title"></p>
+                                    <p class="para">
+                                        <br>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item wow bounce">
+                            <div class="item">
+                                <div class="image">
+                                    <img src="images/AG4A3113-scaled-e1598948344512-230x230.jpg" alt="">
+                                    <div class="detail">
+                                        <a href="" class="link">Thông tin bác sĩ</a>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <p class="title"></p>
+                                    <p class="para">
+                                        <br>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item wow bounce">
+                            <div class="item">
+                                <div class="image">
+                                    <img src="images/AG4A3113-scaled-e1598948344512-230x230.jpg" alt="">
+                                    <div class="detail">
+                                        <a href="" class="link">Thông tin bác sĩ</a>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <p class="title"></p>
+                                    <p class="para">
+                                        <br>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item wow bounce">
+                            <div class="item">
+                                <div class="image">
+                                    <img src="images/AG4A3113-scaled-e1598948344512-230x230.jpg" alt="">
+                                    <div class="detail">
+                                        <a href="" class="link">Thông tin bác sĩ</a>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <p class="title"></p>
+                                    <p class="para">
+                                        <br>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item wow bounce">
+                            <div class="item">
+                                <div class="image">
+                                    <img src="images/more-doctor.png" alt="">
+                                </div>
+                                <div class="content">
+                                    <a href="" class="fix-link">Xem thêm bác sĩ khác</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="categories-8">
+            <div class="welcome-container">
+                <div class="welcome-header">
+                    <p class="title">Chào mừng đến với hệ thống bệnh viện</p>
+                </div>
+                <div class="welcome-body">
+                    <div class="item">
+                        <div class="image"><img src="images/bsaichuyennghiep-1-1.png" alt=""></div>
+                        <p class="title">Bác sĩ kinh nghiệm</p>
+                        <p class="para">Đội ngũ bác sĩ là các chuyên gia nhãn khoa với nền tảng chuyên môn vững chắc, giàu kinh nghiệm và y đức.</p>
+                    </div>
+                    <div class="item">
+                        <div class="image"><img src="images/congnghehiendai-2.png" alt=""></div>
+                        <p class="title">Công nghệ hiện đại</p>
+                        <p class="para">Hệ thống trang thiết bị y tế hiện đại bấc nhất được nhập khẩu từ các nước Anh, Mỹ, Đức.</p>
+                    </div>
+                    <div class="item">
+                        <div class="image"><img src="images/chiphihoply-2.png" alt=""></div>
+                        <p class="title">Chi phí hợp lý</p>
+                        <p class="para">Chi phí khám và điều trị, phẫu thuật minh bạch, rõ ràng cùng nhiều ưu đãi hỗ trợ hấp dẫn.</p>
+                    </div>
+                    <div class="item">
+                        <div class="image"><img src="images/hethong-1.png" alt=""></div>
+                        <p class="title">Hệ thống rộng khắp</p>
+                        <p class="para">8 bệnh viện phủ sóng từ Bắc vào Nam, thuận tiện người dân trên khắp cả nước.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/layouts/footer')  %> 
+
+    <%- include('partials/layouts/scripts') %>
 </body>
 
 </html>
