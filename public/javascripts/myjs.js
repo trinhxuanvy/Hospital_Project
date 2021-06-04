@@ -293,19 +293,6 @@ $(document).ready(function () {
         });
     });
 
-    // Hàm remove
-    // $(function () {
-    //     let content = $('.container-item .categories-2 .body-item .item .menu-item .box-item');
-    //     switch (content.length) {
-    //         case 2,3,5,6:
-                
-    //             break;
-        
-    //         default:
-    //             break;
-    //     }
-    // });
-
     // Hàm delete item
     function DeleteBillDrug () {
         let del = $('.form-box-detail .form-item .delete');
