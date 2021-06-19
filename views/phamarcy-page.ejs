@@ -5,6 +5,8 @@
     <%- include('partials/layouts/head') %>
 
     <%- include('partials/layouts/styles') %>
+
+    
 </head>
 
 <body>
@@ -17,7 +19,7 @@
                     <img src="/images/no-user.jpg" alt="">
                 </div>
                 <a href="" class="link-detail-user">Trang cá nhân</a>
-                <a href="/doctor/<%= iddoctor %>/drug-bill/page-1" class="link-detail-user">Quản lý đơn thuốc</a>
+                <a href="/phamarcy/<%= iddoctor %>/drug-bill/page-1" class="link-detail-user">Xem đơn thuốc</a>
                 <a href="/logout" class="link-detail-user">Đăng xuất</a>
             </div>
             <div class="btn-show-user">
@@ -30,7 +32,10 @@
         <div class="categories-1">
             <div class="content">
                 <div class="header">
-                    <p class="title">Cửa hàng thuốc</p>
+                    <p class="title">
+                        Cửa hàng thuốc
+                        <img src="/images/medicine.png" alt="">
+                    </p>
                 </div>
             </div>
         </div>
@@ -41,44 +46,42 @@
                         <p class="title">Danh mục</p>
                     </div>
                     <div class="menu-item">
-                        <a href="/pharmacy/<%= iddoctor %>/drug-bill/page-1" class="link-item"><p>Tất cả đơn thuốc</p></a>
-                    </div>
-                    
+                        <a href="/phamarcy/<%= iddoctor %>/drug-bill/page-1" class="link-item"><p>Tất cả đơn thuốc</p></a>
+                    </div>       
                 </div>
                 <div class="item">
                     <div class="header">
-                        <p class="title">Tìm kiếm theo tên</p>
+                        <p class="title">Tìm kiếm mã đơn thuốc</p>
                     </div>
                     <div class="box-search">
-                        <form action="/pharmacy/<%= iddoctor %>/drug-bill/page-<%= page %>" method="GET">
+                        <form action="/phamarcy/<%= iddoctor %>/drug-bill/page-<%= page %>" method="GET">
                             <label for="search"></label>
-                            <input type="search" name="search" id="search">
+                            <input type="search" name="search" id="searchPhamarcy" autocomplete="off">
                             <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                            <div id="autocomplete"></div>
                         </form>
                     </div>
                 </div>
-                
             </div>
             <div class="body-item">
                 <div class="item">
                     <div class="header-body">
                         <a href="" class="link-filter"><p><i class="fa fa-filter" aria-hidden="true"></i> Lọc</p></a>
-                        <a href="/pharmacy/<%= iddoctor %>/drug-bill/page-<% if (page == 1) { %><%= 1 %><% } else { %><%= page*1 - 1 %><% } if (isSearch) { %><%= '?search=' + search %><% } else { %><%= '' %><% } %>" title="trang trước" class="link-prev-page"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
-                        <a href="/pharmacy/<%= iddoctor %>/drug-bill/page-<% if (page == numPage) { %><%= numPage %><% } else { %><%= page*1 + 1 %><% } if (isSearch) { %><%= '?search=' + search %><% } else { %><%= '' %><% } %>" title="trang sau" class="link-next-page"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                        <a href="/phamarcy/<%= iddoctor %>/drug-bill/page-<% if (page == 1) { %><%= 1 %><% } else { %><%= page*1 - 1 %><% } if (isSearch) { %><%= '?search=' + search %><% } else { %><%= '' %><% } %>" title="trang trước" class="link-prev-page"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
+                        <a href="/phamarcy/<%= iddoctor %>/drug-bill/page-<% if (page == numPage) { %><%= numPage %><% } else { %><%= page*1 + 1 %><% } if (isSearch) { %><%= '?search=' + search %><% } else { %><%= '' %><% } %>" title="trang sau" class="link-next-page"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
                     </div>
                     <div class="menu-item">
                         <% data.forEach(item => { %>
                             <div class="box-item">
-                                <a href="/pharmacy/<%= iddoctor %>/drug-bill/page-<%= page %> /iddonthuoc" title="<%= item['IDDONTHUOC'] %>" class="box-item-link">
-                                    <!-- <div class="logo-item"><img src="/images/no-user.jpg" alt=""></div>
-                                    <p class="infor-1">Mã bệnh:  </p>
-                                    <p class="infor-2">Họ tên: </p> -->
-                                    adsadsadasd
+                                <a href="/phamarcy/<%= iddoctor %>/drug-bill/page-<%= page %>/<%= item['IDDONTHUOC'] %>" title="<%= item['IDDONTHUOC'] %>" class="box-item-link bg-item">
+                                    <p class="infor-1">Mã đơn thuốc: <%= item['IDDONTHUOC'] %></p>
+                                    <p class="infor-1">Ngày tạo: <%= item['NGAY'] %></p>
+                                    <p class="infor-1">Mã bệnh nhân: <%= item['IDBENHNHAN'] %></p>
+                                    <p class="infor-2">Họ tên: <%= item['TENBENHNHAN'] %> </p>
                                 </a>
                             </div>
                         <% }) %>                                                                                                                                                                                                                                                                                                                                                                                                        
-                    </div>
-                    
+                    </div>              
                 </div>
             </div>
         </div>

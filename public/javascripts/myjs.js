@@ -401,4 +401,43 @@ $(document).ready(function () {
     };
 
     HandleBillDrug();
+
+    $(function () {
+        let itemDr = $('.container-item .categories-2 .body-item .item .menu-item .box-item .box-item-link');
+        for (let i = 0; i < itemDr.length; i++) {
+            $(itemDr[i]).hover(function () {
+                    // over
+                    $(this).addClass('bg-item-active');
+                }, function () {
+                    // out
+                    $(this).removeClass('bg-item-active');
+                }
+            );
+        }
+    });
+
+    let searchBox = $('#autocomplete');
+    let inputBox = $('#searchPhamarcy');
+    
+    $(inputBox).keyup(function (e) { 
+        let str = $(this).val();
+        let href = window.location.href;
+
+        if (str.length === 0) {
+            $(searchBox).css('display', 'none');
+        }
+        else {
+            $(searchBox).css('display', 'flex');
+        }
+
+        $.ajax({
+            url: href,
+            contentType: "application/json",
+            method: "POST",
+            data: JSON.stringify({query: str}),
+            success: function (response) {
+                $(searchBox).html(response);
+            }
+        });
+    });
 });

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/layouts/head') %>
+
+    <%- include('partials/layouts/styles') %>
+</head>
+
+<body>
+    <%- include('partials/layouts/header') %>
+
+    <div class="container-user">
+        <div class="box-user">
+            <div class="content-user">
+                <div class="logo-user">
+                    <img src="/images/no-user.jpg" alt="">
+                </div>
+                <a href="" class="link-detail-user">Trang cá nhân</a>
+                <a href="/doctor/<%= iddoctor %>/patient/page-1" class="link-detail-user">Quản lý bệnh nhân</a>
+                <a href="/logout" class="link-detail-user">Đăng xuất</a>
+            </div>
+            <div class="btn-show-user">
+                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="box-item-detail phamarcy-page">
+        <div class="header">
+            <p class="title">Chi tiết đơn thuốc</p>
+        </div>
+        <div class="box-form-item">
+            <div class="form-box-detail">
+                <form>
+                    <div class="form-item">
+                        <p class="title-item">Tên bệnh nhân</p>
+                        <label for="idPat"></label>
+                        <input class="name" type="text" name="idPat" id="idPat" value="<%= data[0]['TENBENHNHAN'] %>" placeholder="Lê Văn A">
+                    </div>
+                    <div class="form-item">
+                        <p class="title-item">Chi tiết đơn thuốc</p>
+                            <% data.forEach(item => { %>
+                                <div class="item-detail">
+                                    <div class="detail">
+                                        <p class="title-item-detail">Tên thuốc</p>
+                                        <label for="<%='idDrug_' + item['IDCHITIETDONTHUOC'] %>"></label>
+                                        <div class="box-detail">
+                                            <input class="input-des" type="text" value="<%= item['TENTHUOC'] + ' - ' + item['IDTHUOC'] %>" id="<%='idDrug_' + item['IDCHITIETDONTHUOC'] %>" name="<%='idDrug_' + item['IDCHITIETDONTHUOC'] %>">
+                                        </div>
+                                    </div>
+                                    <div class="detail">
+                                        <p class="title-detail">Liều lượng</p>
+                                        <label for="<%= 'numberUse_' + item['IDTHUOC'] %>"></label>
+                                        <input class="number" type="text" id="<%= 'numberUse_' + item['IDTHUOC'] %>" name="<%= 'numberUse_' + item['IDTHUOC'] %>" value="<%= item['SOLUONG'] %>">
+                                        <p class="unit">Đơn vị tính: <%= item['DONVITINH'] %></p>
+                                    </div>
+                                </div>
+                            <% }) %>
+                    </div>
+                    <button class="btn-submit" type="submit">Xuất đơn thuốc</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <a href="/phamarcy/<%= iddoctor %>/drug-bill/page-<%= page %>" class="btn-link-back">Quay lại</a>
+    <%- include('partials/layouts/scripts') %>
+</body>
+
+</html>

@@ -4,7 +4,7 @@
 <head>
     <%- include('partials/layouts/head') %>
 
-        <%- include('partials/layouts/styles') %>
+    <%- include('partials/layouts/styles') %>
 </head>
 
 <body>
@@ -17,11 +17,15 @@
                     <img src="images/no-user.jpg" alt="">
                 </div>
                 <% if (iddoctor != '') { %>
-                    <a href="" class="link-detail-user">Trang cá nhân</a>
-                    <a href="/doctor/<%= iddoctor %>/patient/page-1" class="link-detail-user">Quản lý bệnh nhân</a>
+                    <% if (staff == 'bác sĩ') { %>
+                        <a href="" class="link-detail-user">Trang cá nhân</a>
+                        <a href="/doctor/<%= iddoctor %>/patient/page-1" class="link-detail-user">Xem bệnh nhân</a>    
+                    <% } else if (staff == 'nv bán thuốc') { %>
+                        <a href="" class="link-detail-user">Trang cá nhân</a>
+                        <a href="/phamarcy/<%= iddoctor %>/drug-bill/page-1" class="link-detail-user">Xem đơn thuốc</a>
+                    <% }  %>
                 <% } else { %>
-                    <a href="/login" class="link-detail-user">Trang cá nhân</a>
-                    <a href="/login" class="link-detail-user">Quản lý bệnh nhân</a>
+                    <a href="/login" class="link-detail-user">Đăng nhập</a>
                 <% } %>
                  
                 <a href="/logout" class="link-detail-user">Đăng xuất</a>

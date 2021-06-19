@@ -104,13 +104,14 @@ $color_primary_b: #08974b;
 // Component User
 .container-user {
     position: fixed;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0);
     right: -140px;
     top: 85px;
     transition: 0.2s;
     z-index: 2;
     
     .box-user {
+        background-color: #fff;
         position: relative;
         padding: 12px 8px;
         width: 130px;
@@ -169,13 +170,18 @@ $color_primary_b: #08974b;
     
     .categories-1 {
         padding: 20px 0;
-        text-align: center;
         background: linear-gradient(to right, #56AB2F, #A8E063);
+        display: flex;
+        align-items: center;
+        justify-content: center;
         .title {
             font-weight: bolder;
             text-transform: uppercase;
             color: #fff;
             font-size: 40px;
+            img {
+                width: 60px;
+            }
         }
     }
 
@@ -247,7 +253,7 @@ $color_primary_b: #08974b;
                         border: 5px solid #A8E063;
                         border-radius: 5px;
                         display: flex;
-                        overflow: hidden;
+                        position: relative;
                         input {
                             padding: 8px;
                             width: 80%;
@@ -272,6 +278,23 @@ $color_primary_b: #08974b;
                                 .fa {
                                     color: #56AB2F;
                                 }
+                            }
+                        }
+                        #autocomplete {
+                            position: absolute;
+                            width: 70%;
+                            padding: 16px;
+                            background-color: #fff;
+                            border: 1px solid #c9c9c9;
+                            border-radius: 5px;
+                            top: 120%;
+                            overflow: hidden;
+                            display: none;
+                            flex-direction: column;
+                            .link-item-search {
+                                padding: 6px 0;
+                                color: $color_primary;
+                                display: block;
                             }
                         }
                     }
@@ -409,7 +432,17 @@ $color_primary_b: #08974b;
                                 box-shadow: 0px 0px 5px #000026;
                             }
                         }
+                        .bg-item {
+                            background-image: url("../images/drug-bg.png");
+                            background-position: right;
+                            background-size: 0;
+                            background-repeat: no-repeat;
+                        }
+                        .bg-item-active {
+                            background-size: 50px;
+                        }
                     }
+                    
                 }
             }
         }
@@ -959,6 +992,39 @@ $color_primary_b: #08974b;
                 }
             }
         }
+    }
+}
+
+// Page Phamarcy
+.phamarcy-page {
+    display: block;
+    width: 40%;
+    .form-box-detail {
+        width: auto;
+    }
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-top: 16px;
+        .title {
+            text-transform: uppercase;
+            color: $color_primary;
+            font-weight: bolder;
+        }
+    }
+    .item-detail {
+        display: flex;
+        justify-content: space-between;
+        .detail {
+            width: 50%;
+        }
+    }
+    input {
+        width: 200px !important;
+    }
+    .btn-submit {
+        width: 200px !important;
     }
 }
 
