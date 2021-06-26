@@ -295,6 +295,11 @@ $color_primary_b: #08974b;
                                 padding: 6px 0;
                                 color: $color_primary;
                                 display: block;
+                                transition: 0.2s;
+                            }
+                            .active {
+                                color: #fff !important;
+                                background-color: $color_primary !important;
                             }
                         }
                     }
@@ -339,7 +344,7 @@ $color_primary_b: #08974b;
                             left: -55%;
                             top: 50%;
                             transform: translate(-25%, -75%);
-                            transition: 0.6s;
+                            transition: 0.2s;
                             border-radius: 50%;
                             z-index: 0;
                         }

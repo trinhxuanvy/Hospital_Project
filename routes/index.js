@@ -65,27 +65,27 @@ router.post('/user', async function (req, res, next) {
         let userLogin = await oracledb.userLogin(user, password);
         if (userLogin == true) {
             let megreUser = new setup.User(user, password);
-            console.log(user.length);
             let getUsername = await oracledb.getCheckData(`select idnhanvien, vaitro from C##ADMIN.NhanVien where username = '${user.toUpperCase()}'`);
             let getId = getUsername.length > 0 ? getUsername[0]['IDNHANVIEN'] : '';
 
             let tokenIdUser = jwt.sign({ getId }, 'vychuoi123', { algorithm: 'HS256', expiresIn: '1d' });
             let tokenMegreUser = jwt.sign({ megreUser }, 'vychuoi123', { algorithm: 'HS256', expiresIn: '1d' });
+            
             res.cookie('is_', tokenIdUser);
             res.cookie('statusLogin', 'true');
             res.cookie('redirect', 'true');
 
             let sliceToken = tokenIdUser.slice(tokenIdUser.length - 8, tokenIdUser.length);
-            console.log(sliceToken);
             let roleUser = await getUsername.length > 0 ? getUsername[0]['VAITRO'] : '';
+
             if (roleUser == 'Bác sĩ') {
-                res.redirect(`/doctor/${sliceToken}/patient/page-1`);
+                res.redirect(`/doctor/patient/page-1`);
             }
             else if (roleUser.toLowerCase() == 'NV Kế Toán'.toLowerCase()) {
                 res.redirect(`/`);
             }
             else if (roleUser.toLowerCase() == 'NV Bán Thuốc'.toLowerCase()) {
-                res.redirect(`/phamarcy/${sliceToken}/drug-bill/page-1`);
+                res.redirect(`/phamarcy/bill-drug/page-1`);
             }
             else if (roleUser.toLowerCase() == 'NV Tài Vụ'.toLowerCase()) {
                 res.redirect(`/`);
@@ -264,51 +264,51 @@ router.get('/admin/user/:username/info', async function (req, res, next) {
     res.redirect(`/admin/user/${user}/detail/role`);
 });
 
-router.get('/doctor/:iddoctor/patient/page-:number', async function (req, res, next) {
+router.get('/doctor/patient/page-:number', async function (req, res, next) {
     try {
-        let tokenIdUser = await req.cookies.is_;
+        let token = await req.cookies.is_;
         let getItem = req.query;
-        let iddoctor = req.params.iddoctor;
         let page = req.params.number;
-        if (tokenIdUser.slice(tokenIdUser.length - 8, tokenIdUser.length) == iddoctor) {
-            let reTokenIdUser = jwt.verify(tokenIdUser, 'vychuoi123');
-            iddoctor = reTokenIdUser['getId'];
-            let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${iddoctor}`);
-            if (staff[0]['VAITRO'].toLowerCase() == 'Bác sĩ'.toLowerCase()) {
-                if (page < 1) {
-                    page = 1;
-                }
-                let data, isSearch = 0, search;
-                if ((search = getItem['search']) != null) {
-                    isSearch = 1;
-                    data = await oracledb.getCheckData(`select distinct bn.* from C##ADMIN.BENHNHAN bn, C##ADMIN.hosobenhan hsba where hsba.bsdieutri = ${iddoctor} and hsba.idbenhnhan = bn.idbenhnhan and FN_CONVERT_TO_VN(lower(bn.TENBENHNHAN)) like '%${setup.removeVietnameseTones(getItem['search']).toLowerCase()}%' order by bn.IDBENHNHAN asc`);
-                }
-                else {
-                    data = await oracledb.getCheckData(`select distinct bn.*  from C##ADMIN.hosobenhan hsbn, C##ADMIN.benhnhan bn where hsbn.bsdieutri = ${iddoctor} and hsbn.idbenhnhan = bn.idbenhnhan order by bn.idbenhnhan asc`);
-                }
-                let r = data.length % 8;
-                let numPage = Math.floor(data.length / 8);
-                if (data.length != 0) {
-                    if (r > 0) {
-                        numPage += 1;
-                    }
-                    if (page > numPage) {
-                        page = numPage;
-                    }
-                    let startPage = (page - 1) * 8;
-                    let endPage = page * 8;
-                    data = data.slice(startPage, endPage);
-                }
-                else {
-                    page = req.params.number * 1;
-                }
-                iddoctor = req.params.iddoctor;
-                res.render('doctor-page', { data, page, numPage, isSearch, search, iddoctor });
+        let reToken = jwt.verify(token, 'vychuoi123');
+        let iddoctor = reToken['getId'];
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${iddoctor}`);
+        if (staff[0]['VAITRO'].toLowerCase() == 'Bác sĩ'.toLowerCase()) {
+            if (page < 1) {
+                page = 1;
             }
-        }
-        else {
-            res.clearCookie('flag');
-            res.redirect('/login');
+            let data, isSearch = 0, search;
+            if ((search = getItem['search']) != null) {
+                isSearch = 1;
+                data = await oracledb.getCheckData(`select distinct bn.* from C##ADMIN.BENHNHAN bn, C##ADMIN.hosobenhan hsba where hsba.bsdieutri = ${iddoctor} and hsba.idbenhnhan = bn.idbenhnhan and FN_CONVERT_TO_VN(lower(bn.TENBENHNHAN)) like '%${setup.removeVietnameseTones(getItem['search']).toLowerCase()}%' order by bn.IDBENHNHAN asc`);
+            }
+            else {
+                data = await oracledb.getCheckData(`select distinct bn.*  from C##ADMIN.hosobenhan hsbn, C##ADMIN.benhnhan bn where hsbn.bsdieutri = ${iddoctor} and hsbn.idbenhnhan = bn.idbenhnhan order by bn.idbenhnhan asc`);
+            }
+            let r = data.length % 8;
+            let numPage = Math.floor(data.length / 8);
+            if (data.length != 0) {
+                if (r > 0) {
+                    numPage += 1;
+                }
+                if (page > numPage) {
+                    page = numPage;
+                }
+                let startPage = (page - 1) * 8;
+                let endPage = page * 8;
+                data = data.slice(startPage, endPage);
+            }
+            else {
+                page = req.params.number * 1;
+            }
+
+            if (isSearch == 1)
+            {
+                page = 1;
+            }
+
+            staff = staff[0]['VAITRO'].toLowerCase();
+            iddoctor = req.params.iddoctor;
+            res.render('doctor-page', { data, page, numPage, isSearch, search, iddoctor, staff  });
         }
     } catch (error) {
         res.clearCookie('flag');
@@ -317,21 +317,50 @@ router.get('/doctor/:iddoctor/patient/page-:number', async function (req, res, n
 
 });
 
-router.post('/doctor/:iddoctor/patient/page-:number', async function (req, res, next) {
-    let iddoctor = req.params.iddoctor;
-    res.redirect(`/doctor/${iddoctor}/patient/page-${req.params.number}`);
+router.post('/doctor/patient/page-:number', async function (req, res, next) {
+    try {
+        let token = await req.cookies.is_;
+        let reToken = jwt.verify(token, 'vychuoi123');
+        let iddoctor = reToken['getId'];
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${iddoctor}`);
+        if (staff[0]['VAITRO'].toLowerCase() == 'Bác sĩ'.toLowerCase()) {
+            let hint = '';
+            let search = req.body.query.toLowerCase();
+            console.log(search);
+            if (search.length > 0) {
+                let data = await oracledb.getCheckData(`select distinct bn.* from C##ADMIN.BENHNHAN bn, C##ADMIN.hosobenhan hsba where hsba.bsdieutri = ${iddoctor} and hsba.idbenhnhan = bn.idbenhnhan and FN_CONVERT_TO_VN(lower(bn.TENBENHNHAN)) like '%${setup.removeVietnameseTones(search)}%' order by bn.IDBENHNHAN asc`);
+                if (data.length > 0) {
+                    data = data.slice(0, 6);
+                    for (let i = 0; i < data.length; i++) {
+                        hint += `<a href="/doctor/patient/${data[i]['IDBENHNHAN']}/bill-drug/0" class="link-item-search">${data[i]['TENBENHNHAN']}</a>`;
+                    }
+                }
+                else {
+                    hint += `<p class="link-item-search">Không tìm thấy</p>`;
+                }
+                res.send(hint);
+            }
+        }
+        else {
+            res.clearCookie('flag');
+            res.redirect('/login');
+        }
+    }
+    catch (error) {
+        res.clearCookie('flag');
+        res.redirect('/login');
+    }
 });
 
-router.get('/doctor/:iddoctor/patient/:id/bill-drug/:number', async function (req, res, next) {
+router.get('/doctor/patient/:id/bill-drug/:number', async function (req, res, next) {
     try {
-        let tokenIdUser = await req.cookies.is_;
-        let iddoctor = req.params.iddoctor;
+        let token = await req.cookies.is_;
         let id = req.params.id;
         let number = req.params.number;
-        if (tokenIdUser.slice(tokenIdUser.length - 8, tokenIdUser.length) == iddoctor) {
-            let reTokenIdUser = jwt.verify(tokenIdUser, 'vychuoi123');
-            iddoctor = reTokenIdUser['getId'];
-
+        let reToken = jwt.verify(token, 'vychuoi123');
+        let iddoctor = reToken['getId'];
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${iddoctor}`);
+        if (staff[0]['VAITRO'].toLowerCase() == 'Bác Sĩ'.toLowerCase()) {
             let check = await oracledb.getCheckData(`select * from C##ADMIN.hosobenhan hsba, C##ADMIN.donthuoc dt where hsba.idbenhnhan = ${id} and hsba.bsdieutri = ${iddoctor} and hsba.idhosobenhan = dt.idhosobenhan and dt.iddonthuoc = ${number}`);
 
             if (isNaN(id * 1) != true && isNaN(number * 1) != true) {
@@ -344,11 +373,11 @@ router.get('/doctor/:iddoctor/patient/:id/bill-drug/:number', async function (re
                         let allFile = await oracledb.getCheckData(`select * from C##ADMIN.HOSOBENHAN where IDBENHNHAN = ${id} and bsdieutri = ${iddoctor}`);
                         let bill = await oracledb.getCheckData(`select dt.* from C##ADMIN.HOSOBENHAN hs, C##ADMIN.DONTHUOC dt where dt.iDHOSOBENHAN = hs.IDHOSOBENHAN and hs.IDBENHNHAN = ${id} and hs.bsdieutri = ${iddoctor} order by dt.iddonthuoc desc`);
                         let deDes = await oracledb.getCheckData(`select ctdt.*, t.TENTHUOC, t.DONVITINH from C##ADMIN.HOSOBENHAN hsba, C##ADMIN.donthuoc dt, C##ADMIN.CHITIETDONTHUOC ctdt, C##ADMIN.THUOC t
-            where hsba.IDHOSOBENHAN = dt.idhosobenhan and hsba.bsdieutri = ${iddoctor} and dt.iddonthuoc = ctdt.iddonthuoc
-            and ctdt.IDDONTHUOC = ${number} and ctdt.IDTHUOC = t.IDTHUOC`);
+                        where hsba.IDHOSOBENHAN = dt.idhosobenhan and hsba.bsdieutri = ${iddoctor} and dt.iddonthuoc = ctdt.iddonthuoc
+                        and ctdt.IDDONTHUOC = ${number} and ctdt.IDTHUOC = t.IDTHUOC`);
                         let drug = await oracledb.getCheckData(`select * from C##ADMIN.THUOC order by tenthuoc`);
                         let cmtDoc = await oracledb.getCheckData(`select KETLUANBS from C##ADMIN.HOSOBENHAN hsba, C##ADMIN.DONTHUOC dt where hsba.bsdieutri = ${iddoctor} and hsba.IDBENHNHAN = ${id} and hsba.IDHOSOBENHAN = dt.IDHOSOBENHAN and dt.IDDONTHUOC = ${number}`);
-                        console.log(cmtDoc)
+
                         if (number == 0) {
                             //cmtDoc[0]['KETLUANBS'] = '';
                         }
@@ -357,7 +386,14 @@ router.get('/doctor/:iddoctor/patient/:id/bill-drug/:number', async function (re
                             cmtDoc.push({ KETLUANBS: '' });
                         }
                         iddoctor = req.params.iddoctor;
-                        res.render('prescription', { drug, id, allFile, deDes, number, cmtDoc, patient, bill, iddoctor });
+
+                        if (bill.length > 0)
+                        {
+                            setup.convertDate(bill);
+                        }
+
+                        staff = staff[0]['VAITRO'].toLowerCase();
+                        res.render('prescription', { drug, id, allFile, deDes, number, cmtDoc, patient, bill, iddoctor, staff });
                     }
                 }
                 else {
@@ -379,20 +415,17 @@ router.get('/doctor/:iddoctor/patient/:id/bill-drug/:number', async function (re
 
 });
 
-router.post('/doctor/:iddoctor/patient/:id/bill-drug/:number', async function (req, res, next) {
+router.post('/doctor/patient/:id/bill-drug/:number', async function (req, res, next) {
     try {
-        let tokenIdUser = await req.cookies.is_;
-        let iddoctor = req.params.iddoctor;
+        let token = await req.cookies.is_;
         let id = req.params.id;
         let number = req.params.number;
-        if (tokenIdUser.slice(tokenIdUser.length - 8, tokenIdUser.length) == iddoctor) {
-            let reTokenIdUser = jwt.verify(tokenIdUser, 'vychuoi123');
-            iddoctor = reTokenIdUser['getId'];
-
-            let reqBody = req.body;
-            let idDrug = [], numberUse = [], idFile = [], idNewDrug = [], numberNewUse = [], diagnose = '';
-            let count = 0;
-            console.log(reqBody)
+        let reToken = jwt.verify(token, 'vychuoi123');
+        let iddoctor = reToken['getId'];
+        let reqBody = req.body;
+        let idDrug = [], numberUse = [], idFile = [], idNewDrug = [], numberNewUse = [], diagnose = '';
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${iddoctor}`);
+        if (staff[0]['VAITRO'].toLowerCase() == 'Bác Sĩ'.toLowerCase()) {
             for (let i in reqBody) {
                 if (i.indexOf('idDrug') > -1) {
                     if (reqBody[`${i}`] != '') {
@@ -447,21 +480,20 @@ router.post('/doctor/:iddoctor/patient/:id/bill-drug/:number', async function (r
                     let date = new Date();
                     let idbn = reqBody[`${i}`];
                     let strDate = `to_date('${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}', 'yyyy/mm/dd hh24:mi:ss')`
-                    console.log(strDate)
                     let insert = await oracledb.getDataTest(`insert into C##ADMIN.DONTHUOC(IDHOSOBENHAN, NGAYTAO) values (:idhsba, ${strDate})`,
                         { idhsba: idbn });
                 }
             }
             let check = await oracledb.getCheckData(`select * from C##ADMIN.hosobenhan hsba, C##ADMIN.donthuoc dt where hsba.idbenhnhan = ${id} and hsba.bsdieutri = ${iddoctor} and hsba.idhosobenhan = dt.idhosobenhan and dt.iddonthuoc = ${number}`);
 
-            if (check.length != 0 || number == 0) {
+            if (check.length != 0 || number != 0) {
                 for (let i = 0; i < idDrug.length; i++) {
                     let update = await oracledb.getDataTest(`update C##ADMIN.CHITIETDONTHUOC set IDTHUOC = :idt, SOLUONG = :sl 
-          where IDCHITIETDONTHUOC = :idct`,
+                        where IDCHITIETDONTHUOC = :idct`,
                         { idt: idDrug[i], sl: numberUse[i], idct: idFile[i] });
                 }
 
-                for (let i = 0; i < idNewDrug.length; i++) {
+                for (let i = 0; i < idNewDrug.length; i++) {   
                     let insert = await oracledb.getDataTest(`insert into C##ADMIN.chitietdonthuoc(IDDONTHUOC, IDTHUOC, SOLUONG) values (:iddt, :idt, :sl)`,
                         { iddt: number, idt: idNewDrug[i], sl: numberNewUse[i] });
                 }
@@ -469,14 +501,14 @@ router.post('/doctor/:iddoctor/patient/:id/bill-drug/:number', async function (r
                 let paFile = await oracledb.getCheckData(`select IDHOSOBENHAN from C##ADMIN.DONTHUOC where IDDONTHUOC = ${number}`);
                 if (diagnose != '' && paFile.length > 0) {
                     let update = await oracledb.getDataTest(`update C##ADMIN.HOSOBENHAN set KETLUANBS = :kl
-          where IDHOSOBENHAN = :idhsba`,
+                        where IDHOSOBENHAN = :idhsba`,
                         { kl: diagnose, idhsba: paFile[0]['IDHOSOBENHAN'] });
                 }
             }
             iddoctor = req.params.iddoctor;
-            res.redirect(`/doctor/${iddoctor}/patient/${id}/bill-drug/${number}`);
+            res.redirect(`/doctor/patient/${id}/bill-drug/${number}`);
         }
-        else {
+        else{
             res.clearCookie('flag');
             res.redirect('/login');
         }
@@ -487,134 +519,114 @@ router.post('/doctor/:iddoctor/patient/:id/bill-drug/:number', async function (r
 
 });
 
-router.get('/phamarcy/:iddoctor/drug-bill/page-:number', async function (req, res, next) {
+router.get('/phamarcy/bill-drug/page-:number', async function (req, res, next) {
     try {
-        let tokenIdUser = await req.cookies.is_;
+        let token = await req.cookies.is_;
         let getItem = req.query;
-        let iddoctor = req.params.iddoctor;
         let page = req.params.number;
-        if (tokenIdUser.slice(tokenIdUser.length - 8, tokenIdUser.length) == iddoctor) {
-            let reTokenIdUser = jwt.verify(tokenIdUser, 'vychuoi123');
-            iddoctor = reTokenIdUser['getId'];
-            let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${iddoctor}`);
-            if (staff[0]['VAITRO'].toLowerCase() == 'NV Bán Thuốc'.toLowerCase()) {
-                if (page < 1) {
-                    page = 1;
-                }
-                let data, isSearch = 0, search;
-                if ((search = getItem['search']) != null) {
-                    isSearch = 1;
-                    data = await oracledb.getCheckData(`select dt.*, bn.*, to_date(dt.ngaytao, 'YYYY-MM-DD') as ngay from C##ADMIN.donthuoc dt, C##ADMIN.hosobenhan hsba, C##ADMIN.benhnhan bn
-                    where dt.idhosobenhan = hsba.idhosobenhan and hsba.idbenhnhan = bn.idbenhnhan and IDDONTHUOC like '${setup.removeVietnameseTones(search)}'
-                    order by dt.iddonthuoc desc`);
-                }
-                else {
-                    data = await oracledb.getCheckData(`select dt.*, bn.*, to_date(dt.ngaytao) as ngaytao from C##ADMIN.donthuoc dt, C##ADMIN.hosobenhan hsba, C##ADMIN.benhnhan bn
-                    where dt.idhosobenhan = hsba.idhosobenhan and hsba.idbenhnhan = bn.idbenhnhan
-                    order by dt.iddonthuoc desc`);
-                }
-
-                if (data.length != 0) {
-                    setup.convertDate(data);
-                }
-
-                let r = data.length % 12;
-                let numPage = Math.floor(data.length / 12);
-                if (data.length != 0) {
-                    if (r > 0) {
-                        numPage += 1;
-                    }
-                    if (page > numPage) {
-                        page = numPage;
-                    }
-                    let startPage = (page - 1) * 12;
-                    let endPage = page * 12;
-                    data = data.slice(startPage, endPage);
-                }
-                else {
-                    page = req.params.number * 1;
-                }
-                iddoctor = req.params.iddoctor;
-                res.render('phamarcy-page', { data, page, numPage, isSearch, search, iddoctor });
+        let reToken = jwt.verify(token, 'vychuoi123');
+        let iddoctor = reToken['getId'];
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${iddoctor}`);
+        if (staff[0]['VAITRO'].toLowerCase() == 'NV Bán Thuốc'.toLowerCase()) {
+            let data, isSearch = 0, search;
+            if ((search = getItem['search']) != null) {
+                isSearch = 1;
+                data = await oracledb.getCheckData(`select dt.*, bn.*, to_date(dt.ngaytao, 'YYYY-MM-DD') as ngay from C##ADMIN.donthuoc dt, C##ADMIN.hosobenhan hsba, C##ADMIN.benhnhan bn
+                where dt.idhosobenhan = hsba.idhosobenhan and hsba.idbenhnhan = bn.idbenhnhan and IDDONTHUOC like '%${setup.removeVietnameseTones(search)}%'
+                order by dt.iddonthuoc desc`);
             }
-        }
-        else {
-            res.clearCookie('flag');
-            res.redirect('/login');
-        }
-    } catch (error) {
-        res.clearCookie('flag');
-        res.redirect('/login');
-    }
-
-});
-
-router.post('/phamarcy/:iddoctor/drug-bill/page-:number', async function (req, res, next) {
-    try {
-        let tokenIdUser = await req.cookies.is_;
-        let getItem = req.query;
-        let iddoctor = req.params.iddoctor;
-        let page = req.params.number;
-        if (tokenIdUser.slice(tokenIdUser.length - 8, tokenIdUser.length) == iddoctor) {
-            let reTokenIdUser = jwt.verify(tokenIdUser, 'vychuoi123');
-            iddoctor = reTokenIdUser['getId'];
-            let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${iddoctor}`);
-            if (staff[0]['VAITRO'].toLowerCase() == 'NV Bán Thuốc'.toLowerCase()) {
-                let hint = '';
-                let response = '';
-                let search = req.body.query.toLowerCase();
-                if (search.length > 0) {
-                    let data = await oracledb.getCheckData(`select dt.*, bn.*, to_date(dt.ngaytao, 'YYYY-MM-DD') as ngay from C##ADMIN.donthuoc dt, C##ADMIN.hosobenhan hsba, C##ADMIN.benhnhan bn
-                    where dt.idhosobenhan = hsba.idhosobenhan and hsba.idbenhnhan = bn.idbenhnhan and IDDONTHUOC like '%${setup.removeVietnameseTones(search)}%'
-                    order by dt.iddonthuoc desc`);
-                    if (data.length > 0) {
-                        data = data.slice(0, 6);
-                        for (let i = 0; i < data.length; i++) {
-                            hint += `<a href="/phamarcy/${req.params.iddoctor}/drug-bill/page-${req.params.number}/${data[i]['IDDONTHUOC']}" class="link-item-search">${data[i]['IDDONTHUOC']}</a>`;
-                        }
-                    }
-                    else {
-                        hint += `<p class="link-item-search">Không tìm thấy</p>`;
-                    }
-                    res.send(hint);
-                }
+            else {
+                data = await oracledb.getCheckData(`select dt.*, bn.*, to_date(dt.ngaytao) as ngaytao from C##ADMIN.donthuoc dt, C##ADMIN.hosobenhan hsba, C##ADMIN.benhnhan bn
+                where dt.idhosobenhan = hsba.idhosobenhan and hsba.idbenhnhan = bn.idbenhnhan
+                order by dt.iddonthuoc desc`);
             }
-        }
-        else {
-            res.clearCookie('flag');
-            res.redirect('/login');
-        }
-    } catch (error) {
-        res.clearCookie('flag');
-        res.redirect('/login');
-    }
-});
 
-router.get('/phamarcy/:iddoctor/drug-bill/page-:number/:id', async function (req, res, next) {
-    try {
-        let tokenIdUser = await req.cookies.is_;
-        let getItem = req.query;
-        let iddoctor = req.params.iddoctor;
-        let page = req.params.number;
-        if (tokenIdUser.slice(tokenIdUser.length - 8, tokenIdUser.length) == iddoctor) {
-            let reTokenIdUser = jwt.verify(tokenIdUser, 'vychuoi123');
-            iddoctor = reTokenIdUser['getId'];
-            let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${iddoctor}`);
-            if (staff[0]['VAITRO'].toLowerCase() == 'NV Bán Thuốc'.toLowerCase()) {
-                let data, isSearch = 0, search;
-                data = await oracledb.getCheckData(`select ctdt.*, t.*, bn.*, to_date(dt.ngaytao) as ngay from C##ADMIN.chitietdonthuoc ctdt, C##ADMIN.donthuoc dt, C##ADMIN.hosobenhan hsba, C##ADMIN.benhnhan bn, C##ADMIN.thuoc t
-                where ctdt.iddonthuoc = dt.iddonthuoc and dt.idhosobenhan = hsba.idhosobenhan and hsba.idbenhnhan = bn.idbenhnhan and t.idthuoc = ctdt.idthuoc
-                and ctdt.iddonthuoc = 100 order by idchitietdonthuoc desc`);
+            if (data.length != 0) {
                 setup.convertDate(data);
-                console.log(data);
-                iddoctor = req.params.iddoctor;
-                res.render('prescription-details', { data, page, iddoctor });
+            }
+
+            if (page < 1) {
+                page = 1;
+            }   
+
+            let r = data.length % 12;
+            let numPage = Math.floor(data.length / 12);
+
+            if (data.length != 0) {
+                if (r > 0) {
+                    numPage += 1;
+                }
+                if (page > numPage) {
+                    page = numPage;
+                }
+                let startPage = (page - 1) * 12;
+                let endPage = page * 12;
+                data = data.slice(startPage, endPage);
+            }
+            else {
+                page = req.params.number * 1;
+            }
+            page = isSearch == 1 ? 1 : page;
+
+            staff = staff[0]['VAITRO'].toLowerCase();
+            res.render('phamarcy-page', { data, page, numPage, isSearch, search, staff, iddoctor });
+        }
+    } catch (error) {
+        res.clearCookie('flag');
+        res.redirect('/login');
+    }
+
+});
+
+router.post('/phamarcy/bill-drug/page-:number', async function (req, res, next) {
+    try {
+        let token = await req.cookies.is_;
+        let reToken = jwt.verify(token, 'vychuoi123');
+        let iddoctor = reToken['getId'];
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${iddoctor}`);
+        if (staff[0]['VAITRO'].toLowerCase() == 'NV Bán Thuốc'.toLowerCase()) {
+            let hint = '';
+            let search = req.body.query.toLowerCase();
+            if (search.length > 0) {
+                let data = await oracledb.getCheckData(`select dt.*, bn.*, to_date(dt.ngaytao, 'YYYY-MM-DD') as ngay from C##ADMIN.donthuoc dt, C##ADMIN.hosobenhan hsba, C##ADMIN.benhnhan bn
+                where dt.idhosobenhan = hsba.idhosobenhan and hsba.idbenhnhan = bn.idbenhnhan and IDDONTHUOC like '%${setup.removeVietnameseTones(search)}%'
+                order by dt.iddonthuoc desc`);
+                if (data.length > 0) {
+                    data = data.slice(0, 6);
+                    for (let i = 0; i < data.length; i++) {
+                        hint += `<a href="/phamarcy/bill-drug/page-${req.params.number}/${data[i]['IDDONTHUOC']}" class="link-item-search">${data[i]['IDDONTHUOC']}</a>`;
+                    }
+                }
+                else {
+                    hint += `<p class="link-item-search">Không tìm thấy</p>`;
+                }
+                res.send(hint);
             }
         }
-        else {
-            res.clearCookie('flag');
-            res.redirect('/login');
+    } catch (error) {
+        res.clearCookie('flag');
+        res.redirect('/login');
+    }
+});
+
+router.get('/phamarcy/bill-drug/page-:number/:id', async function (req, res, next) {
+    try {
+        let token = await req.cookies.is_;
+        let page = req.params.number;
+        let reToken = jwt.verify(token, 'vychuoi123');
+        let iddoctor = reToken['getId'];
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${iddoctor}`);
+        if (staff[0]['VAITRO'].toLowerCase() == 'NV Bán Thuốc'.toLowerCase()) {
+            let data, isSearch = 0, search;
+            data = await oracledb.getCheckData(`select ctdt.*, t.*, bn.*, to_date(dt.ngaytao) as ngay from C##ADMIN.chitietdonthuoc ctdt, C##ADMIN.donthuoc dt, C##ADMIN.hosobenhan hsba, C##ADMIN.benhnhan bn, C##ADMIN.thuoc t
+            where ctdt.iddonthuoc = dt.iddonthuoc and dt.idhosobenhan = hsba.idhosobenhan and hsba.idbenhnhan = bn.idbenhnhan and t.idthuoc = ctdt.idthuoc
+            and ctdt.iddonthuoc = 100 order by idchitietdonthuoc desc`);
+            setup.convertDate(data);
+            iddoctor = req.params.iddoctor;
+            staff = staff[0]['VAITRO'].toLowerCase();
+            res.render('prescription-details', { data, page, iddoctor, staff });
         }
+
     } catch (error) {
         res.clearCookie('flag');
         res.redirect('/login');

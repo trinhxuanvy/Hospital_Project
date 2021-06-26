@@ -1,4 +1,4 @@
-src = "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+//src = "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
 
 $(document).ready(function () {
     // Xử lý header fixed
@@ -294,11 +294,11 @@ $(document).ready(function () {
     });
 
     // Hàm delete item
-    function DeleteBillDrug () {
+    function DeleteBillDrug() {
         let del = $('.form-box-detail .form-item .delete');
         let item = $('.form-box-detail .form-item .item-delete');
         for (let i = 0; i < del.length; i++) {
-            $(del[i]).click(function (e) { 
+            $(del[i]).click(function (e) {
                 e.preventDefault();
                 $(item[i]).remove();
             });
@@ -306,10 +306,10 @@ $(document).ready(function () {
     }
     // Hàm thêm item khi nhấn btn
     $(function () {
-        let btn = $('.form-box-detail .form-item .btn-add-item');      
+        let btn = $('.form-box-detail .form-item .btn-add-item');
         let select = $('.form-box-detail .form-item .select-des');
         let count = 1;
-        
+
         $(btn[0]).click(function (e) {
             e.preventDefault();
             console.log(btn[0], 'aaa')
@@ -336,7 +336,7 @@ $(document).ready(function () {
             $(btn).before(itemChi);
             count++;
             console.log()
-            return [ HandleBillDrug(), DeleteBillDrug() ];
+            return [HandleBillDrug(), DeleteBillDrug()];
         });
     });
 
@@ -374,7 +374,7 @@ $(document).ready(function () {
         let select = $('.select-des');
         let unit = $('.form-box-detail .unit');
         let arr = [];
-        for (let i = 0; i< select.length; i++) {
+        for (let i = 0; i < select.length; i++) {
             arr.push($(input[i]).val())
         }
         for (let i = 0; i < select.length; i++) {
@@ -406,38 +406,71 @@ $(document).ready(function () {
         let itemDr = $('.container-item .categories-2 .body-item .item .menu-item .box-item .box-item-link');
         for (let i = 0; i < itemDr.length; i++) {
             $(itemDr[i]).hover(function () {
-                    // over
-                    $(this).addClass('bg-item-active');
-                }, function () {
-                    // out
-                    $(this).removeClass('bg-item-active');
-                }
+                // over
+                $(this).addClass('bg-item-active');
+            }, function () {
+                // out
+                $(this).removeClass('bg-item-active');
+            }
             );
         }
     });
 
-    let searchBox = $('#autocomplete');
-    let inputBox = $('#searchPhamarcy');
-    
-    $(inputBox).keyup(function (e) { 
-        let str = $(this).val();
-        let href = window.location.href;
+    function GetInputPharmacy() {
+        let searchBox = $('#autocomplete');
+        let inputBox = $('#searchPhamarcy');
 
-        if (str.length === 0) {
-            $(searchBox).css('display', 'none');
-        }
-        else {
-            $(searchBox).css('display', 'flex');
-        }
+        $(inputBox).keyup(function (e) {
+            let str = $(this).val();
+            let href = window.location.href;
 
-        $.ajax({
-            url: href,
-            contentType: "application/json",
-            method: "POST",
-            data: JSON.stringify({query: str}),
-            success: function (response) {
-                $(searchBox).html(response);
+            if (str.length === 0) {
+                $(searchBox).css('display', 'none');
             }
+            else {
+                $(searchBox).css('display', 'flex');
+            }
+
+            $.ajax({
+                url: href,
+                contentType: "application/json",
+                method: "POST",
+                data: JSON.stringify({ query: str }),
+                success: function (response) {
+                    $(searchBox).html(response);
+                }
+            });
         });
-    });
+
+    }
+
+    function GetInputDoctor() {
+        let searchBox = $('#autocomplete');
+        let inputBox = $('#search');
+
+        $(inputBox).keyup(function (e) {
+            let str = $(this).val();
+            let href = window.location.href;
+
+            if (str.length === 0) {
+                $(searchBox).css('display', 'none');
+            }
+            else {
+                $(searchBox).css('display', 'flex');
+            }
+
+            $.ajax({
+                url: href,
+                contentType: "application/json",
+                method: "POST",
+                data: JSON.stringify({ query: str }),
+                success: function (response) {
+                    $(searchBox).html(response);
+                }
+            });
+        });
+    }
+
+    GetInputDoctor();
+    GetInputPharmacy();
 });

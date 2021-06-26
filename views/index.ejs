@@ -10,31 +10,7 @@
 <body>
     <%- include('partials/layouts/header') %>
 
-    <div class="container-user">
-        <div class="box-user">
-            <div class="content-user">
-                <div class="logo-user">
-                    <img src="images/no-user.jpg" alt="">
-                </div>
-                <% if (iddoctor != '') { %>
-                    <% if (staff == 'bác sĩ') { %>
-                        <a href="" class="link-detail-user">Trang cá nhân</a>
-                        <a href="/doctor/<%= iddoctor %>/patient/page-1" class="link-detail-user">Xem bệnh nhân</a>    
-                    <% } else if (staff == 'nv bán thuốc') { %>
-                        <a href="" class="link-detail-user">Trang cá nhân</a>
-                        <a href="/phamarcy/<%= iddoctor %>/drug-bill/page-1" class="link-detail-user">Xem đơn thuốc</a>
-                    <% }  %>
-                <% } else { %>
-                    <a href="/login" class="link-detail-user">Đăng nhập</a>
-                <% } %>
-                 
-                <a href="/logout" class="link-detail-user">Đăng xuất</a>
-            </div>
-            <div class="btn-show-user">
-                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-            </div>
-        </div>
-    </div>
+    <%- include('partials/layouts/user.ejs') %> 
 
     <div class="index-page">
         <div class="categories-1">

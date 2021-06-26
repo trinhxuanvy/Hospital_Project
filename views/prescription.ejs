@@ -11,21 +11,7 @@
 <body>
     <%- include('partials/layouts/header') %>
 
-    <div class="container-user">
-        <div class="box-user">
-            <div class="content-user">
-                <div class="logo-user">
-                    <img src="/images/no-user.jpg" alt="">
-                </div>
-                <a href="" class="link-detail-user">Trang cá nhân</a>
-                <a href="/doctor/<%= iddoctor %>/patient/page-1" class="link-detail-user">Quản lý bệnh nhân</a>
-                <a href="/logout" class="link-detail-user">Đăng xuất</a>
-            </div>
-            <div class="btn-show-user">
-                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-            </div>
-        </div>
-    </div>
+    <%- include('partials/layouts/user.ejs') %> 
 
     <div class="box-item-detail">
         <div class="menu-box-item">
@@ -34,7 +20,7 @@
             </div>
             <div class="menu-item-detail">
                 <% bill.forEach(item => { %>
-                    <a title="<%= item['NGAYTAO'] %>" href="/doctor/<%= iddoctor %>/patient/<%= id %>/bill-drug/<%= item['IDDONTHUOC'] %>" class="link-item"><%= item['NGAYTAO'] %></a>
+                    <a title="<%= item['NGAYTAO'] %>" href="/doctor/patient/<%= id %>/bill-drug/<%= item['IDDONTHUOC'] %>" class="link-item"><%= item['NGAYTAO'] %></a>
                 <% }) %>
             </div>
             <button type="button" class="btn-add-item">
@@ -46,7 +32,7 @@
                     <div class="header">
                         <p class="title">Hồ sơ bệnh án</p>
                     </div>
-                    <form action="/doctor/<%= iddoctor %>/patient/<%= id %>/bill-drug/<%= number %>" method="post">
+                    <form action="/doctor/patient/<%= id %>/bill-drug/<%= number %>" method="post">
                         <div class="detail-item">
                             <% allFile.forEach(item => { %>
                                 <div class="detail">                          
@@ -64,7 +50,7 @@
             </div>
         </div>
         <div class="form-box-detail">
-            <form action="/doctor/<%= iddoctor %>/patient/<%= id %>/bill-drug/<%= number %>" method="POST">
+            <form action="/doctor/patient/<%= id %>/bill-drug/<%= number %>" method="POST">
                 <div class="form-item">
                     <p class="title-item">Tên bệnh nhân</p>
                     <label for="idPat"></label>
@@ -132,7 +118,7 @@
         </div>
         
     </div>
-    <a href="/doctor/<%= iddoctor %>/patient/page-1" class="btn-link-back">Quay lại</a>
+    <a href="/doctor/patient/page-1" class="btn-link-back">Quay lại</a>
     <%- include('partials/layouts/scripts') %>
 </body>
 

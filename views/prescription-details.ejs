@@ -10,21 +10,7 @@
 <body>
     <%- include('partials/layouts/header') %>
 
-    <div class="container-user">
-        <div class="box-user">
-            <div class="content-user">
-                <div class="logo-user">
-                    <img src="/images/no-user.jpg" alt="">
-                </div>
-                <a href="" class="link-detail-user">Trang cá nhân</a>
-                <a href="/doctor/<%= iddoctor %>/patient/page-1" class="link-detail-user">Quản lý bệnh nhân</a>
-                <a href="/logout" class="link-detail-user">Đăng xuất</a>
-            </div>
-            <div class="btn-show-user">
-                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-            </div>
-        </div>
-    </div>
+    <%- include('partials/layouts/user.ejs') %> 
 
     <div class="box-item-detail phamarcy-page">
         <div class="header">
@@ -63,7 +49,7 @@
             </div>
         </div>
     </div>
-    <a href="/phamarcy/<%= iddoctor %>/drug-bill/page-<%= page %>" class="btn-link-back">Quay lại</a>
+    <a href="/phamarcy/bill-drug/page-<%= page %>" class="btn-link-back">Quay lại</a>
     <%- include('partials/layouts/scripts') %>
 </body>
 

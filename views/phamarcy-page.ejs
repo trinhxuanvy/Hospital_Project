@@ -12,21 +12,7 @@
 <body>
     <%- include('partials/layouts/header') %>
 
-    <div class="container-user">
-        <div class="box-user">
-            <div class="content-user">
-                <div class="logo-user">
-                    <img src="/images/no-user.jpg" alt="">
-                </div>
-                <a href="" class="link-detail-user">Trang cá nhân</a>
-                <a href="/phamarcy/<%= iddoctor %>/drug-bill/page-1" class="link-detail-user">Xem đơn thuốc</a>
-                <a href="/logout" class="link-detail-user">Đăng xuất</a>
-            </div>
-            <div class="btn-show-user">
-                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-            </div>
-        </div>
-    </div>
+    <%- include('partials/layouts/user.ejs') %> 
 
     <div class="container-item">
         <div class="categories-1">
@@ -46,7 +32,7 @@
                         <p class="title">Danh mục</p>
                     </div>
                     <div class="menu-item">
-                        <a href="/phamarcy/<%= iddoctor %>/drug-bill/page-1" class="link-item"><p>Tất cả đơn thuốc</p></a>
+                        <a href="/phamarcy/bill-drug/page-1" class="link-item"><p>Tất cả đơn thuốc</p></a>
                     </div>       
                 </div>
                 <div class="item">
@@ -54,7 +40,7 @@
                         <p class="title">Tìm kiếm mã đơn thuốc</p>
                     </div>
                     <div class="box-search">
-                        <form action="/phamarcy/<%= iddoctor %>/drug-bill/page-<%= page %>" method="GET">
+                        <form action="/phamarcy/bill-drug/page-<%= page %>" method="GET">
                             <label for="search"></label>
                             <input type="search" name="search" id="searchPhamarcy" autocomplete="off">
                             <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
@@ -67,17 +53,17 @@
                 <div class="item">
                     <div class="header-body">
                         <a href="" class="link-filter"><p><i class="fa fa-filter" aria-hidden="true"></i> Lọc</p></a>
-                        <a href="/phamarcy/<%= iddoctor %>/drug-bill/page-<% if (page == 1) { %><%= 1 %><% } else { %><%= page*1 - 1 %><% } if (isSearch) { %><%= '?search=' + search %><% } else { %><%= '' %><% } %>" title="trang trước" class="link-prev-page"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
-                        <a href="/phamarcy/<%= iddoctor %>/drug-bill/page-<% if (page == numPage) { %><%= numPage %><% } else { %><%= page*1 + 1 %><% } if (isSearch) { %><%= '?search=' + search %><% } else { %><%= '' %><% } %>" title="trang sau" class="link-next-page"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                        <a href="/phamarcy/bill-drug/page-<% if (page == 1) { %><%= 1 %><% } else { %><%= page*1 - 1 %><% } if (isSearch) { %><%= '?search=' + search %><% } else { %><%= '' %><% } %>" title="trang trước" class="link-prev-page"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
+                        <a href="/phamarcy/bill-drug/page-<% if (page == numPage) { %><%= numPage %><% } else { %><%= page*1 + 1 %><% } if (isSearch) { %><%= '?search=' + search %><% } else { %><%= '' %><% } %>" title="trang sau" class="link-next-page"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
                     </div>
                     <div class="menu-item">
                         <% data.forEach(item => { %>
                             <div class="box-item">
-                                <a href="/phamarcy/<%= iddoctor %>/drug-bill/page-<%= page %>/<%= item['IDDONTHUOC'] %>" title="<%= item['IDDONTHUOC'] %>" class="box-item-link bg-item">
+                                <a href="/phamarcy/bill-drug/page-<%= page %>/<%= item['IDDONTHUOC'] %>" title="<%= item['IDDONTHUOC'] %>" class="box-item-link bg-item">
                                     <p class="infor-1">Mã đơn thuốc: <%= item['IDDONTHUOC'] %></p>
                                     <p class="infor-1">Ngày tạo: <%= item['NGAY'] %></p>
                                     <p class="infor-1">Mã bệnh nhân: <%= item['IDBENHNHAN'] %></p>
-                                    <p class="infor-2">Họ tên: <%= item['TENBENHNHAN'] %> </p>
+                                    <p class="infor-1">Họ tên: <%= item['TENBENHNHAN'] %> </p>
                                 </a>
                             </div>
                         <% }) %>                                                                                                                                                                                                                                                                                                                                                                                                        
