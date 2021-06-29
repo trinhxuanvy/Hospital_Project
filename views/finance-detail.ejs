@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/layouts/head') %>
+
+    <%- include('partials/layouts/styles') %>
+
+    
+</head>
+
+<body>
+    <%- include('partials/layouts/header') %>
+
+    <%- include('partials/layouts/user.ejs') %> 
+
+    <div class="container-item reception-page finance-page finance-detail">
+        <div class="categories-1">
+            <div class="content">
+                <div class="header">
+                    <p class="title">
+                        Bộ phận kế toán
+                        <img src="/images/logo-1.gif" alt="">
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="categories-2">
+            <div class="header">
+                <p class="title">Danh mục quản lý</p>
+            </div>
+            <div class="body">
+                <div class="item">
+                    <form action="/finance/employee/<%= data[0]['IDNHANVIEN'] %>" method="POST">
+                        <p class="content"><span>Họ và tên: </span><span><%= data[0]['TENNHANVIEN'] %></span></p>
+                        <p class="content"><span>Mã nhân viên: </span><span><%= data[0]['IDNHANVIEN'] %></span></p>
+                        <p class="content"><span>Tháng: </span><span><%= month %></span></p>
+                        <p class="content"><span>Năm: </span><span><%= year %></span></p>
+                        <div class="box-form">
+                            <div class="form-item">
+                                <p class="form-item-title">Tiền lương: </p>
+                                <input type="text" placeholder="123456" value="<%= data[0]['LUONG'] %>" id="saEmployee" name="saEmployee">
+                                <label for="saEmployee"></label>
+                            </div>
+                        </div>
+                        <div class="box-btn">
+                            <button class="btn-search" type="submit">Thay đổi</button>
+                            <a class="btn-reset" href="/finance">Quay lại</a>
+                        </div>
+                    </form>
+                </div>
+                <div class="item">
+                    <div class="box-function">
+                        <div class="function-item">
+                            <p class="content-item"><%= fullData.length %>  Ngày làm việc</p>
+                        </div>
+                        <div class="function-item">
+                            <button class="btn-view"><i class="fa fa-th-list" aria-hidden="true"></i></button>
+                            <button class="btn-view"><i class="fa fa-th-large" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="box-infor">
+                        <div class="infor-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Mã nhân viên</th>
+                                        <th>Tên nhân viên</th>
+                                        <th>Mã chấm công</th>
+                                        <th>Ngày làm</th>
+                                        <th>Chỉnh sửa</th>
+                                        <th>Xóa</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% fullData.forEach(item => { %>
+                                        <tr>
+                                            <th><span><%= item['IDNHANVIEN'] %></span></th>
+                                            <th><span><%= item['TENNHANVIEN'] %></span></th>
+                                            <th><%= item['IDCHAMCONG'] %></th>
+                                            <th><%= item['NGAYBATDAU'] %></th>
+                                            <th><button class="btn-fix">Chỉnh sửa</button></th>
+                                            <th><a href="/finance/employee/<%= data[0]['IDNHANVIEN'] %>/delete/<%= item['IDCHAMCONG'] %>" class="btn-link">Xóa</a></th>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="categories-3">
+            <div class="header">
+                <p class="title">Thêm bệnh nhân</p>
+            </div>
+            <div class="body">
+                <form action="/reception" method="POST">
+                    <div class="box-form">
+                        <div class="form-item">
+                            <p class="title">Họ và tên: </p>
+                            <input type="text" id="addNameEmployee" name="addNameEmployee" placeholder="Lê Văn A" required>
+                            <label for="addNameEmployee"></label>
+                        </div>
+                        <div class="form-item">
+                            <p class="title">Năm sinh: </p>
+                            <input type="date" id="addDateEmployee" name="addDateEmployee" required>
+                            <label for="addDateEmployee"></label>
+                        </div>
+                        <div class="form-item">
+                            <p class="title">Địa chỉ: </p>
+                            <input type="text" id="addReEmployee" name="addReEmployee" placeholder="TPHCM" required>
+                            <label for="addReEmployee"></label>
+                        </div>
+                        <div class="form-item">
+                            <p class="title">Số điện thoại: </p>
+                            <input type="text" id="addPhoneEmployee" name="addPhoneEmployee" placeholder="0123456789" required>
+                            <label for="addPhoneEmployee"></label>
+                        </div>
+                    </div>
+                    <div class="box-btn">
+                        <button type="submit" class="btn-add"><i class="fa fa-plus" aria-hidden="true"></i> Thêm</button>
+                        <button class="btn-reset">Nhập lại</button>
+                    </div>
+                </form>
+                <button class="btn-back">Quay lại</button>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/layouts/footer')  %> 
+
+    <%- include('partials/layouts/scripts') %>
+</body>
+
+</html>

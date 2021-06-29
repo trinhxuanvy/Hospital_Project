@@ -416,6 +416,34 @@ $(document).ready(function () {
         }
     });
 
+    $(function () {
+        let itemBtn = $('.reception-page .categories-2 .body .item:nth-child(2) .box-function .function-item:nth-child(2) .btn-add');
+
+        $(itemBtn[0]).click(function (e) { 
+            e.preventDefault();
+            let paRent = $('.reception-page .categories-3');
+            let isParent = $(paRent[0]).hasClass('active');
+
+            if (isParent) {
+                $(paRent[0]).removeClass('active');
+            }
+            else {
+                $(paRent[0]).addClass('active');
+            }
+        });
+
+        let reItemBtn = $('.reception-page .categories-3 .body .btn-back');
+        $(reItemBtn[0]).click(function (e) { 
+            e.preventDefault();
+            let paRent = $('.reception-page .categories-3');
+            let isParent = $(paRent[0]).hasClass('active');
+
+            if (isParent) {
+                $(paRent[0]).removeClass('active');
+            }
+        });
+    });
+
     function GetInputPharmacy() {
         let searchBox = $('#autocomplete');
         let inputBox = $('#searchPhamarcy');

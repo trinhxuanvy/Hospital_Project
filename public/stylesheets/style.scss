@@ -1033,6 +1033,740 @@ $color_primary_b: #08974b;
     }
 }
 
+// Page Reception
+.reception-page {
+    .categories-2 {
+        display: block !important;
+        .header {
+            .title {
+                color: $color_primary;
+                font-size: 20px;
+                font-weight: bolder;
+                text-transform: uppercase;
+            }
+        }
+        .body {
+            .item {
+                &:nth-child(1) {
+                    form {
+                        .box-form {
+                            display: flex;
+                            align-items: center;
+                            padding: 16px 0;
+                            .form-item {
+                                display: flex;
+                                align-items: center;
+                                margin-right: 32px;
+                                label {
+                                    display: none;
+                                }
+                                p {
+                                    margin-right: 16px;
+                                }
+                                input {
+                                    padding: 8px 16px;
+                                    border: 1px solid #c9c9c9;
+                                    border-radius: 5px;
+                                }
+                            }
+                        }
+                        .box-btn {
+                            .btn-search {
+                                cursor: pointer;
+                                width: 80px;
+                                background-color: $color_primary;
+                                color: #fff;
+                                border: 1px solid $color_primary;
+                                padding: 10px 0;
+                                border-radius: 5px;
+                                transition: 0.2s;
+                                &:hover {
+                                    background-color: $color_primary_b;
+                                }
+                            }
+                            .btn-reset {
+                                cursor: pointer;
+                                width: 100px;
+                                background-color: #fff;
+                                color: #333;
+                                border: 1px solid #c9c9c9;
+                                padding: 10px 0;
+                                border-radius: 5px;
+                                transition: 0.2s;
+                                margin-left: 8px;
+                                &:hover {
+                                    background-color: #f5f5f5;
+                                }
+                            }
+                        }
+                    }
+                }
+                &:nth-child(2) {
+                    padding: 32px 0 16px;
+                    .box-function {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        .function-item {
+                            &:nth-child(1) {
+                                .content-item {
+                                    font-size: 20px;
+                                    font-weight: bolder;
+                                    color: #333;
+                                    span {
+                                        font-size: 16px;
+                                        padding: 4px 26px;
+                                        background-color: #fff;
+                                        border: 1px solid $color_primary;
+                                        border-radius: 50px;
+                                        color: $color_primary;
+                                        margin-left: 16px;
+                                    }
+                                }
+                            }
+                            &:nth-child(2) {
+                                display: flex;
+                                align-items: center;
+                                .btn-add {
+                                    width: 250px;
+                                    background-color: $color_primary;
+                                    color: #fff;
+                                    border: 1px solid $color_primary;
+                                    transition: 0.2s;
+                                    cursor: pointer;
+                                    border-radius: 5px;
+                                    padding: 12px 0;
+                                    margin-right: 8px;
+                                    &:hover {
+                                        background-color: $color_primary_b;
+                                    }
+                                }
+                                .btn-view {
+                                    width: 40px;
+                                    height: 40px;
+                                    border: 3px solid #dadada;
+                                    cursor: pointer;
+                                    background-color: #fff;
+                                    transition: 0.2s;
+                                    &:nth-child(2) {
+                                        border-radius: 5px 0 0 5px;  
+                                    }
+                                    &:nth-child(3) {
+                                        border-radius: 0px 5px 5px 0;
+                                    }
+                                    .fa {
+                                        font-size: 18px;
+                                        color: $color_primary;
+                                    }
+                                    &:hover {
+                                        background-color: $color_primary;
+                                        .fa { 
+                                            color: #fff;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                &:nth-child(3) {
+                    .box-infor {
+                        padding: 16px;
+                        border: 1px solid #dadada;
+                        border-radius: 5px;
+                        .infor-table {
+                            height: 400px;
+                            overflow-y: scroll;
+                            &::-webkit-scrollbar {
+                                width: 8px;
+                            }
+                            &::-webkit-scrollbar-thumb {
+                                border-radius: 10px;
+                                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+                                background: linear-gradient(to right, transparent, $color_primary);
+                            }
+                            &::-webkit-scrollbar-track {
+                                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+                                border-radius: 10px;
+                                background-color: #F5F5F5;
+                            }
+                        }
+                        
+                        table {
+                            border-collapse: collapse;
+                            width: 100%;
+                            thead {
+                                tr {
+                                    width: 100%;
+                                    th {
+                                        color: $color_primary;
+                                        border: 1px solid #dadada;
+                                        padding: 6px 0;
+                                        &:nth-child(1) {
+                                            width: 15%;
+                                        }
+                                        &:nth-child(2) {
+                                            width: 20%;
+                                        }
+                                        &:nth-child(3) {
+                                            width: 10%;
+                                        }
+                                        &:nth-child(4) {
+                                            width: 25%;
+                                        }
+                                        &:nth-child(5) {
+
+                                        }
+                                        &:nth-child(6) {
+
+                                        }
+                                        &:nth-child(7) {
+
+                                        }
+                                    }
+                                }
+                            }
+                            tbody {
+                                tr {
+                                    width: 100%;
+                                    th {
+                                        color: #333;
+                                        font-size: 14px;
+                                        border: 1px solid #dadada;
+                                        padding: 6px;
+                                        &:nth-child(1) {
+                                            width: 15%;
+                                        }
+                                        &:nth-child(2) {
+                                            width: 20%;
+                                        }
+                                        &:nth-child(3) {
+                                            width: 10%;
+                                        }
+                                        &:nth-child(4) {
+                                            width: 25%;
+                                        }
+                                        &:nth-child(5) {
+
+                                        }
+                                        &:nth-child(6) {
+                                            button {
+                                                border: 1px solid $color_primary;
+                                                background-color: $color_primary;
+                                                border-radius: 5px;
+                                                a {
+                                                    color: #fff;
+                                                    padding: 4px 8px;
+                                                    display: block;
+                                                }
+                                            }
+                                        }
+                                        &:nth-child(7) {
+                                            button {
+                                                cursor: pointer;
+                                                border: 1px solid #ff0000;
+                                                background-color: #ff0000;
+                                                border-radius: 5px;
+                                                color: #fff;
+                                                padding: 4px 8px;
+                                                span {
+                                                    margin-left: 4px;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .categories-3 {
+        position: fixed;
+        z-index: 1000;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 0px;
+        height: 410px;
+        transition: 0.2s;
+        background-color: #fff;
+        border-radius: 5px;
+        overflow: hidden;
+        box-shadow: 0px 0px 5px #000026;
+        .header {
+            .title {
+                color: $color_primary;
+                text-transform: uppercase;
+                font-weight: bolder;
+                font-size: 20px;
+                text-align: center;
+                padding: 16px 0;
+            }
+        }
+        .body {
+            padding: 16px 32px;
+            form {
+                width: 100%;
+                .box-form {
+                    .form-item {
+                        display: flex;
+                        align-items: center;
+                        padding: 8px 0;
+                        p {
+                            width: 180px;
+                            display: block;
+                            margin-right: 8px;
+                        }
+                        input {
+                            width: 100%;
+                            padding: 10px 16px;
+                            border-radius: 5px;
+                            border: 1px solid #dadada;
+                        }
+                    }
+                }
+                .box-btn {
+                    padding: 16px 0;
+                    text-align: center;
+                    .btn-add {
+                        width: 80px;
+                        border: 1px solid $color_primary;
+                        background-color: $color_primary;
+                        color: #fff;
+                        border-radius: 5px;
+                        transition: 0.2s;
+                        cursor: pointer;
+                        padding: 10px 0;
+                        &:hover {
+                            background-color: $color_primary_b;
+                        }
+                    }
+                    .btn-reset {
+                        width: 120px;
+                        border: 1px solid $color_primary;
+                        background-color: $color_primary;
+                        color: #fff;
+                        border-radius: 5px;
+                        transition: 0.2s;
+                        cursor: pointer;
+                        padding: 10px 0;
+                        &:hover {
+                            background-color: $color_primary_b;
+                        }
+                    }
+                }
+            }
+            .btn-back {
+                width: 80px;
+                border: 1px solid $color_primary;
+                background-color: $color_primary;
+                color: #fff;
+                border-radius: 5px;
+                transition: 0.2s;
+                cursor: pointer;
+                padding: 6px 0;
+                font-size: 14px;
+                &:hover {
+                    background-color: $color_primary_b;
+                }
+            }
+        }
+    }
+    .active {
+        width: 500px;
+    }
+}
+
+.reception-detail {
+    padding: 32px 0;
+    .categories-3 {
+        margin: 0 auto;
+        position: relative !important;
+        width: 500px !important;
+        height: 410px;
+        left: 0 !important;
+        top: 0 !important;
+        transform: translate(0, 0) !important;
+        z-index: 1;
+        select {
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #dadada;
+            padding: 12px 16px;
+        }
+        .btn-back-link {
+            width: 80px;
+            display: block;
+            text-align: center;
+            border: 1px solid $color_primary;
+            background-color: $color_primary;
+            color: #fff;
+            border-radius: 5px;
+            transition: 0.2s;
+            cursor: pointer;
+            padding: 6px 0;
+            font-size: 14px;
+            &:hover {
+                background-color: $color_primary_b;
+            }
+        }
+    }
+}
+
+// Finance Page
+.finance-page {
+    .categories-2 {
+        .body {
+            .item {
+                &:nth-child(2) {
+                    .box-function {
+                        .function-item {
+                            &:nth-child(2) {
+                                display: flex;
+                                align-items: center;
+                                form {
+                                    display: flex;
+                                    align-items: center;
+                                    margin-right: 16px;
+                                    .title {
+                                        background-color: $color_primary;
+                                        margin-right: 16px;
+                                        display: block;
+                                        width: 170px;
+                                        color: #fff;
+                                        text-align: center;
+                                        padding: 10px 0;
+                                        position: relative;
+                                        overflow: hidden;
+                                        &::before {
+                                            content: '';
+                                            position: absolute;
+                                            width: 50px;
+                                            height: 50px;
+                                            background-color: #fff;
+                                            transform: rotate(45deg);
+                                            top: -40px;
+                                            right: -25px;
+                                        }
+                                        &::after {
+                                            content: '';
+                                            position: absolute;
+                                            width: 50px;
+                                            height: 50px;
+                                            background-color: #fff;
+                                            transform: rotate(45deg);
+                                            bottom: -40px;
+                                            right: -25px;
+                                        }
+                                    }
+                                    .box-form {
+                                        display: flex;
+                                        align-items: center;
+                                        padding: 16px 0;
+                                        .form-item {
+                                            display: flex;
+                                            align-items: center;
+                                            margin-right: 16px;
+                                            label {
+                                                display: none;
+                                            }
+                                            p {
+                                                margin-right: 16px;
+                                            }
+                                            input {
+                                                padding: 8px 16px;
+                                                border: 1px solid #c9c9c9;
+                                                border-radius: 5px;
+                                            }
+                                        }
+                                    }
+                                    .box-btn {
+                                        .btn-search {
+                                            cursor: pointer;
+                                            width: 80px;
+                                            background-color: $color_primary;
+                                            color: #fff;
+                                            border: 1px solid $color_primary;
+                                            padding: 10px 0;
+                                            border-radius: 5px;
+                                            transition: 0.2s;
+                                            &:hover {
+                                                background-color: $color_primary_b;
+                                            }
+                                        }
+                                        .btn-reset {
+                                            cursor: pointer;
+                                            width: 100px;
+                                            background-color: $color_primary;
+                                            color: #fff;
+                                            border: 1px solid $color_primary;
+                                            padding: 10px 0;
+                                            border-radius: 5px;
+                                            transition: 0.2s;
+                                            margin-left: 8px;
+                                            &:hover {
+                                                background-color: $color_primary_b;
+                                            }
+                                        }
+                                    }
+                                }
+                                .btn-view {
+                                    width: 40px;
+                                    height: 40px;
+                                    border: 3px solid #dadada;
+                                    cursor: pointer;
+                                    background-color: #fff;
+                                    transition: 0.2s;
+                                    &:nth-child(2) {
+                                        border-radius: 5px 0 0 5px;  
+                                    }
+                                    &:nth-child(3) {
+                                        border-radius: 0px 5px 5px 0;
+                                    }
+                                    .fa {
+                                        font-size: 18px;
+                                        color: $color_primary;
+                                    }
+                                    &:hover {
+                                        background-color: $color_primary;
+                                        .fa { 
+                                            color: #fff;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                &:nth-child(3) {
+                    .box-infor {
+                        padding: 16px;
+                        border: 1px solid #dadada;
+                        border-radius: 5px;
+                        .infor-table {
+                            height: 400px;
+                            overflow-y: scroll;
+                            &::-webkit-scrollbar {
+                                width: 8px;
+                            }
+                            &::-webkit-scrollbar-thumb {
+                                border-radius: 10px;
+                                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+                                background: linear-gradient(to right, transparent, $color_primary);
+                            }
+                            &::-webkit-scrollbar-track {
+                                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+                                border-radius: 10px;
+                                background-color: #F5F5F5;
+                            }
+                        }
+                        
+                        table {
+                            border-collapse: collapse;
+                            width: 100%;
+                            thead {
+                                tr {
+                                    width: 100%;
+                                    th {
+                                        color: $color_primary;
+                                        border: 1px solid #dadada;
+                                        padding: 6px 0;
+                                        &:nth-child(1) {
+                                            width: 15%;
+                                        }
+                                        &:nth-child(2) {
+                                            width: 20%;
+                                        }
+                                        &:nth-child(3) {
+                                            width: 10%;
+                                        }
+                                        &:nth-child(4) {
+                                            width: 10%;
+                                        }
+                                        &:nth-child(5) {
+                                            width: 10%;
+                                        }
+                                        &:nth-child(6) {
+                                            width: 20%;
+                                        }
+                                        &:nth-child(7) {
+
+                                        }
+                                    }
+                                }
+                            }
+                            tbody {
+                                tr {
+                                    width: 100%;
+                                    th {
+                                        color: #333;
+                                        font-size: 14px;
+                                        border: 1px solid #dadada;
+                                        padding: 8px 6px;
+                                        &:nth-child(1) {
+                                            width: 15%;
+                                        }
+                                        &:nth-child(2) {
+                                            width: 20%;
+                                        }
+                                        &:nth-child(3) {
+                                            width: 10%;
+                                        }
+                                        &:nth-child(4) {
+                                            width: 10%;
+                                        }
+                                        &:nth-child(5) {
+                                            width: 10%;
+                                        }
+                                        &:nth-child(6) {
+                                            width: 20%;
+                                        }
+                                        &:nth-child(7) {
+                                            a {
+                                                cursor: pointer;
+                                                border: 1px solid #ff0000;
+                                                background-color: #ff0000;
+                                                border-radius: 5px;
+                                                color: #fff;
+                                                padding: 4px 8px;
+                                                font-size: 12px;
+                                                span {
+                                                    margin-left: 4px;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.finance-detail {
+    .categories-2 {
+        .body {
+            .item {
+                &:nth-child(1) {
+                    form {
+                        width: 400px;
+                        margin: 0 auto;
+                        .content {
+                            display: flex;
+                            margin-top: 16px;
+                            span {
+                                &:nth-child(1) {
+                                    width: 150px;
+                                }
+                                &:nth-child(2) {
+                                    font-size: 20px;
+                                    font-weight: bolder;
+                                    color: $color_primary;
+                                }
+                            }
+                        }
+                        .box-form {
+                            display: flex;
+                            align-items: center;
+                            padding: 16px 0;
+                            .form-item {
+                                display: flex;
+                                align-items: center;
+                                margin-right: 32px;
+                                label {
+                                    display: none;
+                                }
+                                p {
+                                    margin-right: 16px;
+                                }
+                                input {
+                                    padding: 8px 16px;
+                                    border: 1px solid #c9c9c9;
+                                    border-radius: 5px;
+                                }
+                            }
+                            
+                        }
+                        .btn-reset {
+                            display: inline-block !important;
+                            padding: 10px 16px !important;
+                            text-align: center;
+                        }
+                    }
+                }
+                &:nth-child(3) {
+                    .box-infor {                    
+                        table {
+                            thead {
+                                tr {
+                                    th {
+                                        &:nth-child(1) {
+                                            width: 15%;
+                                        }
+                                        &:nth-child(2) {
+                                            width: 25%;
+                                        }
+                                        &:nth-child(3) {
+                                            width: 15%;
+                                        }
+                                        &:nth-child(4) {
+                                            width: 15%;
+                                        }
+                                        &:nth-child(5) {
+                                            width: 10%;
+                                        }
+                                        &:nth-child(6) {
+                                            width: 10%;
+                                        }
+                                    }
+                                }
+                            }
+                            tbody {
+                                tr {
+                                    width: 100%;
+                                    th {
+                                        &:nth-child(1) {
+                                            width: 15%;
+                                        }
+                                        &:nth-child(2) {
+                                            width: 25%;
+                                        }
+                                        &:nth-child(3) {
+                                            width: 15%;
+                                        }
+                                        &:nth-child(4) {
+                                            width: 15%;
+                                        }
+                                        &:nth-child(5) {
+                                            width: 10%;
+                                        }
+                                        &:nth-child(6) {
+                                            width: 10%;
+                                            a {
+                                                background-color: #ff0000;
+                                                color: #fff;
+                                                padding: 4px 8px;
+                                                display: inline-block;
+                                                border-radius: 5px;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 // Admin page
 .admin-container {
     position: relative;

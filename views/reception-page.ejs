@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/layouts/head') %>
+
+    <%- include('partials/layouts/styles') %>
+
+    
+</head>
+
+<body>
+    <%- include('partials/layouts/header') %>
+
+    <%- include('partials/layouts/user.ejs') %> 
+
+    <div class="container-item reception-page">
+        <div class="categories-1">
+            <div class="content">
+                <div class="header">
+                    <p class="title">
+                        Quầy tiếp tân
+                        <img src="/images/logo-1.gif" alt="">
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="categories-2">
+            <div class="header">
+                <p class="title">Danh mục quản lý</p>
+            </div>
+            <div class="body">
+                <div class="item">
+                    <form action="">
+                        <div class="box-form">
+                            <div class="form-item">
+                                <p class="form-item-title">Tên bệnh nhân: </p>
+                                <input type="text" placeholder="Tên bệnh nhân" id="namePatient" name="namePatient">
+                                <label for="namePatient"></label>
+                            </div>
+                            <div class="form-item">
+                                <p class="form-item-title">Ngày sinh: </p>
+                                <input type="date" placeholder="Tên bệnh nhân" id="datePatient" name="datePatient">
+                                <label for="datePatient"></label>
+                            </div>
+                        </div>
+                        <div class="box-btn">
+                            <button class="btn-search">Tìm</button>
+                            <button class="btn-reset">Nhập lại</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="item">
+                    <div class="box-function">
+                        <div class="function-item">
+                            <p class="content-item"><%= data.length %>  Bệnh nhân <span><%= data.length %>  / <%= numData[0]['SUM'] %> </span></p>
+                        </div>
+                        <div class="function-item">
+                            <button class="btn-add"><i class="fa fa-plus" aria-hidden="true"></i> <span>Thêm bệnh nhân</span></button>
+                            <button class="btn-view"><i class="fa fa-th-list" aria-hidden="true"></i></button>
+                            <button class="btn-view"><i class="fa fa-th-large" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="box-infor">
+                        <div class="infor-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Mã bệnh nhân</th>
+                                        <th>Tên bệnh nhân</th>
+                                        <th>Năm sinh</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Khám bệnh</th>
+                                        <th>Xóa bệnh nhân</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% data.forEach(item => { %>
+                                        <tr>
+                                            <th><span><%= item['IDBENHNHAN'] %> </span></th>
+                                            <th><span><%= item['TENBENHNHAN'] %> </span></th>
+                                            <th><%= item['NAMSINH'] %> </th>
+                                            <th><%= item['DIACHI'] %></th>
+                                            <th><%= item['SDT'] %> </th>
+                                            <th><button><a href="/reception/patient/<%= item['IDBENHNHAN'] %>"><i class="fa fa-plus" aria-hidden="true"></i><span>Thêm</span></a></button></th>
+                                            <th><button><a href="/reception/patient/<%= item['IDBENHNHAN'] %>/delete"><i class="fas fa-trash-alt    "></i><span>Xóa</span></a></button></th>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="categories-3">
+            <div class="header">
+                <p class="title">Thêm bệnh nhân</p>
+            </div>
+            <div class="body">
+                <form action="/reception" method="POST">
+                    <div class="box-form">
+                        <div class="form-item">
+                            <p class="title">Họ và tên: </p>
+                            <input type="text" id="addNamePatient" name="addNamePatient" placeholder="Lê Văn A" required>
+                            <label for="addNamePatient"></label>
+                        </div>
+                        <div class="form-item">
+                            <p class="title">Năm sinh: </p>
+                            <input type="date" id="addDatePatient" name="addDatePatient" required>
+                            <label for="addDatePatient"></label>
+                        </div>
+                        <div class="form-item">
+                            <p class="title">Địa chỉ: </p>
+                            <input type="text" id="addRePatient" name="addRePatient" placeholder="TPHCM" required>
+                            <label for="addRePatient"></label>
+                        </div>
+                        <div class="form-item">
+                            <p class="title">Số điện thoại: </p>
+                            <input type="text" id="addPhonePatient" name="addPhonePatient" placeholder="0123456789" required>
+                            <label for="addPhonePatient"></label>
+                        </div>
+                    </div>
+                    <div class="box-btn">
+                        <button type="submit" class="btn-add"><i class="fa fa-plus" aria-hidden="true"></i> Thêm</button>
+                        <button class="btn-reset">Nhập lại</button>
+                    </div>
+                </form>
+                <button class="btn-back">Quay lại</button>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/layouts/footer')  %> 
+
+    <%- include('partials/layouts/scripts') %>
+</body>
+
+</html>

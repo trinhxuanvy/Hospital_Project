@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/layouts/head') %>
+
+    <%- include('partials/layouts/styles') %>
+
+    
+</head>
+
+<body>
+    <%- include('partials/layouts/header') %>
+
+    <%- include('partials/layouts/user.ejs') %> 
+
+    <div class="container-item reception-page reception-detail">
+        <div class="categories-3">
+            <div class="header">
+                <p class="title">Thêm hồ sơ bệnh án</p>
+            </div>
+            <div class="body">
+                <form action="/reception/patient/<%= idPatient %>" method="POST">
+                    <div class="box-form">
+                        <div class="form-item">
+                            <p class="title">Họ và tên: </p>
+                            <input type="text" id="addNamePatient" value="<%= patient[0]['TENBENHNHAN'] %>">
+                        </div>
+                        <div class="form-item">
+                            <p class="title">Ngày khám: </p>
+                            <input type="date" id="addDateExam" name="addDateExam">
+                            <label for="addDateExam"></label>
+                        </div>
+                        <div class="form-item">
+                            <p class="title">Bác sĩ: </p>
+                            <select name="addDoctor" id="addDoctor">
+                                <% allDoctor.forEach(item => { %>
+                                    <option value="<%= item['IDNHANVIEN'] %>"><%= item['TENNHANVIEN'] %></option>
+                                <% }) %>
+                            </select>
+                            <label for="addDoctor"></label>
+                        </div>
+                        <div class="form-item">
+                            <p class="title">Tình trạng: </p>
+                            <input type="text" id="addStatus" name="addStatus" placeholder="Nhức đầu, ...">
+                            <label for="addStatus"></label>
+                        </div>
+                    </div>
+                    <div class="box-btn">
+                        <button type="submit" class="btn-add"><i class="fa fa-plus" aria-hidden="true"></i> Thêm</button>
+                        <button class="btn-reset">Nhập lại</button>
+                    </div>
+                </form>
+                <a href="/reception" class="btn-back-link">Quay lại</a>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/layouts/footer')  %> 
+
+    <%- include('partials/layouts/scripts') %>
+</body>
+
+</html>

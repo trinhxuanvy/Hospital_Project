@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/layouts/head') %>
+
+    <%- include('partials/layouts/styles') %>
+
+    
+</head>
+
+<body>
+    <%- include('partials/layouts/header') %>
+
+    <%- include('partials/layouts/user.ejs') %> 
+
+    <div class="container-item reception-page finance-page">
+        <div class="categories-1">
+            <div class="content">
+                <div class="header">
+                    <p class="title">
+                        Bộ phận kế toán
+                        <img src="/images/logo-1.gif" alt="">
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="categories-2">
+            <div class="header">
+                <p class="title">Danh mục quản lý</p>
+            </div>
+            <div class="body">
+                <div class="item">
+                    <form action="finance" method="GET">
+                        <div class="box-form">
+                            <div class="form-item">
+                                <p class="form-item-title">Mã nhân viên: </p>
+                                <input type="text" placeholder="123456" id="idEmployee" name="idEmployee">
+                                <label for="idEmployee"></label>
+                            </div>
+                            <div class="form-item">
+                                <p class="form-item-title">Tên nhân viên: </p>
+                                <input type="text" placeholder="Tên nhân viên" id="nameEmployee" name="nameEmployee">
+                                <label for="nameEmployee"></label>
+                            </div>
+                        </div>
+                        <div class="box-btn">
+                            <button class="btn-search">Tìm</button>
+                            <button class="btn-reset">Nhập lại</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="item">
+                    <div class="box-function">
+                        <div class="function-item">
+                            <p class="content-item"><%= data.length %>  Nhân viên <span><%= data.length %>  / <%= numData[0]['SUM'] %> </span></p>
+                        </div>
+                        <div class="function-item">
+                            <form action="/finance" method="GET">
+                                <p class="title">Thống kê lương</p>
+                                <div class="box-form">
+                                    <div class="form-item">
+                                        <p class="form-item-title">Tháng: </p>
+                                        <input type="number" value="<%= month %>" min="1" max="12" id="monSet" name="monSet">
+                                        <label for="monSet"></label>
+                                    </div>
+                                    <div class="form-item">
+                                        <p class="form-item-title">Năm: </p>
+                                        <input type="number" value="<%= year %>" min="2000" max="2050" id="yearSet" name="yearSet">
+                                        <label for="yearSet"></label>
+                                    </div>
+                                </div>
+                                <div class="box-btn">
+                                    <button class="btn-reset">Bắt đầu</button>
+                                </div>
+                            </form>
+                            <button class="btn-view"><i class="fa fa-th-list" aria-hidden="true"></i></button>
+                            <button class="btn-view"><i class="fa fa-th-large" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="box-infor">
+                        <div class="infor-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Mã nhân viên</th>
+                                        <th>Tên nhân viên</th>
+                                        <th>Tháng</th>
+                                        <th>Năm</th>
+                                        <th>Số ngày làm</th>
+                                        <th>Lương</th>
+                                        <th>Thống kê</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% data.forEach(item => { %>
+                                        <tr>
+                                            <th><span><%= item['IDNHANVIEN'] %></span></th>
+                                            <th><span><%= item['TENNHANVIEN'] %></span></th>
+                                            <th><%= month %></th>
+                                            <th><%= year %></th>
+                                            <th><%= item['SONGAY'] %></th>
+                                            <th><span>VNĐ</span></th>
+                                            <th><a href="/finance/employee/<%= item['IDNHANVIEN'] %>" class="btn-link"><i class="fa fa-calculator" aria-hidden="true"></i> <span>Thống kê</span></a></th>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="categories-3">
+            <div class="header">
+                <p class="title">Thêm bệnh nhân</p>
+            </div>
+            <div class="body">
+                <form action="/reception" method="POST">
+                    <div class="box-form">
+                        <div class="form-item">
+                            <p class="title">Họ và tên: </p>
+                            <input type="text" id="addNameEmployee" name="addNameEmployee" placeholder="Lê Văn A" required>
+                            <label for="addNameEmployee"></label>
+                        </div>
+                        <div class="form-item">
+                            <p class="title">Năm sinh: </p>
+                            <input type="date" id="addDateEmployee" name="addDateEmployee" required>
+                            <label for="addDateEmployee"></label>
+                        </div>
+                        <div class="form-item">
+                            <p class="title">Địa chỉ: </p>
+                            <input type="text" id="addReEmployee" name="addReEmployee" placeholder="TPHCM" required>
+                            <label for="addReEmployee"></label>
+                        </div>
+                        <div class="form-item">
+                            <p class="title">Số điện thoại: </p>
+                            <input type="text" id="addPhoneEmployee" name="addPhoneEmployee" placeholder="0123456789" required>
+                            <label for="addPhoneEmployee"></label>
+                        </div>
+                    </div>
+                    <div class="box-btn">
+                        <button type="submit" class="btn-add"><i class="fa fa-plus" aria-hidden="true"></i> Thêm</button>
+                        <button class="btn-reset">Nhập lại</button>
+                    </div>
+                </form>
+                <button class="btn-back">Quay lại</button>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/layouts/footer')  %> 
+
+    <%- include('partials/layouts/scripts') %>
+</body>
+
+</html>

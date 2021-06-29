@@ -2,12 +2,13 @@ var express = require('express');
 var oracledb = require('../backend/data');
 var jwt = require('jsonwebtoken');
 var setup = require('./setup');
+const { query } = require('express');
 
 var router = express.Router();
 
 // GET home page
 router.get('/', async function (req, res, next) {
-    let iddoctor = staff = '';
+    let idStaff = staff = '';
     try {
         let tokenIdUser = await req.cookies.is_;
         let isCheck = jwt.verify(tokenIdUser, 'vychuoi123', function (err, result) {
@@ -22,20 +23,20 @@ router.get('/', async function (req, res, next) {
             res.clearCookie('flag');
         }
         else {
-            iddoctor = tokenIdUser.slice(tokenIdUser.length - 8, tokenIdUser.length);
+            idStaff = tokenIdUser.slice(tokenIdUser.length - 8, tokenIdUser.length);
             let reTokenIdUser = jwt.verify(tokenIdUser, 'vychuoi123');
-            iddoctor = reTokenIdUser['getId'];
-            staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${iddoctor}`);
-            iddoctor = tokenIdUser.slice(tokenIdUser.length - 8, tokenIdUser.length);
+            idStaff = reTokenIdUser['getId'];
+            staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${idStaff}`);
+            idStaff = tokenIdUser.slice(tokenIdUser.length - 8, tokenIdUser.length);
             if (staff.length > 0) {
                 staff = staff[0]['VAITRO'].toLowerCase();
                 console.log(staff);
             }
         }
-        res.render('index', { iddoctor, staff });
+        res.render('index', { idStaff, staff });
     } catch (error) {
         res.clearCookie('flag');
-        res.render('index', { iddoctor });
+        res.render('index', { idStaff });
     }
 });
 
@@ -75,14 +76,13 @@ router.post('/user', async function (req, res, next) {
             res.cookie('statusLogin', 'true');
             res.cookie('redirect', 'true');
 
-            let sliceToken = tokenIdUser.slice(tokenIdUser.length - 8, tokenIdUser.length);
             let roleUser = await getUsername.length > 0 ? getUsername[0]['VAITRO'] : '';
 
             if (roleUser == 'Bác sĩ') {
                 res.redirect(`/doctor/patient/page-1`);
             }
             else if (roleUser.toLowerCase() == 'NV Kế Toán'.toLowerCase()) {
-                res.redirect(`/`);
+                res.redirect(`/finance`);
             }
             else if (roleUser.toLowerCase() == 'NV Bán Thuốc'.toLowerCase()) {
                 res.redirect(`/phamarcy/bill-drug/page-1`);
@@ -91,7 +91,7 @@ router.post('/user', async function (req, res, next) {
                 res.redirect(`/`);
             }
             else if (roleUser.toLowerCase() == 'NV Điều Phối'.toLowerCase()) {
-                res.redirect(`/`);
+                res.redirect(`/reception`);
             }
             else if (roleUser.toLowerCase() == 'Quản Lý'.toLowerCase()) {
                 res.redirect(`/`);
@@ -270,8 +270,8 @@ router.get('/doctor/patient/page-:number', async function (req, res, next) {
         let getItem = req.query;
         let page = req.params.number;
         let reToken = jwt.verify(token, 'vychuoi123');
-        let iddoctor = reToken['getId'];
-        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${iddoctor}`);
+        let idStaff = reToken['getId'];
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${idStaff}`);
         if (staff[0]['VAITRO'].toLowerCase() == 'Bác sĩ'.toLowerCase()) {
             if (page < 1) {
                 page = 1;
@@ -279,10 +279,10 @@ router.get('/doctor/patient/page-:number', async function (req, res, next) {
             let data, isSearch = 0, search;
             if ((search = getItem['search']) != null) {
                 isSearch = 1;
-                data = await oracledb.getCheckData(`select distinct bn.* from C##ADMIN.BENHNHAN bn, C##ADMIN.hosobenhan hsba where hsba.bsdieutri = ${iddoctor} and hsba.idbenhnhan = bn.idbenhnhan and FN_CONVERT_TO_VN(lower(bn.TENBENHNHAN)) like '%${setup.removeVietnameseTones(getItem['search']).toLowerCase()}%' order by bn.IDBENHNHAN asc`);
+                data = await oracledb.getCheckData(`select distinct bn.* from C##ADMIN.BENHNHAN bn, C##ADMIN.hosobenhan hsba where hsba.bsdieutri = ${idStaff} and hsba.idbenhnhan = bn.idbenhnhan and FN_CONVERT_TO_VN(lower(bn.TENBENHNHAN)) like '%${setup.removeVietnameseTones(getItem['search']).toLowerCase()}%' order by bn.IDBENHNHAN asc`);
             }
             else {
-                data = await oracledb.getCheckData(`select distinct bn.*  from C##ADMIN.hosobenhan hsbn, C##ADMIN.benhnhan bn where hsbn.bsdieutri = ${iddoctor} and hsbn.idbenhnhan = bn.idbenhnhan order by bn.idbenhnhan asc`);
+                data = await oracledb.getCheckData(`select distinct bn.*  from C##ADMIN.hosobenhan hsbn, C##ADMIN.benhnhan bn where hsbn.bsdieutri = ${idStaff} and hsbn.idbenhnhan = bn.idbenhnhan order by bn.idbenhnhan asc`);
             }
             let r = data.length % 8;
             let numPage = Math.floor(data.length / 8);
@@ -307,8 +307,8 @@ router.get('/doctor/patient/page-:number', async function (req, res, next) {
             }
 
             staff = staff[0]['VAITRO'].toLowerCase();
-            iddoctor = req.params.iddoctor;
-            res.render('doctor-page', { data, page, numPage, isSearch, search, iddoctor, staff  });
+            idStaff = req.params.idStaff;
+            res.render('doctor-page', { data, page, numPage, isSearch, search, idStaff, staff  });
         }
     } catch (error) {
         res.clearCookie('flag');
@@ -321,14 +321,14 @@ router.post('/doctor/patient/page-:number', async function (req, res, next) {
     try {
         let token = await req.cookies.is_;
         let reToken = jwt.verify(token, 'vychuoi123');
-        let iddoctor = reToken['getId'];
-        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${iddoctor}`);
+        let idStaff = reToken['getId'];
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${idStaff}`);
         if (staff[0]['VAITRO'].toLowerCase() == 'Bác sĩ'.toLowerCase()) {
             let hint = '';
             let search = req.body.query.toLowerCase();
             console.log(search);
             if (search.length > 0) {
-                let data = await oracledb.getCheckData(`select distinct bn.* from C##ADMIN.BENHNHAN bn, C##ADMIN.hosobenhan hsba where hsba.bsdieutri = ${iddoctor} and hsba.idbenhnhan = bn.idbenhnhan and FN_CONVERT_TO_VN(lower(bn.TENBENHNHAN)) like '%${setup.removeVietnameseTones(search)}%' order by bn.IDBENHNHAN asc`);
+                let data = await oracledb.getCheckData(`select distinct bn.* from C##ADMIN.BENHNHAN bn, C##ADMIN.hosobenhan hsba where hsba.bsdieutri = ${idStaff} and hsba.idbenhnhan = bn.idbenhnhan and FN_CONVERT_TO_VN(lower(bn.TENBENHNHAN)) like '%${setup.removeVietnameseTones(search)}%' order by bn.IDBENHNHAN asc`);
                 if (data.length > 0) {
                     data = data.slice(0, 6);
                     for (let i = 0; i < data.length; i++) {
@@ -358,25 +358,25 @@ router.get('/doctor/patient/:id/bill-drug/:number', async function (req, res, ne
         let id = req.params.id;
         let number = req.params.number;
         let reToken = jwt.verify(token, 'vychuoi123');
-        let iddoctor = reToken['getId'];
-        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${iddoctor}`);
+        let idStaff = reToken['getId'];
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${idStaff}`);
         if (staff[0]['VAITRO'].toLowerCase() == 'Bác Sĩ'.toLowerCase()) {
-            let check = await oracledb.getCheckData(`select * from C##ADMIN.hosobenhan hsba, C##ADMIN.donthuoc dt where hsba.idbenhnhan = ${id} and hsba.bsdieutri = ${iddoctor} and hsba.idhosobenhan = dt.idhosobenhan and dt.iddonthuoc = ${number}`);
+            let check = await oracledb.getCheckData(`select * from C##ADMIN.hosobenhan hsba, C##ADMIN.donthuoc dt where hsba.idbenhnhan = ${id} and hsba.bsdieutri = ${idStaff} and hsba.idhosobenhan = dt.idhosobenhan and dt.iddonthuoc = ${number}`);
 
             if (isNaN(id * 1) != true && isNaN(number * 1) != true) {
                 if (check.length != 0 || number == 0) {
-                    let patient = await oracledb.getCheckData(`select distinct bn.*  from C##ADMIN.hosobenhan hsbn, C##ADMIN.benhnhan bn where hsbn.bsdieutri = ${iddoctor} and hsbn.idbenhnhan = ${id} and hsbn.idbenhnhan = bn.idbenhnhan order by bn.idbenhnhan asc`);
+                    let patient = await oracledb.getCheckData(`select distinct bn.*  from C##ADMIN.hosobenhan hsbn, C##ADMIN.benhnhan bn where hsbn.bsdieutri = ${idStaff} and hsbn.idbenhnhan = ${id} and hsbn.idbenhnhan = bn.idbenhnhan order by bn.idbenhnhan asc`);
                     if (patient.length == 0) {
                         res.render('404');
                     }
                     else {
-                        let allFile = await oracledb.getCheckData(`select * from C##ADMIN.HOSOBENHAN where IDBENHNHAN = ${id} and bsdieutri = ${iddoctor}`);
-                        let bill = await oracledb.getCheckData(`select dt.* from C##ADMIN.HOSOBENHAN hs, C##ADMIN.DONTHUOC dt where dt.iDHOSOBENHAN = hs.IDHOSOBENHAN and hs.IDBENHNHAN = ${id} and hs.bsdieutri = ${iddoctor} order by dt.iddonthuoc desc`);
+                        let allFile = await oracledb.getCheckData(`select * from C##ADMIN.HOSOBENHAN where IDBENHNHAN = ${id} and bsdieutri = ${idStaff}`);
+                        let bill = await oracledb.getCheckData(`select dt.* from C##ADMIN.HOSOBENHAN hs, C##ADMIN.DONTHUOC dt where dt.iDHOSOBENHAN = hs.IDHOSOBENHAN and hs.IDBENHNHAN = ${id} and hs.bsdieutri = ${idStaff} order by dt.iddonthuoc desc`);
                         let deDes = await oracledb.getCheckData(`select ctdt.*, t.TENTHUOC, t.DONVITINH from C##ADMIN.HOSOBENHAN hsba, C##ADMIN.donthuoc dt, C##ADMIN.CHITIETDONTHUOC ctdt, C##ADMIN.THUOC t
-                        where hsba.IDHOSOBENHAN = dt.idhosobenhan and hsba.bsdieutri = ${iddoctor} and dt.iddonthuoc = ctdt.iddonthuoc
+                        where hsba.IDHOSOBENHAN = dt.idhosobenhan and hsba.bsdieutri = ${idStaff} and dt.iddonthuoc = ctdt.iddonthuoc
                         and ctdt.IDDONTHUOC = ${number} and ctdt.IDTHUOC = t.IDTHUOC`);
                         let drug = await oracledb.getCheckData(`select * from C##ADMIN.THUOC order by tenthuoc`);
-                        let cmtDoc = await oracledb.getCheckData(`select KETLUANBS from C##ADMIN.HOSOBENHAN hsba, C##ADMIN.DONTHUOC dt where hsba.bsdieutri = ${iddoctor} and hsba.IDBENHNHAN = ${id} and hsba.IDHOSOBENHAN = dt.IDHOSOBENHAN and dt.IDDONTHUOC = ${number}`);
+                        let cmtDoc = await oracledb.getCheckData(`select KETLUANBS from C##ADMIN.HOSOBENHAN hsba, C##ADMIN.DONTHUOC dt where hsba.bsdieutri = ${idStaff} and hsba.IDBENHNHAN = ${id} and hsba.IDHOSOBENHAN = dt.IDHOSOBENHAN and dt.IDDONTHUOC = ${number}`);
 
                         if (number == 0) {
                             //cmtDoc[0]['KETLUANBS'] = '';
@@ -385,7 +385,7 @@ router.get('/doctor/patient/:id/bill-drug/:number', async function (req, res, ne
                             cmtDoc = [];
                             cmtDoc.push({ KETLUANBS: '' });
                         }
-                        iddoctor = req.params.iddoctor;
+                        idStaff = req.params.idStaff;
 
                         if (bill.length > 0)
                         {
@@ -393,7 +393,7 @@ router.get('/doctor/patient/:id/bill-drug/:number', async function (req, res, ne
                         }
 
                         staff = staff[0]['VAITRO'].toLowerCase();
-                        res.render('prescription', { drug, id, allFile, deDes, number, cmtDoc, patient, bill, iddoctor, staff });
+                        res.render('prescription', { drug, id, allFile, deDes, number, cmtDoc, patient, bill, idStaff, staff });
                     }
                 }
                 else {
@@ -421,10 +421,10 @@ router.post('/doctor/patient/:id/bill-drug/:number', async function (req, res, n
         let id = req.params.id;
         let number = req.params.number;
         let reToken = jwt.verify(token, 'vychuoi123');
-        let iddoctor = reToken['getId'];
+        let idStaff = reToken['getId'];
         let reqBody = req.body;
         let idDrug = [], numberUse = [], idFile = [], idNewDrug = [], numberNewUse = [], diagnose = '';
-        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${iddoctor}`);
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${idStaff}`);
         if (staff[0]['VAITRO'].toLowerCase() == 'Bác Sĩ'.toLowerCase()) {
             for (let i in reqBody) {
                 if (i.indexOf('idDrug') > -1) {
@@ -484,7 +484,7 @@ router.post('/doctor/patient/:id/bill-drug/:number', async function (req, res, n
                         { idhsba: idbn });
                 }
             }
-            let check = await oracledb.getCheckData(`select * from C##ADMIN.hosobenhan hsba, C##ADMIN.donthuoc dt where hsba.idbenhnhan = ${id} and hsba.bsdieutri = ${iddoctor} and hsba.idhosobenhan = dt.idhosobenhan and dt.iddonthuoc = ${number}`);
+            let check = await oracledb.getCheckData(`select * from C##ADMIN.hosobenhan hsba, C##ADMIN.donthuoc dt where hsba.idbenhnhan = ${id} and hsba.bsdieutri = ${idStaff} and hsba.idhosobenhan = dt.idhosobenhan and dt.iddonthuoc = ${number}`);
 
             if (check.length != 0 || number != 0) {
                 for (let i = 0; i < idDrug.length; i++) {
@@ -505,7 +505,7 @@ router.post('/doctor/patient/:id/bill-drug/:number', async function (req, res, n
                         { kl: diagnose, idhsba: paFile[0]['IDHOSOBENHAN'] });
                 }
             }
-            iddoctor = req.params.iddoctor;
+            idStaff = req.params.idStaff;
             res.redirect(`/doctor/patient/${id}/bill-drug/${number}`);
         }
         else{
@@ -525,8 +525,8 @@ router.get('/phamarcy/bill-drug/page-:number', async function (req, res, next) {
         let getItem = req.query;
         let page = req.params.number;
         let reToken = jwt.verify(token, 'vychuoi123');
-        let iddoctor = reToken['getId'];
-        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${iddoctor}`);
+        let idStaff = reToken['getId'];
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${idStaff}`);
         if (staff[0]['VAITRO'].toLowerCase() == 'NV Bán Thuốc'.toLowerCase()) {
             let data, isSearch = 0, search;
             if ((search = getItem['search']) != null) {
@@ -569,7 +569,7 @@ router.get('/phamarcy/bill-drug/page-:number', async function (req, res, next) {
             page = isSearch == 1 ? 1 : page;
 
             staff = staff[0]['VAITRO'].toLowerCase();
-            res.render('phamarcy-page', { data, page, numPage, isSearch, search, staff, iddoctor });
+            res.render('phamarcy-page', { data, page, numPage, isSearch, search, staff, idStaff });
         }
     } catch (error) {
         res.clearCookie('flag');
@@ -582,8 +582,8 @@ router.post('/phamarcy/bill-drug/page-:number', async function (req, res, next) 
     try {
         let token = await req.cookies.is_;
         let reToken = jwt.verify(token, 'vychuoi123');
-        let iddoctor = reToken['getId'];
-        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${iddoctor}`);
+        let idStaff = reToken['getId'];
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${idStaff}`);
         if (staff[0]['VAITRO'].toLowerCase() == 'NV Bán Thuốc'.toLowerCase()) {
             let hint = '';
             let search = req.body.query.toLowerCase();
@@ -614,17 +614,17 @@ router.get('/phamarcy/bill-drug/page-:number/:id', async function (req, res, nex
         let token = await req.cookies.is_;
         let page = req.params.number;
         let reToken = jwt.verify(token, 'vychuoi123');
-        let iddoctor = reToken['getId'];
-        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${iddoctor}`);
+        let idStaff = reToken['getId'];
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${idStaff}`);
         if (staff[0]['VAITRO'].toLowerCase() == 'NV Bán Thuốc'.toLowerCase()) {
             let data, isSearch = 0, search;
             data = await oracledb.getCheckData(`select ctdt.*, t.*, bn.*, to_date(dt.ngaytao) as ngay from C##ADMIN.chitietdonthuoc ctdt, C##ADMIN.donthuoc dt, C##ADMIN.hosobenhan hsba, C##ADMIN.benhnhan bn, C##ADMIN.thuoc t
             where ctdt.iddonthuoc = dt.iddonthuoc and dt.idhosobenhan = hsba.idhosobenhan and hsba.idbenhnhan = bn.idbenhnhan and t.idthuoc = ctdt.idthuoc
             and ctdt.iddonthuoc = 100 order by idchitietdonthuoc desc`);
             setup.convertDate(data);
-            iddoctor = req.params.iddoctor;
+            idStaff = req.params.idStaff;
             staff = staff[0]['VAITRO'].toLowerCase();
-            res.render('prescription-details', { data, page, iddoctor, staff });
+            res.render('prescription-details', { data, page, idStaff, staff });
         }
 
     } catch (error) {
@@ -632,6 +632,299 @@ router.get('/phamarcy/bill-drug/page-:number/:id', async function (req, res, nex
         res.redirect('/login');
     }
 
+});
+
+router.get('/reception', async function (req, res, next) {
+    try {
+        let token = req.cookies.is_;
+        let reToken = jwt.verify(token, 'vychuoi123');
+        let idStaff = reToken['getId'] || '';
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${idStaff}`);
+        let datePatient = req.query.datePatient || '';
+        let namePatient = req.query.namePatient || '';
+        if (staff[0]['VAITRO'].toLowerCase() == 'NV Điều phối'.toLowerCase()) {
+            let query = `select * from C##ADMIN.benhnhan where `;
+            if (namePatient != '') {
+                query += `fn_convert_to_vn(lower(tenbenhnhan)) like '%${setup.removeVietnameseTones(namePatient.toLowerCase())}%'`;
+            }
+            else {
+                query += `1 = 1`;
+            }
+
+            if (datePatient != '') {
+                query += ` and trunc(namsinh) = TO_DATE('${datePatient}','yyyy-mm-dd')`;
+            }
+            else {
+                query += ` and 1 = 1`;
+            }
+
+            query += ` order by idbenhnhan desc`;
+            let data = [];
+            if (namePatient != '' || datePatient != '') {
+                data = await oracledb.getCheckData(query);
+            }
+            
+            let numData = await oracledb.getCheckData(`select count(*) as sum from C##ADMIN.benhnhan`);
+
+            setup.convertDate(data);
+            staff = staff[0]['VAITRO'].toLowerCase();
+            res.render('reception-page', { idStaff, staff, numData, data });
+        }
+        else {
+            res.clearCookie('flag');
+            res.redirect('/login');
+        }
+    } catch (error) {
+        res.clearCookie('flag');
+        res.redirect('/login');
+    }
+});
+
+router.post('/reception', async function (req, res, next) {
+    try {
+        let token = req.cookies.is_;
+        let reToken = jwt.verify(token, 'vychuoi123');
+        let idStaff = reToken['getId'] || '';
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${idStaff}`);
+        let getItem = req.body;
+        if (staff[0]['VAITRO'].toLowerCase() == 'NV Điều phối'.toLowerCase()) {
+            let insert = await oracledb.getDataTest(`insert into C##ADMIN.benhnhan(tenbenhnhan, namsinh, diachi, sdt) values (:ten, to_date(:ns, 'yyyy-mm-dd hh24:mi:ss'), :dc, :sdt)`,
+            { ten: getItem['addNamePatient'], ns: getItem['addDatePatient'], dc: getItem['addRePatient'], sdt: getItem['addPhonePatient'] });
+
+            
+            res.redirect('/reception');
+        }
+        else {
+            res.clearCookie('flag');
+            res.redirect('/login');
+        }
+    } catch (error) {
+        res.clearCookie('flag');
+        res.redirect('/login');
+    }
+});
+
+router.get('/reception/patient/:id/delete', async function (req, res, next) {
+    try {
+        let token = req.cookies.is_;
+        let reToken = jwt.verify(token, 'vychuoi123');
+        let idStaff = reToken['getId'] || '';
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${idStaff}`);
+        let idPat = req.params.id || '';
+        console.log(idPat)
+        if (staff[0]['VAITRO'].toLowerCase() == 'NV Điều phối'.toLowerCase()) {
+            let decode = await oracledb.getDataTest(`delete from C##ADMIN.benhnhan where idbenhnhan = :idbn`, { idbn: idPat });
+            res.redirect(`/reception`)
+        }
+        else {
+            res.clearCookie('flag');
+            res.redirect('/login');
+        }
+    } catch (error) {
+        res.clearCookie('flag');
+        res.redirect('/login');
+    }
+});
+
+router.get('/reception/patient/:idPatient', async function (req, res, next) {
+    try {
+        let token = req.cookies.is_;
+        let reToken = jwt.verify(token, 'vychuoi123');
+        let idStaff = reToken['getId'] || '';
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${idStaff}`);
+        let idPatient = req.params.idPatient || '';
+        if (staff[0]['VAITRO'].toLowerCase() == 'NV Điều phối'.toLowerCase()) {
+            let patient = await oracledb.getCheckData(`select tenbenhnhan from C##ADMIN.benhnhan where idbenhnhan = ${idPatient}`)
+            let allDoctor = await oracledb.getCheckData(`select idnhanvien, tennhanvien from C##ADMIN.nhanvien where lower(vaitro) = lower('Bác sĩ')`);
+
+            staff = staff[0]['VAITRO'].toLowerCase();
+            res.render('reception-detail', { idStaff, staff, idPatient, allDoctor, patient });
+        }
+        else {
+            res.clearCookie('flag');
+            res.redirect('/login');
+        }     
+    } catch (error) {
+        res.clearCookie('flag');
+        res.redirect('/login');
+    }
+});
+
+router.post('/reception/patient/:idPatient', async function (req, res, next) {
+    try {
+        let token = req.cookies.is_;
+        let reToken = jwt.verify(token, 'vychuoi123');
+        let idStaff = reToken['getId'] || '';
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${idStaff}`);
+        let getItem = req.body;
+        let idPatient = req.params.idPatient;
+        if (staff[0]['VAITRO'].toLowerCase() == 'NV Điều phối'.toLowerCase()) {
+            let insert = await oracledb.getDataTest(`insert into C##ADMIN.hosobenhan(idbenhnhan, bsdieutri, nvdieuphoi, tinhtrangbandau, ngaykham) values (:idP, idD, idE, :st, to_date(:nk, 'yyyy-mm-dd hh24:mi:ss'))`,
+            { idP: req.params.idPatient, idD: getItem['addDoctor'], idE: staff, st: getItem['addStatus'], nk: getItem['addDateExam'] });
+            res.redirect(`/reception/patient/${idPatient}`);
+        }
+        else {
+            res.clearCookie('flag');
+            res.redirect('/login');
+        }
+    } catch (error) {
+        res.clearCookie('flag');
+        res.redirect('/login');
+    }
+});
+
+router.get('/finance', async function (req, res, next) {
+    try {
+        let token = req.cookies.is_;
+        let reToken = jwt.verify(token, 'vychuoi123');
+        let idStaff = reToken['getId'] || '';
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${idStaff}`);
+        let idEmp = req.query.idEmployee || '';
+        let nameEmp = req.query.nameEmployee || '';
+        if (staff[0]['VAITRO'].toLowerCase() == 'NV Kế toán'.toLowerCase()) {
+            let isMon = req.cookies.month || '', isYear = req.cookies.year || '';
+            let query = '';
+            if (isMon != '' && isYear != '') {
+                query = `select nv.idnhanvien, nv.tennhanvien, nv.luong, count(*) as songay from C##ADMIN.nhanvien nv, C##ADMIN.chamcong cc
+                where cc.idnhanvien = nv.idnhanvien and to_char(ngaybatdau, 'mm') = '${isMon}'
+                and to_char(ngaybatdau, 'yyyy') = '${isYear}'`;
+                if (nameEmp != '') {
+                    query += ` and fn_convert_to_vn(lower(nv.tennhanvien)) like '%${setup.removeVietnameseTones(nameEmp.toLowerCase())}%'`;
+                }
+                else {
+                    query += ` and 1 = 1`;
+                }
+    
+                if (idEmp != '') {
+                    query += ` and nv.idnhanvien like '%${idEmp}%'`;
+                }
+                else {
+                    query += ` and 1 = 1`;
+                }
+    
+                query += ` group by nv.idnhanvien, nv.tennhanvien, nv.luong order by nv.idnhanvien asc`;
+            }
+            console.log(query)
+            let data = [];
+            if (nameEmp != '' || idEmp != '') {
+                data = await oracledb.getCheckData(query);
+                console.log(data);
+            }
+            else {
+                data = await oracledb.getCheckData(`select nv.idnhanvien, nv.tennhanvien, nv.luong, count(*) as songay from C##ADMIN.nhanvien nv, C##ADMIN.chamcong cc
+                where cc.idnhanvien = nv.idnhanvien and to_char(ngaybatdau, 'mm') = '${req.query['monSet']}'
+                and to_char(ngaybatdau, 'yyyy') = '${req.query['yearSet']}'
+                group by nv.idnhanvien, nv.tennhanvien, nv.luong order by nv.idnhanvien asc`)
+            }
+            
+            let numData = await oracledb.getCheckData(`select count(*) as sum from C##ADMIN.nhanvien`);
+            let month = req.query.monSet || isMon, year = req.query.yearSet || isYear;
+            res.cookie('month', month);
+            res.cookie('year', year);
+            staff = staff[0]['VAITRO'].toLowerCase();
+            res.render('finance-page', { idStaff, staff, numData, data, month, year });
+        }
+        else {
+            res.clearCookie('flag');
+            res.redirect('/login');
+        }
+    } catch (error) {
+        res.clearCookie('flag');
+        res.redirect('/login');
+    }
+});
+
+router.get('/finance/employee/:id', async function (req, res, next) {
+    try {
+        let token = req.cookies.is_;
+        let reToken = jwt.verify(token, 'vychuoi123');
+        let idStaff = reToken['getId'] || '';
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${idStaff}`);
+        let idEmp = req.params.id || '';
+        if (staff[0]['VAITRO'].toLowerCase() == 'NV Kế toán'.toLowerCase()) {
+            let isMon = req.cookies.month || '', isYear = req.cookies.year || '';
+            let query = '';
+            if (isMon != '' && isYear != '') {
+                query = `select nv.idnhanvien, nv.tennhanvien, nv.luong, count(*) as songay from C##ADMIN.nhanvien nv, C##ADMIN.chamcong cc
+                where cc.idnhanvien = nv.idnhanvien and to_char(ngaybatdau, 'mm') = '${isMon}'
+                and to_char(ngaybatdau, 'yyyy') = '${isYear}'`;
+
+                if (idEmp != '') {
+                    query += ` and nv.idnhanvien = '${idEmp}'`;
+                }
+                else {
+                    query += ` and 1 = 1`;
+                }
+    
+                query += ` group by nv.idnhanvien, nv.tennhanvien, nv.luong`;
+            }
+
+            let data = [];
+            if (idEmp != '') {
+                data = await oracledb.getCheckData(query);
+                console.log(data);
+            }
+            
+            let month = isMon || '', year = isYear || '';
+
+            let fullData = await oracledb.getCheckData(`select nv.idnhanvien, nv.tennhanvien, cc.idchamcong, cc.ngaybatdau from C##ADMIN.nhanvien nv, C##ADMIN.chamcong cc
+            where cc.idnhanvien = nv.idnhanvien and to_char(ngaybatdau, 'mm') = '${isMon}'
+            and to_char(ngaybatdau, 'yyyy') = '${isYear}' and nv.idnhanvien = '${idEmp}'`);
+            setup.convertDate(fullData);
+            staff = staff[0]['VAITRO'].toLowerCase();
+            res.render('finance-detail', { idStaff, staff, fullData, data, month, year });
+        }
+        else {
+            res.clearCookie('flag');
+            res.redirect('/login');
+        }
+    } catch (error) {
+        res.clearCookie('flag');
+        res.redirect('/login');
+    }
+});
+
+router.get('/finance/employee/:id/delete/:idDelete', async function (req, res, next) {
+    try {
+        let token = req.cookies.is_;
+        let reToken = jwt.verify(token, 'vychuoi123');
+        let idStaff = reToken['getId'] || '';
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${idStaff}`);
+        let idEmp = req.params.id || '';
+        let idDelete = req.params.idDelete;
+        if (staff[0]['VAITRO'].toLowerCase() == 'NV Kế toán'.toLowerCase()) {
+            let decode = await oracledb.getDataTest(`delete from C##ADMIN.chamcong where idchamcong = :idcc`, { idcc: idDelete });
+            res.redirect(`/finance/employee/${idEmp}`)
+        }
+        else {
+            res.clearCookie('flag');
+            res.redirect('/login');
+        }
+    } catch (error) {
+        res.clearCookie('flag');
+        res.redirect('/login');
+    }
+});
+
+router.post('/finance/employee/:id', async function (req, res, next) {
+    try {
+        let token = req.cookies.is_;
+        let reToken = jwt.verify(token, 'vychuoi123');
+        let idStaff = reToken['getId'] || '';
+        let staff = await oracledb.getCheckData(`select vaitro from C##ADMIN.NhanVien where IDNHANVIEN = ${idStaff}`);
+        let idEmp = req.params.id || '';
+        if (staff[0]['VAITRO'].toLowerCase() == 'NV Kế toán'.toLowerCase()) {
+            let decode = await oracledb.getDataTest(`update C##ADMIN.nhanvien set luong = ${req.body.saEmployee} where idnhanvien = :idnv`, { idnv: idEmp });
+            res.redirect(`/finance/employee/${idEmp}`)
+        }
+        else {
+            res.clearCookie('flag');
+            res.redirect('/login');
+        }
+    } catch (error) {
+        res.clearCookie('flag');
+        res.redirect('/login');
+    }
 });
 
 module.exports = router;

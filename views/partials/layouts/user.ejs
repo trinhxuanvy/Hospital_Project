@@ -4,13 +4,19 @@
             <div class="logo-user">
                 <img src="/images/no-user.jpg" alt="">
             </div>
-            <% if (iddoctor != '') { %>
+            <% if (idStaff != '') { %>
                 <% if (staff == 'bác sĩ') { %>
                     <a href="" class="link-detail-user">Trang cá nhân</a>
                     <a href="/doctor/patient/page-1" class="link-detail-user">Xem bệnh nhân</a>    
                 <% } else if (staff == 'nv bán thuốc') { %>
                     <a href="" class="link-detail-user">Trang cá nhân</a>
                     <a href="/phamarcy/bill-drug/page-1" class="link-detail-user">Xem đơn thuốc</a>
+                <% } else if (staff == 'nv điều phối') { %>
+                    <a href="" class="link-detail-user">Trang cá nhân</a>
+                    <a href="/reception" class="link-detail-user">Điều phối bệnh</a>
+                <% } else if (staff == 'nv kế toán') { %>
+                    <a href="" class="link-detail-user">Trang cá nhân</a>
+                    <a href="/finance" class="link-detail-user">Điều phối bệnh</a>
                 <% }  %>
             <% } else { %>
                 <a href="/login" class="link-detail-user">Đăng nhập</a>

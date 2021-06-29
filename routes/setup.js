@@ -219,13 +219,17 @@ module.exports = {
                 let date = new Date(obj[i]['NGAY']);
                 obj[i]['NGAY'] = date.getDate().toString() + '/' + (date.getMonth() + 1).toString() + '/' + date.getFullYear().toString();
             }
-            if (obj[i]['NAMSINH'] != null) {
+            else if (obj[i]['NAMSINH'] != null) {
                 let date = new Date(obj[i]['NAMSINH']);
                 obj[i]['NAMSINH'] = date.getDate().toString() + '/' + (date.getMonth() + 1).toString() + '/' + date.getFullYear().toString();
             }
-            if (obj[i]['NGAYTAO'] != null) {
+            else if (obj[i]['NGAYTAO'] != null) {
                 let date = new Date(obj[i]['NGAYTAO']);
                 obj[i]['NGAYTAO'] = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} - ${date.getDate().toString()}/${(date.getMonth() + 1).toString()}/${date.getFullYear().toString()}`;
+            }
+            else if (obj[i]['NGAYBATDAU'] != null) {
+                let date = new Date(obj[i]['NGAYBATDAU']);
+                obj[i]['NGAYBATDAU'] = `${date.getDate().toString()}/${(date.getMonth() + 1).toString()}/${date.getFullYear().toString()}`;
             }
         }
     }
