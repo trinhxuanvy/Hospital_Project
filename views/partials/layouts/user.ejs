@@ -4,24 +4,36 @@
             <div class="logo-user">
                 <img src="/images/no-user.jpg" alt="">
             </div>
-            <% if (idStaff != '') { %>
-                <% if (staff == 'bác sĩ') { %>
-                    <a href="" class="link-detail-user">Trang cá nhân</a>
-                    <a href="/doctor/patient/page-1" class="link-detail-user">Xem bệnh nhân</a>    
-                <% } else if (staff == 'nv bán thuốc') { %>
-                    <a href="" class="link-detail-user">Trang cá nhân</a>
-                    <a href="/phamarcy/bill-drug/page-1" class="link-detail-user">Xem đơn thuốc</a>
-                <% } else if (staff == 'nv điều phối') { %>
-                    <a href="" class="link-detail-user">Trang cá nhân</a>
-                    <a href="/reception" class="link-detail-user">Điều phối bệnh</a>
-                <% } else if (staff == 'nv kế toán') { %>
-                    <a href="" class="link-detail-user">Trang cá nhân</a>
-                    <a href="/finance" class="link-detail-user">Điều phối bệnh</a>
-                <% }  %>
+            <a href="/user" class="link-detail-user">Trang cá nhân</a>
+            <% if (idUser != '') { %>
+                <% if (redir[0] == 1) { %>
+                    <a href="" class="link-detail-user">Quản lý tn & ns</a>
+                <% } %>
+                <% if (redir[1] == 1) { %>
+                    <a href="" class="link-detail-user">Quản lý tài vụ</a>
+                <% } %>
+                <% if (redir[2] == 1) { %>
+                    <a href="" class="link-detail-user">Quản lý chuyên môn</a>
+                <% } %>
+                <% if (redir[3] == 1) { %>
+                    <a href="/finance" class="link-detail-user">Kế toán</a>
+                <% } %>
+                <% if (redir[4] == 1) { %>
+                    <a href="/phamarcy/bill-drug/page-1" class="link-detail-user">Bán thuốc</a>
+                <% } %>
+                <% if (redir[5] == 1) { %>
+                    <a href="/doctor/patient/page-1" class="link-detail-user">Bác sĩ</a>
+                    <a href="/service/1" class="link-detail-user">Dịch vụ khám bệnh</a>
+                <% } %>
+                <% if (redir[6] == 1) { %>
+                    <a href="" class="link-detail-user">Tài vụ</a>
+                <% } %>
+                <% if (redir[7] == 1) { %>
+                    <a href="/reception" class="link-detail-user">Tiếp tân</a>
+                <% } %>
             <% } else { %>
-                <a href="/login" class="link-detail-user">Đăng nhập</a>
-            <% } %>
-             
+                    <a href="/login" class="link-detail-user">Đăng nhập</a>
+            <% } %>   
             <a href="/logout" class="link-detail-user">Đăng xuất</a>
         </div>
         <div class="btn-show-user">

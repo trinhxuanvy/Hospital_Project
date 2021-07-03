@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/layouts/head') %>
+
+    <%- include('partials/layouts/styles') %>
+</head>
+
+<body>
+    <div class="admin-page">
+        <div class="container">
+            <div class="header-top">
+                <div class="nav-top">
+                    <div class="bar-top">
+                        <i class="fa fa-bars" aria-hidden="true"></i>
+                    </div>
+                    <div class="logo-top">
+                        <p class="brand">Adminstrator</p>
+                    </div>
+                </div>
+                <div class="menu-top">
+                    <%- include('partials/layouts/admin-sidebar.ejs')  %> 
+                </div>
+            </div>
+            <div class="body">
+                <div class="sidebar">
+                    <div class="header">
+                        <p class="title">Quyền User</p>
+                    </div>
+                    <ul class="menu-list">
+                        <li class="menu-item">
+                            <a href="/admin/user/<%= user %>/detail/role" class="menu-link">
+                                <span>Role</span>
+                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="/admin/user/<%= user %>/detail/role/nhanvien" class="menu-link">
+                                <span>Table</span>
+                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="/admin/user/<%= user %>/detail/column/nhanvien" class="menu-link">
+                                <span>Column</span>
+                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="box-btn">
+                        <a href="/admin/user" class="btn-link">Quay lại</a>
+                    </div>
+                </div>
+                <div class="main-body">
+                    <div class="header">
+                        <p class="title">Role Privilege</p>
+                    </div>
+                    <% if (type == 3) { %>
+                        <div class="container-check-box-item">
+                            <div class="detail-check-box-item">
+                                <a href="/admin/user/<%= user %>/detail/column/nhanvien" class="link-detail-item <% if (tableName == 'nhanvien') { %>
+                                 active-link
+                                <% } %>">Nhân viên</a>
+                                <a href="/admin/user/<%= user %>/detail/column/thuoc" class="link-detail-item <% if (tableName == 'thuoc') { %>
+                                 active-link
+                                <% } %>">Thuốc</a>
+                                <a href="/admin/user/<%= user %>/detail/column/dichvu" class="link-detail-item <% if (tableName == 'dichvu') { %>
+                                    active-link
+                                <% } %>">Dịch vụ</a>
+                                <a href="/admin/user/<%= user %>/detail/column/benhnhan" class="link-detail-item <% if (tableName == 'benhnhan') { %>
+                                    active-link
+                                   <% } %>">Bệnh nhân</a>
+                                <a href="/admin/user/<%= user %>/detail/column/hoadon" class="link-detail-item <% if (tableName == 'hoadon') { %>
+                                    active-link
+                                   <% } %>">Hóa đơn</a>
+                                <a href="/admin/user/<%= user %>/detail/column/chamcong" class="link-detail-item <% if (tableName == 'chamcong') { %>
+                                    active-link
+                                   <% } %>">Chấm công</a>
+                                <a href="/admin/user/<%= user %>/detail/column/chitiethoadon" class="link-detail-item <% if (tableName == 'chitiethoadon') { %>
+                                    active-link
+                                   <% } %>">Chi tiết hóa đơn</a>
+                                <a href="/admin/user/<%= user %>/detail/column/donthuoc" class="link-detail-item <% if (tableName == 'donthuoc') { %>
+                                    active-link
+                                   <% } %>">Đơn thuốc</a>
+                                <a href="/admin/user/<%= user %>/detail/column/phong" class="link-detail-item <% if (tableName == 'phong') { %>
+                                    active-link
+                                   <% } %>">Phòng</a>
+                                <a href="/admin/user/<%= user %>/detail/column/donvi" class="link-detail-item <% if (tableName == 'donvi') { %>
+                                    active-link
+                                   <% } %>">Đơn vị</a>
+                                <a href="/admin/user/<%= user %>/detail/column/lichtruc" class="link-detail-item <% if (tableName == 'lichtruc') { %>
+                                    active-link
+                                   <% } %>">Lịch trực</a>
+                                <a href="/admin/user/<%= user %>/detail/column/hosobenhan" class="link-detail-item <% if (tableName == 'hosobenhnhan') { %>
+                                    active-link
+                                   <% } %>">Hồ sơ bệnh án</a>
+                                <a href="/admin/user/<%= user %>/detail/column/chitietdonthuoc" class="link-detail-item <% if (tableName == 'chitietdonthuoc') { %>
+                                    active-link
+                                   <% } %>">Chi tiết đơn thuốc</a>
+                                <a href="/admin/user/<%= user %>/detail/column/hosodichvu" class="link-detail-item <% if (tableName == 'hosodichvu') { %>
+                                    active-link
+                                   <% } %>">Hồ sơ dịch vụ</a>
+                            </div>
+                            <form action="/admin/user/<%= user %>/detail/column/<%= tableName %>" method="POST">
+                                <div class="scroll-box">
+                                    <% if (type == 3) { %>
+                                        <div class="table-check-box">
+                                            <% for( let i = 0; i < arrColRol[1].length; i++ ) { %>
+                                                <div class="item">
+                                                    <label for="">Cột <%= arrColRol[1][i]['column'] %></label>
+                                                    <div class="item-checkbox">
+                                                        <div class="item-checkbox-content">
+                                                            <div class="detail-item-checkbox-content <% if (arrColRol[1][i]['allowS'] == 0) { %>allow-detail-item-checkbox-content<% } %>">
+                                                                <input type="checkbox" name="scol<%= arrColRol[1][i]['column'] %>"  class="role" id="scol<%= arrColRol[1][i]['column'] %>" <% if (arrColRol[1][i]['select']) { %> checked <% } %>>
+                                                                <label for="scol<%= arrColRol[1][i]['column'] %>">Select</label>    
+                                                            </div>
+                                                            <div class="detail-item-checkbox-content <% if (arrColRol[1][i]['allowgS'] == 0) { %>allow-detail-item-checkbox-content<% } %>">
+                                                                <input type="checkbox" name="gscol<%= arrColRol[1][i]['column'] %>" class="grant-role" id="gscol<%= arrColRol[1][i]['column'] %>" <% if (arrColRol[1][i]['grantS']) { %> checked <% } %>>
+                                                                <label for="gscol<%= arrColRol[1][i]['column'] %>">Grant</label>    
+                                                            </div>
+                                                        </div>
+                                                        <div class="item-checkbox-content">
+                                                            <div class="detail-item-checkbox-content <% if (arrColRol[1][i]['allowU'] == 0) { %>allow-detail-item-checkbox-content<% } %>">
+                                                                <input type="checkbox" name="ucol<%= arrColRol[1][i]['column'] %>" value="<% if (arrColRol[1][i]['allowS'] == 1) { %>ucol<%= arrColRol[1][i]['column'] %><% } %>" class="role" id="ucol<%= arrColRol[1][i]['column'] %>" <% if (arrColRol[1][i]['update']) { %> checked <% } %>>
+                                                                <label for="ucol<%= arrColRol[1][i]['column'] %>">Update</label>
+                                                            </div>
+                                                            <div class="detail-item-checkbox-content <% if (arrColRol[1][i]['allowgU'] == 0) { %>allow-detail-item-checkbox-content<% } %>">
+                                                                <input type="checkbox" name="gucol<%= arrColRol[1][i]['column'] %>" value="<% if (arrColRol[1][i]['allowgS'] == 1) { %>gucol<%= arrColRol[1][i]['column'] %><% } %>" class="grant-role" id="gucol<%= arrColRol[1][i]['column'] %>" <% if (arrColRol[1][i]['grantU']) { %> checked <% } %>>
+                                                                <label for="gucol<%= arrColRol[1][i]['column'] %>">Grant</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <% } %>
+                                            
+                                        </div>
+                                    <% } %>        
+                                </div>
+                                <div class="box-btn">
+                                    <button class="btn-submit" type="submit">Lưu thay đổi</button>
+                                </div>
+                            </form>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/layouts/scripts') %>
+</body>
+
+</html>

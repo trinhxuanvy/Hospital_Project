@@ -220,8 +220,8 @@ $(document).ready(function () {
 
     // Hàm lọc table
     $(function () {
-        let search = $('.admin-container .box-find .form-find input');
-        let rowTable = document.querySelectorAll('.admin-container .table-box tbody tr');
+        let search = $('.admin-page .box-find .form-find input');
+        let rowTable = document.querySelectorAll('.admin-page .box-table tbody tr');
 
         $(search).keyup(function (e) {
             e.preventDefault();
@@ -440,6 +440,75 @@ $(document).ready(function () {
 
             if (isParent) {
                 $(paRent[0]).removeClass('active');
+            }
+        });
+    });
+
+    $(function () {
+        let itemBtn = $('.finance-detail .btn-fix');
+
+        $(itemBtn[0]).click(function (e) { 
+            e.preventDefault();
+            let paRent = $('.finance-detail .categories-4');
+            let isParent = $(paRent[0]).hasClass('active');
+
+            if (isParent) {
+                $(paRent[0]).removeClass('active');
+            }
+            else {
+                $(paRent[0]).addClass('active');
+            }
+        });
+
+        let reItemBtn = $('.finance-detail .categories-4 .body .btn-back');
+        $(reItemBtn[0]).click(function (e) { 
+            e.preventDefault();
+            let paRent = $('.finance-detail .categories-4');
+            let isParent = $(paRent[0]).hasClass('active');
+
+            if (isParent) {
+                $(paRent[0]).removeClass('active');
+            }
+        });
+    });
+
+    $(function () {
+        let btnNew = $('.admin-page .container .admin-form .box-find .box-btn .btn-add');
+        $(btnNew[0]).click(function (e) { 
+            e.preventDefault();
+            let setShow = $('.admin-page .container .categories-5');
+            let has = $(setShow[0]).hasClass('active');
+            if (has) {
+                $(setShow[0]).removeClass('active');
+            }
+            else {
+                $(setShow[0]).addClass('active');
+            }
+        });
+    });
+
+    $(function () {
+        let barAdmin = $('.admin-page .container .header-top .nav-top .bar-top');
+
+        $(barAdmin[0]).click(function (e) { 
+            e.preventDefault();
+            let hasClass = $(this).hasClass('bar-active');
+            let isMenu = $('.admin-page .container .header-top .menu-top');
+            if (!hasClass) {
+                $(this).addClass('bar-active');
+                $(isMenu).addClass('menu-active');
+            }
+        });
+
+        let reBarAdmin = $('.admin-page .container .header-top .menu-top .menu-container .box-btn');
+
+        $(reBarAdmin[0]).click(function (e) { 
+            e.preventDefault();
+            let isMenu = $('.admin-page .container .header-top .menu-top');
+            let hasClass = $(isMenu).hasClass('bar-active');
+            if (!hasClass) {
+                $(barAdmin[0]).removeClass('bar-active');
+                $(isMenu).removeClass('menu-active');
             }
         });
     });

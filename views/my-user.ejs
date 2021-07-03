@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/layouts/head') %>
+
+    <%- include('partials/layouts/styles') %>
+</head>
+
+<body>
+    <%- include('partials/layouts/header') %>
+
+    <%- include('partials/layouts/user.ejs') %> 
+
+    <div class="container-item">
+        <div class="categories-1">
+            <div class="content">
+                <div class="header">
+                    <p class="title">Quản lý tài khoản</p>
+                </div>
+            </div>
+        </div>
+        <form action="/user/update" method="POST">
+            <div class="categories-6" id="cate_6">
+                <div class="box-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Mã nhân viên</th>
+                                <th>Đơn vị</th>
+                                <th>Vai trò</th>
+                                <th>Lương</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>
+                                    <div class="item-form">
+                                        <p><%= getData[0]['USERNAME'] %></p>
+                                    </div>
+                                </th>
+                                
+                                <th>
+                                    <div class="item-form">
+                                        <p><%= getData[0]['IDNHANVIEN'] %></p>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="item-form">
+                                        <p><%= getData[0]['TENDONVI'] %></p>
+                                    </div>
+                                </th>
+                                
+                                <th>
+                                    <div class="item-form">
+                                        <p><%= getData[0]['VAITRO'] %></p>
+                                    </div>
+                                </th>
+                                <th></th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    
+            <div class="categories-6" id="cate_6">
+                <div class="box-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Họ và tên</th>
+                                <th>Địa chỉ</th>
+                                <th>Số điện thoại</th>
+                                <th>Năm sinh</th>
+                                <th>Mật khẩu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>
+                                    <div class="item-form">
+                                        <input type="text" placeholder="Lê Văn A" value="<%= getData[0]['TENNHANVIEN'] %>" name="addName" id="addName" required>
+                                        <label for="addName"></label>
+                                    </div>
+                                </th>
+                                
+                                <th>
+                                    <div class="item-form">
+                                        <input type="text" placeholder="TPHCM" value="<%= getData[0]['DIACHI'] %>" name="addAd" id="addAd" required>
+                                        <label for="addAd"></label>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="item-form">
+                                        <input type="text" placeholder="0769699470" value="<%= getData[0]['SDT'] %>" name="addPhone" id="addPhone" required>
+                                        <label for="addPhone"></label>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="item-form">
+                                        <input type="text" placeholder="dd/mm/yyyy" value="<%= getData[0]['NAMSINH'] %>" name="addDate" id="addDate" required>
+                                        <label for="addDate"></label>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="item-form">
+                                        <input type="text" placeholder="password" value="" name="addP" id="addUP">
+                                        <label for="addP"></label>
+                                    </div>
+                                </th>
+                                
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="box-btn">
+                <button class="btn-submit-user" type="submit">Lưu thay đổi</button>
+            </div>
+        </form>
+        
+    </div>
+
+    <%- include('partials/layouts/footer')  %> 
+
+    <%- include('partials/layouts/scripts') %>
+</body>
+
+</html>

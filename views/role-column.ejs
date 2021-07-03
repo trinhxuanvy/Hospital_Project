@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/layouts/head') %>
+
+    <%- include('partials/layouts/styles') %>
+</head>
+
+<body>
+    <div class="admin-page">
+        <div class="container">
+            <div class="header-top">
+                <div class="nav-top">
+                    <div class="bar-top">
+                        <i class="fa fa-bars" aria-hidden="true"></i>
+                    </div>
+                    <div class="logo-top">
+                        <p class="brand">Adminstrator</p>
+                    </div>
+                </div>
+                <div class="menu-top">
+                    <%- include('partials/layouts/admin-sidebar.ejs')  %> 
+                </div>
+            </div>
+            <div class="body">
+                <div class="sidebar">
+                    <div class="header">
+                        <p class="title">Quyền User</p>
+                    </div>
+                    <ul class="menu-list">
+                        <li class="menu-item">
+                            <a href="/admin/role/<%= role %>/nhanvien" class="menu-link">
+                                <span>Table</span>
+                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="/admin/role/<%= role %>/nhanvien/column" class="menu-link">
+                                <span>Column</span>
+                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="box-btn">
+                        <a href="/admin/role" class="btn-link">Quay lại</a>
+                    </div>
+                </div>
+                <div class="main-body">
+                    <div class="header">
+                        <p class="title">Role Privilege</p>
+                    </div>
+                    <% if (Rtype == 2) { %>
+                        <div class="container-check-box-item">
+                            <div class="detail-check-box-item">
+                                <a href="/admin/role/<%= role %>/nhanvien/column" class="link-detail-item <% if (table == 'nhanvien') { %>
+                                 active-link
+                                <% } %>">Nhân viên</a>
+                                <a href="/admin/role/<%= role %>/thuoc/column" class="link-detail-item <% if (table == 'thuoc') { %>
+                                 active-link
+                                <% } %>">Thuốc</a>
+                                <a href="/admin/role/<%= role %>/dichvu/column" class="link-detail-item <% if (table == 'dichvu') { %>
+                                    active-link
+                                <% } %>">Dịch vụ</a>
+                                <a href="/admin/role/<%= role %>/benhnhan/column" class="link-detail-item <% if (table == 'benhnhan') { %>
+                                    active-link
+                                   <% } %>">Bệnh nhân</a>
+                                <a href="/admin/role/<%= role %>/hoadon/column" class="link-detail-item <% if (table == 'hoadon') { %>
+                                    active-link
+                                   <% } %>">Hóa đơn</a>
+                                <a href="/admin/role/<%= role %>/chamcong/column" class="link-detail-item <% if (table == 'chamcong') { %>
+                                    active-link
+                                   <% } %>">Chấm công</a>
+                                <a href="/admin/role/<%= role %>/chitiethoadon/column" class="link-detail-item <% if (table == 'chitiethoadon') { %>
+                                    active-link
+                                   <% } %>">Chi tiết hóa đơn</a>
+                                <a href="/admin/role/<%= role %>/donthuoc/column" class="link-detail-item <% if (table == 'donthuoc') { %>
+                                    active-link
+                                   <% } %>">Đơn thuốc</a>
+                                <a href="/admin/role/<%= role %>/phong/column" class="link-detail-item <% if (table == 'phong') { %>
+                                    active-link
+                                   <% } %>">Phòng</a>
+                                <a href="/admin/role/<%= role %>/donvi/column" class="link-detail-item <% if (table == 'donvi') { %>
+                                    active-link
+                                   <% } %>">Đơn vị</a>
+                                <a href="/admin/role/<%= role %>/lichtruc/column" class="link-detail-item <% if (table == 'lichtruc') { %>
+                                    active-link
+                                   <% } %>">Lịch trực</a>
+                                <a href="/admin/role/<%= role %>/hosobenhan/column" class="link-detail-item <% if (table == 'hosobenhnhan') { %>
+                                    active-link
+                                   <% } %>">Hồ sơ bệnh án</a>
+                                <a href="/admin/role/<%= role %>/chitietdonthuoc/column" class="link-detail-item <% if (table == 'chitietdonthuoc') { %>
+                                    active-link
+                                   <% } %>">Chi tiết đơn thuốc</a>
+                                <a href="/admin/role/<%= role %>/hosodichvu/column" class="link-detail-item <% if (table == 'hosodichvu') { %>
+                                    active-link
+                                   <% } %>">Hồ sơ dịch vụ</a>
+                            </div>
+                            <form action="/admin/role/<%= role %>/<%= table %>/column" method="POST">
+                                <div class="scroll-box">
+                                    <% if (Rtype == 2) { %>
+                                        <div class="table-check-box">
+                                            <% for( let i = 0; i < arrColRol[1].length; i++ ) { %>
+                                                <div class="item">
+                                                    <label for="">Cột <%= arrColRol[1][i]['column'] %></label>
+                                                    <div class="item-checkbox">
+                                                        <div class="item-checkbox-content">
+                                                            <div class="detail-item-checkbox-content">
+                                                                <input type="checkbox" name="icol<%= arrColRol[1][i]['column'] %>" value="icol<%= arrColRol[1][i]['column'] %>"  class="role" id="icol<%= arrColRol[1][i]['column'] %>" <% if (arrColRol[1][i]['insert']) { %> checked <% } %>>
+                                                                <label for="icol<%= arrColRol[1][i]['column'] %>">Insert</label>    
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="item-checkbox-content">
+                                                            <div class="detail-item-checkbox-content">
+                                                                <input type="checkbox" name="ucol<%= arrColRol[1][i]['column'] %>" value="ucol<%= arrColRol[1][i]['column'] %>" class="role" id="ucol<%= arrColRol[1][i]['column'] %>" <% if (arrColRol[1][i]['update']) { %> checked <% } %>>
+                                                                <label for="ucol<%= arrColRol[1][i]['column'] %>">Update</label>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <% } %>
+                                            
+                                        </div>
+                                    <% } %>        
+                                </div>
+                                <div class="box-btn">
+                                    <button class="btn-submit" type="submit">Lưu thay đổi</button>
+                                </div>
+                            </form>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/layouts/scripts') %>
+</body>
+
+</html>

@@ -39,13 +39,13 @@
                         <div class="box-form">
                             <div class="form-item">
                                 <p class="form-item-title">Tiền lương: </p>
-                                <input type="text" placeholder="123456" value="<%= data[0]['LUONG'] %>" id="saEmployee" name="saEmployee">
+                                <input type="text" placeholder="123456" value="<%= money[0]['LUONG'] %>" id="saEmployee" name="saEmployee">
                                 <label for="saEmployee"></label>
                             </div>
                         </div>
                         <div class="box-btn">
-                            <button class="btn-search" type="submit">Thay đổi</button>
-                            <a class="btn-reset" href="/finance">Quay lại</a>
+                            <!-- <button class="btn-search" type="submit">Thay đổi</button> -->
+                            <a class="btn-reset" href="/finance?monSet=<%= month %>&yearSet=<%= year %>">Quay lại</a>
                         </div>
                     </form>
                 </div>
@@ -55,6 +55,8 @@
                             <p class="content-item"><%= fullData.length %>  Ngày làm việc</p>
                         </div>
                         <div class="function-item">
+                            <button class="btn-add"><i class="fa fa-plus" aria-hidden="true"></i> <span>Thêm ngày công</span></button>
+                            <button class="btn-fix"><i class="fas fa-hammer    "></i> <span>Sửa ngày công</span></button>
                             <button class="btn-view"><i class="fa fa-th-list" aria-hidden="true"></i></button>
                             <button class="btn-view"><i class="fa fa-th-large" aria-hidden="true"></i></button>
                         </div>
@@ -70,7 +72,6 @@
                                         <th>Tên nhân viên</th>
                                         <th>Mã chấm công</th>
                                         <th>Ngày làm</th>
-                                        <th>Chỉnh sửa</th>
                                         <th>Xóa</th>
                                     </tr>
                                 </thead>
@@ -81,7 +82,6 @@
                                             <th><span><%= item['TENNHANVIEN'] %></span></th>
                                             <th><%= item['IDCHAMCONG'] %></th>
                                             <th><%= item['NGAYBATDAU'] %></th>
-                                            <th><button class="btn-fix">Chỉnh sửa</button></th>
                                             <th><a href="/finance/employee/<%= data[0]['IDNHANVIEN'] %>/delete/<%= item['IDCHAMCONG'] %>" class="btn-link">Xóa</a></th>
                                         </tr>
                                     <% }) %>
@@ -95,34 +95,56 @@
 
         <div class="categories-3">
             <div class="header">
-                <p class="title">Thêm bệnh nhân</p>
+                <p class="title">Thêm ngày làm việc</p>
             </div>
             <div class="body">
-                <form action="/reception" method="POST">
+                <form action="/finance/employee/<%= data[0]['IDNHANVIEN'] %>/add" method="POST">
                     <div class="box-form">
                         <div class="form-item">
-                            <p class="title">Họ và tên: </p>
-                            <input type="text" id="addNameEmployee" name="addNameEmployee" placeholder="Lê Văn A" required>
-                            <label for="addNameEmployee"></label>
+                            <p class="title">Ngày bắt đầu: </p>
+                            <input type="date" id="addStart" name="addStart" required>
+                            <label for="addStart"></label>
                         </div>
                         <div class="form-item">
-                            <p class="title">Năm sinh: </p>
-                            <input type="date" id="addDateEmployee" name="addDateEmployee" required>
-                            <label for="addDateEmployee"></label>
-                        </div>
-                        <div class="form-item">
-                            <p class="title">Địa chỉ: </p>
-                            <input type="text" id="addReEmployee" name="addReEmployee" placeholder="TPHCM" required>
-                            <label for="addReEmployee"></label>
-                        </div>
-                        <div class="form-item">
-                            <p class="title">Số điện thoại: </p>
-                            <input type="text" id="addPhoneEmployee" name="addPhoneEmployee" placeholder="0123456789" required>
-                            <label for="addPhoneEmployee"></label>
+                            <p class="title">Ngày kết thúc: </p>
+                            <input type="date" id="addEnd" name="addEnd" required>
+                            <label for="addEnd"></label>
                         </div>
                     </div>
                     <div class="box-btn">
                         <button type="submit" class="btn-add"><i class="fa fa-plus" aria-hidden="true"></i> Thêm</button>
+                        <button class="btn-reset">Nhập lại</button>
+                    </div>
+                </form>
+                <button class="btn-back">Quay lại</button>
+            </div>
+        </div>
+
+        <div class="categories-4">
+            <div class="header">
+                <p class="title">Sửa ngày làm việc</p>
+            </div>
+            <div class="body">
+                <form action="/finance/employee/<%= data[0]['IDNHANVIEN'] %>/fix" method="POST">
+                    <div class="box-form">
+                        <div class="form-item">
+                            <p class="title">Mã ngày làm: </p>
+                            <input type="text" id="fixId" name="fixId" required>
+                            <label for="fixId"></label>
+                        </div>
+                        <div class="form-item">
+                            <p class="title">Ngày bắt đầu: </p>
+                            <input type="date" id="fixStart" name="fixStart" required>
+                            <label for="fixStart"></label>
+                        </div>
+                        <div class="form-item">
+                            <p class="title">Ngày kết thúc: </p>
+                            <input type="date" id="fixEnd" name="fixEnd" required>
+                            <label for="fixEnd"></label>
+                        </div>
+                    </div>
+                    <div class="box-btn">
+                        <button type="submit" class="btn-add"><i class="fas fa-hammer    "></i> Sửa</button>
                         <button class="btn-reset">Nhập lại</button>
                     </div>
                 </form>

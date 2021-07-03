@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/layouts/head') %>
+
+    <%- include('partials/layouts/styles') %>
+</head>
+
+<body>
+    <%- include('partials/layouts/header') %>
+
+    <%- include('partials/layouts/user.ejs') %> 
+
+    <div class="container-item">
+        <div class="categories-1">
+            <div class="content">
+                <div class="header">
+                    <p class="title">Bác sĩ</p>
+                </div>
+            </div>
+        </div>
+        <div class="categories-2">
+            <div class="sidebar">
+                <div class="item">
+                    <div class="header">
+                        <p class="title">Danh mục</p>
+                    </div>
+                    <div class="menu-item">
+                        <a href="service/<%= idService %>" class="link-item"><p>Tất cả bệnh nhân</p></a>
+                        <a href="" class="link-item"><p>Bệnh nhân đang điều trị</p></a>
+                        <a href="" class="link-item"><p>Bệnh nhân đã điều trị</p></a>
+                    </div>
+                    
+                </div>
+                <div class="item">
+
+                </div>
+                
+            </div>
+            <div class="body-item">
+                <div class="item">
+                    <div class="header-body">
+                        
+                    </div>
+                    <div class="menu-item">
+                                                                                                                                                                                                                                                                                                                                                                                                                          
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/layouts/footer')  %> 
+
+    <%- include('partials/layouts/scripts') %>
+</body>
+
+</html>

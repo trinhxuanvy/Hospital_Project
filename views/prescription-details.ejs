@@ -39,10 +39,11 @@
                                         <p class="title-detail">Liều lượng</p>
                                         <label for="<%= 'numberUse_' + item['IDTHUOC'] %>"></label>
                                         <input class="number" type="text" id="<%= 'numberUse_' + item['IDTHUOC'] %>" name="<%= 'numberUse_' + item['IDTHUOC'] %>" value="<%= item['SOLUONG'] %>">
-                                        <p class="unit">Đơn vị tính: <%= item['DONVITINH'] %></p>
+                                        <p class="unit">Đơn vị tính: <%= item['DONGIA'] %> đồng/<%= item['DONVITINH'] %></p>
                                     </div>
                                 </div>
                             <% }) %>
+                            <p class="cost">Tổng tiền: <span><%= money %></span> đồng</p>
                     </div>
                     <button class="btn-submit" type="submit">Xuất đơn thuốc</button>
                 </form>
@@ -50,6 +51,9 @@
         </div>
     </div>
     <a href="/phamarcy/bill-drug/page-<%= page %>" class="btn-link-back">Quay lại</a>
+
+    <%- include('partials/layouts/footer.ejs')  %>
+    
     <%- include('partials/layouts/scripts') %>
 </body>
 

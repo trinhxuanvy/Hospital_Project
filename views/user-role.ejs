@@ -8,399 +8,83 @@
 </head>
 
 <body>
-    <div class="admin-container">
-        <div class="admin-content">
-            <div class="admin-sidebar">
-                <div class="admin-sidebar-header">
-                    <p class="admin-title">Administrator</p>
+    <div class="admin-page">
+        <div class="container">
+            <div class="header-top">
+                <div class="nav-top">
+                    <div class="bar-top">
+                        <i class="fa fa-bars" aria-hidden="true"></i>
+                    </div>
+                    <div class="logo-top">
+                        <p class="brand">Adminstrator</p>
+                    </div>
                 </div>
-                <div class="admin-sidebar-body">
-                    <div class="admin-menu-list">
-                        <a href="" class="admin-menu-link">
-                            <p><i class="fa fa-home" aria-hidden="true"></i> Trang chủ Admin</p>
-                            <i class="fa fa-caret-down" aria-hidden="true"></i>
-                        </a>
-                        <a href="" class="admin-menu-link">
-                            <p><i class="fa fa-bars" aria-hidden="true"></i> Quản trị giao diện</p>
-                            <i class="fa fa-caret-down" aria-hidden="true"></i>
-                        </a>
-                        <a href="" class="admin-menu-link">
-                            <p><i class="fa fa-money" aria-hidden="true"></i> Quản trị thông tin</p>
-                            <i class="fa fa-caret-down" aria-hidden="true"></i>
-                        </a>
-                        <a href="" class="admin-menu-link">
-                            <p><i class="fa fa-paper-plane" aria-hidden="true"></i> Seo Website</p>
-                            <i class="fa fa-caret-down" aria-hidden="true"></i>
-                        </a>
-                        <a href="" class="admin-menu-link">
-                            <p><i class="fa fa-user" aria-hidden="true"></i> Quản lý User</p>
-                            <i class="fa fa-caret-down" aria-hidden="true"></i>
-                        </a>
-                    </div>
-                    <div class="admin-log-out">
-                        <a href="/logout" class="link-log-out">Đăng xuất</a>
-                    </div>
+                <div class="menu-top">
+                    <%- include('partials/layouts/admin-sidebar.ejs')  %> 
                 </div>
             </div>
-            <div class="admin-form">
-                <div class="admin-form-header">
-                    <a title="Cấu hình user" href="" class="link-this-page">
-                        <p><i class="fa fa-user" aria-hidden="true"></i> Cấu hình User</p>
-                    </a>
-                    <a title="Chuyển đến trang chủ" href="/" class="link-to-web">Vào trang Web</a>
+            <div class="body">
+                <div class="sidebar">
+                    <div class="header">
+                        <p class="title">Quyền User</p>
+                    </div>
+                    <ul class="menu-list">
+                        <li class="menu-item">
+                            <a href="/admin/user/<%= user %>/detail/role" class="menu-link">
+                                <span>Role</span>
+                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="/admin/user/<%= user %>/detail/role/nhanvien" class="menu-link">
+                                <span>Table</span>
+                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="/admin/user/<%= user %>/detail/column/nhanvien" class="menu-link">
+                                <span>Column</span>
+                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="box-btn">
+                        <a href="/admin/user" class="btn-link">Quay lại</a>
+                    </div>
                 </div>
-                <form action="<%= tableName %> " method="POST">
-                    <div class="admin-form-item">
-                        <label for="">Loại tài khoản:</label>
-                        <select name="typeUser" id="">
-                            <option value="admin">Quản trị viên</option>
-                            <option value="employee">Nhân viên</option>
-                        </select>
+                <div class="main-body">
+                    <div class="header">
+                        <p class="title">Role Privilege</p>
                     </div>
-                    <div class="admin-form-item">
-                        <label for="">Tên tài khoản:</label>
-                        <input type="text" value="" name="nameAccount">
-                    </div>
-                    <div class="admin-form-item">
-                        <label for="">Họ tên:</label>
-                        <input type="text" name="nameUser">
-                    </div>
-                    <div class="admin-form-item">
-                        <label for="">Quyền hạn:</label>
-                        <div class="check-box-form-all">
-                            <div class="check-box-item">
-                                <div class="title-check-box-item">
-                                    <a href="/admin/user/<%= user %>/detail/role" class="link-detail-item">Quyền chức vụ</a>
-                                </div>
-                                <% if (type == 1) { %>
-                                    <div class="table-check-box">
-                                        <div class="item">
-                                            <div class="detail-item">
-                                                <input type="checkbox" name="MANAGERMENT_ROLE" class="role" id="MANAGERMENT_ROLE" <% if (fullRole[0]['GRANTED_ROLE'] !=0) { %>
-                                                checked
-                                                <% } %>>
-                                                <label for="MANAGERMENT_ROLE">Quyền quản lý</label>
-                                            </div>
-                                            <div class="detail-item">
-                                                <input type="checkbox" name="gMANAGERMENT_ROLE" class="grant-role" id="gMANAGERMENT_ROLE" <% if (fullRole[0]['ADMIN_OPTION'] !=0) { %>
-                                                checked
-                                                <% } %>>
-                                                <label for="gMANAGERMENT_ROLE">Grant</label>
-                                            </div>
+                    <% if (type == 1) { %>
+                        <form action="/admin/user/<%= user %>/detail/role" method="post">
+                            <div class="table-check-box">
+                                <% for( let i = 0; i < fullRole[1].length; i++ ) { %>
+                                    <div class="item">
+                                        <div class="detail-item">
+                                            <input type="checkbox" name="ROLE_QLBENHVIEN_<%= fullRole[0][i]['ROLE'] %>" class="role" id="ROLE_QLBENHVIEN_<%= fullRole[0][i]['ROLE'] %>" <% if (fullRole[1][i]['GRANTED_ROLE'] !=0) { %>
+                                            checked
+                                            <% } %>>
+                                            <label for="ROLE_QLBENHVIEN_<%= fullRole[0][i]['ROLE'] %>"><%= fullRole[0][i]['ROLE'] %></label>
                                         </div>
-                                        <div class="item">
-                                            <div class="detail-item">
-                                                <input type="checkbox" name="PRECEPTIONIST_ROLE" class="role" id="PRECEPTIONIST_ROLE" <% if (fullRole[1]['GRANTED_ROLE'] !=0) { %>
-                                                checked
-                                                <% } %>>
-                                                <label for="PRECEPTIONIST_ROLE">Quyền tiếp tân</label>
-                                            </div>
-                                            <div class="detail-item">
-                                                <input type="checkbox" name="gPRECEPTIONIST_ROLE" class="grant-role" id="gPRECEPTIONIST_ROLE" <% if (fullRole[1]['ADMIN_OPTION'] !=0) { %>
-                                                checked
-                                                <% } %>>
-                                                <label for="gPRECEPTIONIST_ROLE">Grant</label>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="detail-item">
-                                                <input type="checkbox" name="DOCTOR_ROLE" class="role" id="DOCTOR_ROLE" <% if (fullRole[2]['GRANTED_ROLE'] !=0) { %>
-                                                checked
-                                                <% } %>>
-                                                <label for="DOCTOR_ROLE">Quyền bác sĩ</label>
-                                            </div>
-                                            <div class="detail-item">
-                                                <input type="checkbox" name="gDOCTOR_ROLE" class="grant-role" id="gDOCTOR_ROLE" <% if (fullRole[2]['ADMIN_OPTION'] !=0) { %>
-                                                checked
-                                                <% } %>>
-                                                <label for="gDOCTOR_ROLE">Grant</label>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="detail-item">
-                                                <input type="checkbox" name="PARAMEDIC_ROLE" class="role" id="PARAMEDIC_ROLE" <% if (fullRole[3]['GRANTED_ROLE'] !=0) { %>
-                                                checked
-                                                <% } %>>
-                                                <label for="PARAMEDIC_ROLE">Quyền nhân viên dịch vụ</label>
-                                            </div>
-                                            <div class="detail-item">
-                                                <input type="checkbox" name="gPARAMEDIC_ROLE" class="grant-role" id="gPARAMEDIC_ROLE" <% if (fullRole[3]['ADMIN_OPTION'] !=0) { %>
-                                                checked
-                                                <% } %>>
-                                                <label for="gPARAMEDIC_ROLE">Grant</label>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="detail-item">
-                                                <input type="checkbox" name="FINANCE_ROLE" class="role" id="FINANCE_ROLE" <% if (fullRole[4]['GRANTED_ROLE'] !=0) { %>
-                                                checked
-                                                <% } %>>
-                                                <label for="FINANCE_ROLE">Quyền nhân viên tài vụ</label>
-                                            </div>
-                                            <div class="detail-item">
-                                                <input type="checkbox" name="gFINANCE_ROLE" class="grant-role" id="gFINANCE_ROLE" <% if (fullRole[4]['ADMIN_OPTION'] !=0) { %>
-                                                checked
-                                                <% } %>>
-                                                <label for="gFINANCE_ROLE">Grant</label>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="detail-item">
-                                                <input type="checkbox" name="PHARMACY_ROLE" class="role" id="PHARMACY_ROLE" <% if (fullRole[5]['GRANTED_ROLE'] !=0) { %>
-                                                checked
-                                                <% } %>>
-                                                <label for="PHARMACY_ROLE">Quyền nhân viên bán thuốc</label>
-                                            </div>
-                                            <div class="detail-item">
-                                                <input type="checkbox" name="gPHARMACY_ROLE" class="grant-role" id="gPHARMACY_ROLE" <% if (fullRole[5]['ADMIN_OPTION'] !=0) { %>
-                                                checked
-                                                <% } %>>
-                                                <label for="gPHARMACY_ROLE">Grant</label>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="detail-item">
-                                                <input type="checkbox" name="ACCOUNTANCE_ROLE" class="role" id="ACCOUNTANCE_ROLE" <% if(fullRole[6]['GRANTED_ROLE'] !=0) { %>
-                                                checked
-                                                <% } %>>
-                                                <label for="ACCOUNTANCE_ROLE">Quyền nhân viên kế toán</label>
-                                            </div>
-                                            <div class="detail-item">
-                                                <input type="checkbox" name="gACCOUNTANCE_ROLE" class="grant-role" id="gACCOUNTANCE_ROLE" <% if (fullRole[6]['ADMIN_OPTION'] !=0) { %>
-                                                checked
-                                                <% } %>>
-                                                <label for="gACCOUNTANCE_ROLE">Grant</label>
-                                            </div>
+                                        <div class="detail-item">
+                                            <input type="checkbox" name="gROLE_QLBENHVIEN_<%= fullRole[0][i]['ROLE'] %>" class="grant-role" id="gROLE_QLBENHVIEN_<%= fullRole[0][i]['ROLE'] %>" <% if (fullRole[1][i]['ADMIN_OPTION'] !=0) { %>
+                                            checked
+                                            <% } %>>
+                                            <label for="gROLE_QLBENHVIEN_<%= fullRole[0][i]['ROLE'] %>">Grant</label>
                                         </div>
                                     </div>
                                 <% } %>
                             </div>
-                            <div class="check-box-item">
-                                <div class="title-check-box-item">
-                                    <p>Quyền trên bảng</p>
-                                </div>
-                                <div class="container-check-box-item">
-                                    <div class="detail-check-box-item">
-                                        <a href="/admin/user/<%= user %>/detail/nhanvien" class="link-detail-item <% if (tableName == 'nhanvien') { %>
-                                         active-link
-                                        <% } %>">Nhân viên</a>
-                                        <a href="/admin/user/<%= user %>/detail/thuoc" class="link-detail-item <% if (tableName == 'thuoc') { %>
-                                         active-link
-                                        <% } %>">Thuốc</a>
-                                        <a href="/admin/user/<%= user %>/detail/dichvu" class="link-detail-item <% if (tableName == 'dichvu') { %>
-                                            active-link
-                                        <% } %>">Dịch vụ</a>
-                                        <a href="/admin/user/<%= user %>/detail/benhnhan" class="link-detail-item <% if (tableName == 'benhnhan') { %>
-                                            active-link
-                                           <% } %>">Bệnh nhân</a>
-                                        <a href="/admin/user/<%= user %>/detail/hoadon" class="link-detail-item <% if (tableName == 'hoadon') { %>
-                                            active-link
-                                           <% } %>">Hóa đơn</a>
-                                        <a href="/admin/user/<%= user %>/detail/chamcong" class="link-detail-item <% if (tableName == 'chamcong') { %>
-                                            active-link
-                                           <% } %>">Chấm công</a>
-                                        <a href="/admin/user/<%= user %>/detail/chitiethoadon" class="link-detail-item <% if (tableName == 'chitiethoadon') { %>
-                                            active-link
-                                           <% } %>">Chi tiết hóa đơn</a>
-                                        <a href="/admin/user/<%= user %>/detail/donthuoc" class="link-detail-item <% if (tableName == 'donthuoc') { %>
-                                            active-link
-                                           <% } %>">Đơn thuốc</a>
-                                        <a href="/admin/user/<%= user %>/detail/phong" class="link-detail-item <% if (tableName == 'phong') { %>
-                                            active-link
-                                           <% } %>">Phòng</a>
-                                        <a href="/admin/user/<%= user %>/detail/donvi" class="link-detail-item <% if (tableName == 'donvi') { %>
-                                            active-link
-                                           <% } %>">Đơn vị</a>
-                                        <a href="/admin/user/<%= user %>/detail/lichtruc" class="link-detail-item <% if (tableName == 'lichtruc') { %>
-                                            active-link
-                                           <% } %>">Lịch trực</a>
-                                        <a href="/admin/user/<%= user %>/detail/hosobenhan" class="link-detail-item <% if (tableName == 'hosobenhnhan') { %>
-                                            active-link
-                                           <% } %>">Hồ sơ bệnh án</a>
-                                        <a href="/admin/user/<%= user %>/detail/chitietdonthuoc" class="link-detail-item <% if (tableName == 'chitietdonthuoc') { %>
-                                            active-link
-                                           <% } %>">Chi tiết đơn thuốc</a>
-                                        <a href="/admin/user/<%= user %>/detail/hosodichvu" class="link-detail-item <% if (tableName == 'hosodichvu') { %>
-                                            active-link
-                                           <% } %>">Hồ sơ dịch vụ</a>
-                                    </div>
-                                    <div class="table-check-box">
-                                        <% if (type == 2) { %>
-                                            <div class="item">
-                                                <label for="">Bảng <%= tableHasSign %> </label>
-                                                <div class="item-checkbox">
-                                                    <div class="item-checkbox-content">
-                                                        <div class="detail-item-checkbox-content">
-                                                            <input type="checkbox" name="delete-table" id="delete" class="role" <% if (allRole[0]['PRIVILEGE']) { %>
-                                                                checked
-                                                            <% } %>>
-                                                            <label for="delete">Delete</label>
-                                                        </div>
-                                                        <div class="detail-item-checkbox-content">
-                                                            <input type="checkbox" name="pdelete-table" id="pdelete" class="grant-role" <% if (allRole[0]['GRANTABLE']) { %>
-                                                                checked
-                                                            <% } %>>
-                                                            <label for="pdelete">Grant</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="item-checkbox-content">
-                                                        <div class="detail-item-checkbox-content">
-                                                            <input type="checkbox" name="insert-table" id="insert" class="role" <% if (allRole[1]['PRIVILEGE']) { %>
-                                                                checked
-                                                            <% } %>>
-                                                            <label for="insert">Insert</label>
-                                                        </div>
-                                                        <div class="detail-item-checkbox-content">
-                                                            <input type="checkbox" name="pinsert-table" id="pinsert" class="grant-role" <% if (allRole[1]['GRANTABLE']) { %>
-                                                                checked
-                                                            <% } %>>
-                                                            <label for="pinsert">Grant</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="item-checkbox-content">
-                                                        <div class="detail-item-checkbox-content">
-                                                            <input type="checkbox" name="select-table" id="select" class="role" <% if (allRole[2]['PRIVILEGE']) { %>
-                                                                checked
-                                                            <% } %>>
-                                                            <label for="select">Select</label>
-                                                        </div>
-                                                        <div class="detail-item-checkbox-content">
-                                                            <input type="checkbox" name="pselect-table" id="pselect" class="grant-role" <% if (allRole[2]['GRANTABLE']) { %>
-                                                                checked
-                                                            <% } %>>
-                                                            <label for="pselect">Grant</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="item-checkbox-content">
-                                                        <div class="detail-item-checkbox-content">
-                                                            <input type="checkbox" name="update-table" id="update" class="role" <% if (allRole[3]['PRIVILEGE']) { %>
-                                                                checked
-                                                            <% } %> >
-                                                            <label for="update">Update</label>
-                                                        </div>
-                                                        <div class="detail-item-checkbox-content">
-                                                            <input type="checkbox" name="pupdate-table" id="pupdate" class="grant-role" <% if (allRole[3]['GRANTABLE']) { %>
-                                                                checked
-                                                            <% } %>>
-                                                            <label for="pupdate">Grant</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        <% } %>
-                                    </div>
-                                </div>
+                            <div class="box-btn">
+                                <button type="submit" class="btn-submit">Lưu thay đổi</button>
                             </div>
-                            <div class="check-box-item chech-box-item-active">
-                                <div class="title-check-box-item">
-                                    <p>Quyền trên cột</p>
-                                </div>
-                                <div class="container-check-box-item">
-                                    <div class="detail-check-box-item">
-                                        <a href="/admin/user/<%= user %>/detail/nhanviencol" class="link-detail-item <% if (tableName == 'nhanviencol') { %>
-                                         active-link
-                                        <% } %>">Nhân viên</a>
-                                        <a href="/admin/user/<%= user %>/detail/thuoccol" class="link-detail-item <% if (tableName == 'thuoccol') { %>
-                                         active-link
-                                        <% } %>">Thuốc</a>
-                                        <a href="/admin/user/<%= user %>/detail/dichvucol" class="link-detail-item <% if (tableName == 'dichvucol') { %>
-                                            active-link
-                                        <% } %>">Dịch vụ</a>
-                                        <a href="/admin/user/<%= user %>/detail/benhnhancol" class="link-detail-item <% if (tableName == 'benhnhancol') { %>
-                                            active-link
-                                           <% } %>">Bệnh nhân</a>
-                                        <a href="/admin/user/<%= user %>/detail/hoadoncol" class="link-detail-item <% if (tableName == 'hoadoncol') { %>
-                                            active-link
-                                           <% } %>">Hóa đơn</a>
-                                        <a href="/admin/user/<%= user %>/detail/chamcongcol" class="link-detail-item <% if (tableName == 'chamcongcol') { %>
-                                            active-link
-                                           <% } %>">Chấm công</a>
-                                        <a href="/admin/user/<%= user %>/detail/chitiethoadoncol" class="link-detail-item <% if (tableName == 'chitiethoadoncol') { %>
-                                            active-link
-                                           <% } %>">Chi tiết hóa đơn</a>
-                                        <a href="/admin/user/<%= user %>/detail/donthuoccol" class="link-detail-item <% if (tableName == 'donthuoccol') { %>
-                                            active-link
-                                           <% } %>">Đơn thuốc</a>
-                                        <a href="/admin/user/<%= user %>/detail/phongcol" class="link-detail-item <% if (tableName == 'phongcol') { %>
-                                            active-link
-                                           <% } %>">Phòng</a>
-                                        <a href="/admin/user/<%= user %>/detail/donvicol" class="link-detail-item <% if (tableName == 'donvicol') { %>
-                                            active-link
-                                           <% } %>">Đơn vị</a>
-                                        <a href="/admin/user/<%= user %>/detail/lichtruccol" class="link-detail-item <% if (tableName == 'lichtruccol') { %>
-                                            active-link
-                                           <% } %>">Lịch trực</a>
-                                        <a href="/admin/user/<%= user %>/detail/hosobenhancol" class="link-detail-item <% if (tableName == 'hosobenhnhancol') { %>
-                                            active-link
-                                           <% } %>">Hồ sơ bệnh án</a>
-                                        <a href="/admin/user/<%= user %>/detail/chitietdonthuoccol" class="link-detail-item <% if (tableName == 'chitietdonthuoccol') { %>
-                                            active-link
-                                           <% } %>">Chi tiết đơn thuốc</a>
-                                        <a href="/admin/user/<%= user %>/detail/hosodichvucol" class="link-detail-item <% if (tableName == 'hosodichvucol') { %>
-                                            active-link
-                                           <% } %>">Hồ sơ dịch vụ</a>
-                                    </div>
-                                    <div class="scroll-box">
-                                        <% if (type == 3) { %>
-                                            <div class="table-check-box">
-                                                <% for( let i = 0; i < arrColRol[1].length; i++ ) { %>
-                                                    <div class="item">
-                                                        <label for="">Cột <%= arrColRol[0][0]['col_' + (i + 1)] %></label>
-                                                        <div class="item-checkbox">
-                                                            <div class="item-checkbox-content">
-                                                                <div class="detail-item-checkbox-content">
-                                                                    <input type="checkbox" name="scol<%= arrColRol[1][i]['column'] %>" class="role" id="scol<%= arrColRol[1][i]['column'] %>" <% if (arrColRol[1][i]['select']) { %> checked <% } %>>
-                                                                    <label for="scol<%= arrColRol[1][i]['column'] %>">Select</label>    
-                                                                </div>
-                                                                <div class="detail-item-checkbox-content">
-                                                                    <input type="checkbox" name="gscol<%= arrColRol[1][i]['column'] %>" class="grant-role" id="gscol<%= arrColRol[1][i]['column'] %>" <% if (arrColRol[1][i]['grantS']) { %> checked <% } %>>
-                                                                    <label for="gscol<%= arrColRol[1][i]['column'] %>">Grant</label>    
-                                                                </div>
-                                                            </div>
-                                                            <div class="item-checkbox-content">
-                                                                <div class="detail-item-checkbox-content">
-                                                                    <input type="checkbox" name="ucol<%= arrColRol[1][i]['column'] %>" class="role" id="ucol<%= arrColRol[1][i]['column'] %>" <% if (arrColRol[1][i]['update']) { %> checked <% } %>>
-                                                                    <label for="ucol<%= arrColRol[1][i]['column'] %>">Update</label>
-                                                                </div>
-                                                                <div class="detail-item-checkbox-content">
-                                                                    <input type="checkbox" name="gucol<%= arrColRol[1][i]['column'] %>" class="grant-role" id="gucol<%= arrColRol[1][i]['column'] %>" <% if (arrColRol[1][i]['grantU']) { %> checked <% } %>>
-                                                                    <label for="gucol<%= arrColRol[1][i]['column'] %>">Grant</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                <% } %>
-                                                
-                                            </div>
-                                        <% } %>        
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-            <div class="box-btn">
-                <button type="submit" class="user-role-submit">Lưu thay đổi</button>
-                <a href="/admin/user" class="exit-link">Thoát</a>
-            </div>
-            </form>
-        </div>
-    </div>
-    </div>
-
-    <% if (message == 'true' ) { %>
-        <div class="message-container">
-            <div class="message-title">
-                <% if (saveSuccess == 'true' ) { %>
-                    <p class="title"><i class="fa fa-check" aria-hidden="true"></i> Lưu thành công</p>
-                    <% } else { %>
-                    <p class="title-fail"><i class="fa fa-times" aria-hidden="true"></i> Lưu thất bại</p>
+                        </form>
                     <% } %>
+                </div>
             </div>
         </div>
-    <% } %>
-
-
+    </div>
 
     <%- include('partials/layouts/scripts') %>
 </body>

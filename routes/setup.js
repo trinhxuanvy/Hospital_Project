@@ -22,11 +22,12 @@ module.exports = {
     getRole: function (arr) {
         let result = [];
         for (let i in arr) {
-            if (i.indexOf('_ROLE') > -1) {
+            if (i.indexOf('ROLE_QLBENHVIEN_') > -1) {
                 result.push(i);
             }
         }
-        return result
+        console.log(result)
+        return result;
     },
 
     getArrCol: function (arr) {
@@ -50,38 +51,87 @@ module.exports = {
 
     getArrDML: function (arr) {
         let result = [];
-        console.log(arr)
-        for (let i in arr) {
-            if (i.indexOf('col') > -1) {
-                let flag = i.slice(0, 1), obj;
+        for (let i of Object.entries(arr)) {
+            console.log(i);
+            if (i[1].indexOf('col') > -1) {
+                let flag = i[1].slice(0, 1), obj;
                 if (flag != 'g') {
                     if (flag == 's') {
                         obj = {
-                            col: i.slice(4),
-                            dml: 'select',
+                            col: '',
+                            dml: '',
                             grant: 0,
                         };
                     }
-                    else if (flag == 'u') {
+                    else 
+                    if (flag == 'u') {
                         obj = {
-                            col: i.slice(4),
+                            col: i[1].slice(4),
                             dml: 'update',
                             grant: 0,
                         };
                     }
                 }
                 else if (flag == 'g') {
-                    flag = i.slice(1, 2);
+                    flag = i[1].slice(1, 2);
                     if (flag == 's') {
                         obj = {
-                            col: i.slice(5),
-                            dml: 'select',
+                            col: '',
+                            dml: '',
+                            grant: 0,
+                        };
+                    }
+                    else 
+                    if (flag == 'u') {
+                        obj = {
+                            col: i[1].slice(5),
+                            dml: 'update',
                             grant: 1,
                         };
                     }
-                    else if (flag == 'u') {
+                }
+                result.push(obj);
+            }
+        }
+        return result;
+    },
+
+    getArrDML2: function (arr) {
+        let result = [];
+        for (let i of Object.entries(arr)) {
+            console.log(i);
+            if (i[1].indexOf('col') > -1) {
+                let flag = i[1].slice(0, 1), obj;
+                if (flag != 'g') {
+                    if (flag == 'i') {
                         obj = {
-                            col: i.slice(5),
+                            col: i[1].slice(4),
+                            dml: 'insert',
+                            grant: 0,
+                        };
+                    }
+                    else 
+                    if (flag == 'u') {
+                        obj = {
+                            col: i[1].slice(4),
+                            dml: 'update',
+                            grant: 0,
+                        };
+                    }
+                }
+                else if (flag == 'g') {
+                    flag = i[1].slice(1, 2);
+                    if (flag == 'i') {
+                        obj = {
+                            col: i[1].slice(5),
+                            dml: 'insert',
+                            grant: 0,
+                        };
+                    }
+                    else 
+                    if (flag == 'u') {
+                        obj = {
+                            col: i[1].slice(5),
                             dml: 'update',
                             grant: 1,
                         };
@@ -95,9 +145,9 @@ module.exports = {
 
     getTableArrDML: function (arr) {
         let result = [];
-        for (let i in arr) {
-            if (i.indexOf('table') > -1) {
-                let flag = i.slice(0, 1), obj;
+        for (let i of Object.entries(arr)) {
+            if (i[1].indexOf('table') > -1) {
+                let flag = i[1].slice(0, 1), obj;
                 if (flag != 'p') {
                     if (flag == 's') {
                         obj = {
@@ -125,7 +175,7 @@ module.exports = {
                     }
                 }
                 else if (flag == 'p') {
-                    flag = i.slice(1, 2);
+                    flag = i[0].slice(1, 2);
                     if (flag == 's') {
                         obj = {
                             dml: 'select',
@@ -155,6 +205,37 @@ module.exports = {
             }
         }
         return result;
+    },
+
+    getRedirect: function (obj) {
+        let redir = [0, 0, 0, 0, 0, 0, 0, 0];
+        for (let i = 0; i < obj.length; i++) {
+            if (obj[i]['GRANTED_ROLE'] == 'ROLE_QLBENHVIEN_QUANLYTAINGUYENNHANSU') {
+                redir[0] = 1;
+            }
+            else if (obj[i]['GRANTED_ROLE'] == 'ROLE_QLBENHVIEN_QUANLYTAIVU') {
+                redir[1] = 1;
+            }
+            else if (obj[i]['GRANTED_ROLE'] == 'ROLE_QLBENHVIEN_QUANLYCHUYENMON') {
+                redir[2] = 1;
+            }
+            else if (obj[i]['GRANTED_ROLE'] == 'ROLE_QLBENHVIEN_KETOAN') {
+                redir[3] = 1;
+            }
+            else if (obj[i]['GRANTED_ROLE'] == 'ROLE_QLBENHVIEN_BANTHUOC') {
+                redir[4] = 1;
+            }
+            else if (obj[i]['GRANTED_ROLE'] == 'ROLE_QLBENHVIEN_BACSI') {
+                redir[5] = 1;
+            }
+            else if (obj[i]['GRANTED_ROLE'] == 'ROLE_QLBENHVIEN_TAIVU') {
+                redir[6] = 1;
+            }
+            else if (obj[i]['GRANTED_ROLE'] == 'ROLE_QLBENHVIEN_TIEPTAN') {
+                redir[7] = 1;
+            }
+        }
+        return redir;
     },
 
     checkInput: function (string) {
@@ -230,6 +311,26 @@ module.exports = {
             else if (obj[i]['NGAYBATDAU'] != null) {
                 let date = new Date(obj[i]['NGAYBATDAU']);
                 obj[i]['NGAYBATDAU'] = `${date.getDate().toString()}/${(date.getMonth() + 1).toString()}/${date.getFullYear().toString()}`;
+            }
+            else if (obj[i]['NGAYKHAM'] != null) {
+                let date = new Date(obj[i]['NGAYKHAM']);
+                obj[i]['NGAYKHAM'] = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} - ${date.getDate().toString()}/${(date.getMonth() + 1).toString()}/${date.getFullYear().toString()}`;
+            }
+            else if (obj[i]['NGAYLAP'] != null) {
+                let date = new Date(obj[i]['NGAYLAP']);
+                obj[i]['NGAYLAP'] = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} - ${date.getDate().toString()}/${(date.getMonth() + 1).toString()}/${date.getFullYear().toString()}`;
+            }
+        }
+    },
+
+    setMoney: function (money) {
+        return money.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+    },
+
+    getMoney: function (obj) {
+        for (let i = 0; i < obj.length; i++) {
+            if (obj[i]['LUONG'] != null) {
+                obj[i]['LUONG'] = this.setMoney(obj[i]['LUONG']);
             }
         }
     }

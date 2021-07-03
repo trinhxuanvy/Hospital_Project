@@ -20,7 +20,7 @@
             </div>
             <div class="menu-item-detail">
                 <% bill.forEach(item => { %>
-                    <a title="<%= item['NGAYTAO'] %>" href="/doctor/patient/<%= id %>/bill-drug/<%= item['IDDONTHUOC'] %>" class="link-item"><%= item['NGAYTAO'] %></a>
+                    <a title="<%= item['NGAYLAP'] %>" href="/doctor/patient/<%= id %>/bill-drug/<%= item['IDDONTHUOC'] %>" class="link-item"><%= item['NGAYLAP'] %></a>
                 <% }) %>
             </div>
             <button type="button" class="btn-add-item">

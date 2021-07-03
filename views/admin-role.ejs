@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/layouts/head') %>
+
+        <%- include('partials/layouts/styles') %>
+</head>
+
+<body>
+    <div class="admin-page">
+        <div class="container">
+            <div class="header-top">
+                <div class="nav-top">
+                    <div class="bar-top">
+                        <i class="fa fa-bars" aria-hidden="true"></i>
+                    </div>
+                    <div class="logo-top">
+                        <p class="brand">Adminstrator</p>
+                    </div>
+                </div>
+                <div class="menu-top">
+                    <%- include('partials/layouts/admin-sidebar.ejs')  %> 
+                </div>
+            </div>
+            <div class="admin-form">
+                <div class="box-find">
+                    <div class="form-find">
+                        <input id="search-in-table" type="text" placeholder="Tìm kiếm">
+                    </div>
+                    <div class="box-btn">
+                        <button class="btn-add"><i class="fa fa-plus" aria-hidden="true"></i> Thêm Role</button>
+                    </div>
+                </div>
+                <div class="box-table" style="width: 700px !important;">
+                    <table class="" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Tên role</th>
+                                <th>Cài đặt</th>
+                                <th>Xóa</th>
+                            </tr>    
+                        </thead>
+                        <tbody>
+                            
+                            <% for( let index = 0; index < role.length; index++ ) { %>
+                                <tr>
+                                    <th style="padding: 8px 0 !important;">
+                                        <%= role[index]['ROLE'] %>
+                                    </th>
+                                    <th>
+                                        <a href="/admin/role/<%= idRole[index] %>/nhanvien">
+                                            <i class="fas fa-user-cog"></i>
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a href="/admin/role/<%= idRole[index] %>/delete/this">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </a>
+                                    </th>
+                                </tr>
+                            <% } %>
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <div class="categories-5">
+                <form action="/admin/role/add" method="post">
+                    <input type="text" name="addRole" id="addRole">
+                    <label for="addRole"></label>
+                    <button type="submit">Tạo</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/layouts/scripts') %>
+</body>
+
+</html>

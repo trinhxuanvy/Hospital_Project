@@ -1,7 +1,6 @@
 const oracledb = require('./oracledb');
 const jwt = require('jsonwebtoken');
 const setup = require('../routes/setup');
-const { json } = require('body-parser');
 const oracledb2 = require('oracledb');
 
 
@@ -146,8 +145,8 @@ module.exports = {
     },
 
     allRole: [
-        'MANAGERMENT_ROLE', 'PRECEPTIONIST_ROLE', 'DOCTOR_ROLE', 'PARAMEDIC_ROLE', 'FINANCE_ROLE',
-        'PHARMACY_ROLE', 'ACCOUNTANCE_ROLE'
+        'ROLE_QUANLYTAINGUYENNHANSU', 'QUANLYTAIVU_ROLE', 'QUANLYCHUYENMON_ROLE', 'KETOAN_ROLE', 'BANTHUOC_ROLE',
+        'BACSI_ROLE', 'TAIVU_ROLE', 'TIEPTAN_ROLE'
     ],
 
     allTable: ['NHANVIEN', 'BENHNHAN', 'THUOC', 'DICHVU',
@@ -169,13 +168,14 @@ module.exports = {
     allColumn: [
         {
             col_1: 'mã nhân viên',
-            col_2: 'tên nhân viên',
-            col_3: 'đơn vị',
-            col_4: 'vai trò',
-            col_5: 'năm sinh',
-            col_6: 'địa chỉ',
-            col_7: 'số điện thoại',
-            col_8: 'lương'
+            col_2: 'username',
+            col_3: 'tên nhân viên',
+            col_4: 'đơn vị',
+            col_5: 'vai trò',
+            col_6: 'năm sinh',
+            col_7: 'địa chỉ',
+            col_8: 'số điện thoại',
+            col_9: 'lương'
         },
         {
             col_1: 'mã bệnh nhân',
@@ -217,7 +217,8 @@ module.exports = {
         {
             col_1: 'mã đơn thuốc',
             col_2: 'mã hồ sơ bệnh án',
-            col_3: 'liều dùng'
+            col_3: 'liều dùng',
+            col_4: 'ngày tạo'
         },
         {
             col_1: 'mã lịch trực',
@@ -268,6 +269,68 @@ module.exports = {
         }
     },
 
+    setData: function (query, obj) {
+        return new Promise(async function (resolve, reject) {
+            let connection;
+
+            try {
+                connection = await oracledb.connect2('sys', 'Vychuoi123');
+                console.log('adsdsasdsdsdsssssssssssssssssssssssssssssssssssss/')
+                const result = await connection.execute(query, obj);
+                console.log('â;asssssssssssssssssssssssssssss')
+                await connection.commit();
+                resolve(1);
+                
+            } catch (error) {
+
+                reject(error);
+            } finally {
+                if (connection) {
+                    try {
+                        await connection.release();
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+            }
+        });
+    },
+
+    changePass: function (user, password, newPass) {
+        return new Promise(async function (resolve, reject) {
+            let connection;
+
+            try {
+                connection = await oracledb.connect4(user, password);
+
+                let promise = await connection.changePassword(user, password, newPass);
+                //await connection.close();
+                resolve(1);
+                
+            } catch (error) {
+
+                reject(error);
+            } finally {
+                if (connection) {
+                    try {
+                        await connection.release();
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+            }
+        });
+    },
+
+    setDataDBA: async function (query, obj) {
+        try {
+            let decode = await this.setData(query);
+            return decode = 1 ? 1 : 0;
+        } catch (error) {
+            return 0;
+        }
+    },
+
     compareJSON: function (a, b) {
         try {
             if (JSON.stringify(a) == JSON.stringify(b)) {
@@ -284,6 +347,10 @@ module.exports = {
         for (let i = 0; i < num; i++) {
             let item = {
                 column: '',
+                allowU: 1,
+                allowS: 1,
+                allowgU: 1,
+                allowgS: 1,
                 select: 0,
                 grantS: 0,
                 update: 0,
@@ -295,41 +362,156 @@ module.exports = {
     },
 
     getAllRoleCol: async function (user, table) {
-        let pos = this.allTableCol.indexOf(table.toUpperCase());
-        let data = await this.getData(`select column_name from DBA_COL_PRIVS where grantee = '${user.toUpperCase()}' and table_name = '${this.allTable[pos]}'`);
+        //let data = this.createOBJ(allCol.length, this.allColumn[pos]);
+        let pos = this.allTable.indexOf(table.toUpperCase());
+        let hasRole =  await this.getData(`select granted_role from dba_role_privs where grantee = upper('${user}')`);
         let allCol = await this.getData(`select column_name from all_tab_columns where table_name = '${this.allTable[pos]}' and owner = 'C##ADMIN'`);
-        let grantCol = await this.getData(`select column_name from DBA_COL_PRIVS where grantee = '${user.toUpperCase()}' and table_name = '${this.allTable[pos]}' and grantable = 'YES'`)
-        let objData = [], objAllCol = [], objGrant = [];
-        let arr = this.createOBJ(allCol.length, this.allColumn[pos]);
-        num = allCol.length;
+        let data = this.createOBJ(allCol.length, this.allColumn[pos]);
+        let flag = 0;
+        let temp = [];
+        for (let i = 0; i < hasRole.length; i++)
+        {
+            let hasColRole = await this.getCheckData(`select * from role_tab_privs where role = upper('${hasRole[i]['GRANTED_ROLE']}') and table_name = upper('${this.allTable[pos]}')`);
+            if (hasColRole.length > 0) {
+                temp = hasColRole;
+                flag = 1;
+                break;
+            }
+        }
+
+        if (flag == 1) {
+            if (hasRole.length > 0) {
+                for (let i = 0; i < allCol.length; i++) {
+                    data[1][i]['column'] = allCol[i]['COLUMN_NAME'];
+                    for (let j = 0; j < temp.length; j++) {   
+                        let check = 0;
+                        // let decode = await this.getCheckData(`select GRANTED_ROLE, ADMIN_OPTION from dba_role_privs where grantee = '${user}'`);
+                        // for (let l = 0; l < decode.length; l++) {
+                        //     if (decode[l]['GRANTED_ROLE'] == temp[j]['ROLE']) {
+                        //         if (decode[l]['ADMIN_OPTION'] == 'YES') {
+                        //             check = 1;
+                        //         }
+                        //     }
+                        // }
+
+                        if (temp[j]['COLUMN_NAME'] == allCol[i]['COLUMN_NAME']) {
+                            if (temp[j]['PRIVILEGE'] == 'UPDATE') {
+                                data[1][i]['update'] = 1;
+                                data[1][i]['allowU'] = 0;
+                            }
+                            else if (temp[j]['PRIVILEGE'] == 'SELECT') {
+                                data[1][i]['select'] = 1;
+                                data[1][i]['allowS'] = 0;
+                            }
+
+                            if (temp[j]['GRANTABLE'] == 'YES') {
+                                data[1][i]['grantU'] = 1;
+                            }
+                            else if (temp[j]['GRANTABLE'] == 'YES') {
+                                data[1][i]['grantS'] = 1;
+                            }
+
+                            // if (check == 1) {
+                            //     data[1][i]['allowgS'] = 0;
+                            //     data[1][i]['allowgU'] = 0;
+                            //     data[1][i]['grantU'] = 1;
+                            //     data[1][i]['grantS'] = 1;
+                            // }
+                        }
+                        else if (temp[j]['COLUMN_NAME'] == null) {
+                            if (temp[j]['PRIVILEGE'] == 'UPDATE') {
+                                data[1][i]['update'] = 1;
+                                data[1][i]['allowU'] = 0;
+                            }
+                            else if (temp[j]['PRIVILEGE'] == 'SELECT') {
+                                data[1][i]['select'] = 1;
+                                data[1][i]['allowS'] = 0;
+                            }
+
+                            if (temp[j]['GRANTABLE'] == 'YES') {
+                                data[1][i]['grantU'] = 1;
+                            }
+                            else if (temp[j]['GRANTABLE'] == 'YES') {
+                                data[1][i]['grantS'] = 1;
+                            }
+
+                            // if (check == 1) {
+                            //     data[1][i]['allowgS'] = 0;
+                            //     data[1][i]['allowgU'] = 0;
+                            //     data[1][i]['grantU'] = 1;
+                            //     data[1][i]['grantS'] = 1;
+                            // }
+                        }
+                    }
+                }
+
+                
+            }
+        }
+
+        let isData = await this.getCheckData(`select column_name, privilege, grantable from dba_col_privs where
+        grantee = '${user}' and table_name = '${this.allTable[pos]}'`);     
+        
         for (let i = 0; i < allCol.length; i++) {
-            let temp = JSON.stringify(allCol[i]);
-            objAllCol.push(temp);
-        }
-        for (let i = 0; i < data.length; i++) {
-            let temp = JSON.stringify(data[i]);
-            objData.push(temp);
-        }
-        for (let i = 0; i < grantCol.length; i++) {
-            let temp = JSON.stringify(grantCol[i]);
-            objGrant.push(temp);
-        }
-        for (let i = 0; i < objAllCol.length; i++) {
-            pos = objAllCol.indexOf(objData[i]);
-            arr[1][i]['column'] = allCol[i]['COLUMN_NAME'];
-            if (pos > -1) {
-                arr[1][pos]['update'] = 1;
-            }
-            pos = objAllCol.indexOf(objGrant[i]);
-            if (pos > -1) {
-                arr[1][pos]['grantU'] = 1;
+            data[1][i]['column'] = allCol[i]['COLUMN_NAME'];
+            for (let j = 0; j < isData.length; j++) {     
+                if (isData[j]['COLUMN_NAME'] == allCol[i]['COLUMN_NAME']) {
+                    let res = '';
+                    if (isData[j]['PRIVILEGE'] == 'UPDATE') {
+                        data[1][i]['update'] = 1;
+                    }
+                    else if (isData[j]['PRIVILEGE'] == 'SELECT') {
+                        data[1][i]['select'] = 1;
+                    }
+
+                    if (isData[j]['GRANTABLE'] == 'YES') {
+                        data[1][i]['grantU'] = 1;
+                    }
+                    else if (isData[j]['GRANTABLE'] == 'YES') {
+                        data[1][i]['grantS'] = 1;
+                    }
+                }
             }
         }
-        return arr;
+
+        query = `select privilege, grantable from sys.DBA_TAB_PRIVS
+            where grantee = '${user}' and table_name = '${this.allTable[pos]}'`;
+        isData = await this.getCheckData(query);
+
+        for (let i = 0; i < isData.length; i++) {
+            if (isData[i]['PRIVILEGE'] == 'SELECT') {
+                if (isData[i]['GRANTABLE'] == 'NO') {
+                    for (let j = 0; j < allCol.length; j++) {
+                        data[1][j]['select'] = 1;
+                    }
+                }
+                else {
+                    for (let j = 0; j < allCol.length; j++) {
+                        data[1][j]['select'] = 1;
+                        data[1][j]['grantS'] = 1;
+                    }
+                }
+            }
+            else if (isData[i]['PRIVILEGE'] == 'UPDATE') {
+                if (isData[i]['GRANTABLE'] == 'NO') {
+                    for (let j = 0; j < allCol.length; j++) {
+                        data[1][j]['update'] = 1;
+                    }
+                }
+                else {
+                    for (let j = 0; j < allCol.length; j++) {
+                        data[1][j]['update'] = 1;
+                        data[1][j]['grantU'] = 1;
+                    }
+                }
+            }
+        }
+        console.log(data)
+        return data;
     },
 
     setUpdateRolCol: async function (user, table, arrDML) {
-        let pos = this.allTableCol.indexOf(table.toUpperCase());
+        let pos = this.allTable.indexOf(table.toUpperCase());
         let decode;
         let saveData = await this.getData(`select privilege, grantable from sys.DBA_TAB_PRIVS
         where grantee = '${user}' and table_name = '${this.allTable[pos]}'`);
@@ -337,7 +519,9 @@ module.exports = {
             let count = 0;
             let data = await this.getData(`select column_name, privilege from DBA_COL_PRIVS where grantee = '${user.toUpperCase()}' and table_name = '${this.allTable[pos]}'`);
             decode = await this.checkData(`revoke update on C##ADMIN.${this.allTable[pos]} from ${user}`);
+
             for (let i = 0; i < arrDML.length; i++) {
+
                 if (arrDML[i]['grant']) {
                     decode = await this.checkData(`grant update (${arrDML[i]['col']}) on C##ADMIN.${this.allTable[pos]} to ${user} with grant option`);
                 }
@@ -361,6 +545,8 @@ module.exports = {
         let arr = [];
         for (let i = 0; i < 4; i++) {
             let obj = {
+                ALLOW: 1,
+                ALLOWG: 1,
                 PRIVILEGE: 0,
                 GRANTABLE: 0
             };
@@ -372,8 +558,62 @@ module.exports = {
     getAllRoleTable: async function (user, table) {
         let data = this.createOBJTable();
         if (this.allTable.indexOf(table) > -1) {
-            let query = `select privilege, grantable from sys.DBA_TAB_PRIVS
-             where grantee = '${user}' and table_name = '${table}'`;
+            let hasRole =  await this.getData(`select granted_role from dba_role_privs where grantee = upper('${user}')`);
+            let flag = 0;
+            let temp = [];
+            for (let i = 0; i < hasRole.length; i++)
+            {
+                let hasColRole = await this.getData(`select * from role_tab_privs where role = upper('${hasRole[i]['GRANTED_ROLE']}') and table_name = upper('${table}')`)
+                if (hasColRole.length > 0) {
+                    temp = hasColRole;
+                    flag = 1;
+                    break;
+                }
+            }
+            
+            let query;
+            if (flag == 1) {
+                if (hasRole.length > 0) {
+                    for (let k = 0; k < hasRole.length; k++) {
+                        // let check = 0;
+                        // let decode = await this.getCheckData(`select GRANTED_ROLE, ADMIN_OPTION from dba_role_privs where grantee = '${user}'`);
+                        // for (let i = 0; i < decode.length; i++) {
+                        //     if (decode[i]['GRANTED_ROLE'] == hasRole[k]['GRANTED_ROLE']) {
+                        //         if (decode[i]['ADMIN_OPTION'] == 'YES') {
+                        //             check = 1;
+                        //         }
+                        //     }
+                        // }
+
+                        query = `select privilege, grantable from sys.role_tab_privs
+                        where role = upper('${hasRole[k]['GRANTED_ROLE']}') and table_name = upper('${table}')`;
+                        let decode = await this.getCheckData(query);
+                        for (let i = 0; i < decode.length; i++) {
+                            let priv = decode[i]['PRIVILEGE'];
+                            let grant = decode[i]['GRANTABLE'];
+                            let pos = this.DML.indexOf(priv);
+                            if (pos > -1) {
+                                data[pos]['PRIVILEGE'] = 1;
+                                data[pos]['ALLOW'] = 0;
+                                if (grant == 'YES') {
+                                    data[pos]['GRANTABLE'] = 1;
+                                }
+                                // if (check == 1) {
+                                //     data[pos]['GRANTABLE'] = 1;
+                                //     data[pos]['ALLOWG'] = 0;
+                                // }
+                            }
+                        }
+
+                        
+
+                    } 
+                }
+            }
+
+            query = `select privilege, grantable from sys.DBA_TAB_PRIVS
+            where grantee = '${user}' and table_name = '${table}'`;
+
             let decode = await this.getData(query);
             for (let i = 0; i < decode.length; i++) {
                 let priv = decode[i]['PRIVILEGE'];
@@ -386,23 +626,44 @@ module.exports = {
                     }
                 }
             }
+
+            let isData = await this.getCheckData(`select column_name, privilege, grantable from dba_col_privs where
+            grantee = '${user}' and table_name = '${table}'`);
+            if (isData.length > 0) {
+                for (let i = 0; i < isData.length; i++) {
+                    if (isData[i]['PRIVILEGE'] == 'UPDATE') {
+                        data[3]['PRIVILEGE'] = 1;
+                    }
+                    if (isData[i]['GRANTABLE'] == 'YES') {
+                        data[3]['GRANTABLE'] = 1;
+                    }
+                }
+            }
+
+        
             return data;
         }
         else return [];
     },
 
     getAllRole: async function (user) {
-        let result = this.createOBJRole();
+        let result = await this.createOBJRole();
         let data = await this.getData(`select GRANTED_ROLE, ADMIN_OPTION from dba_role_privs where grantee = '${user}'`);
         for (let i = 0; i < data.length; i++) {
-            let pos = this.allRole.indexOf(data[i]['GRANTED_ROLE']);
-            if (pos > -1) {
-                result[pos]['GRANTED_ROLE'] = 1;
-                if (data[i]['ADMIN_OPTION'] == 'YES') {
-                    result[pos]['ADMIN_OPTION'] = 1;
+            //let pos = this.allRole.indexOf(data[i]['GRANTED_ROLE']);
+            console.log('đasa')
+            for (let j = 0; j < result[0].length; j++) {
+                console.log(data[i]['GRANTED_ROLE'].slice(16) ,result[0][j]['ROLE'])
+                if (data[i]['GRANTED_ROLE'].slice(16) == result[0][j]['ROLE']) {
+                    result[1][j]['GRANTED_ROLE'] = 1;
+                    if (data[i]['ADMIN_OPTION'] == 'YES') {
+                        result[1][j ]['ADMIN_OPTION'] = 1;
+                    }
+                    break;
                 }
             }
         }
+        console.log(result);
         return result;
     },
 
@@ -445,7 +706,7 @@ module.exports = {
                 decode = this.checkData(`grant ${arr[i]['dml']} on C##ADMIN.${table} to ${user} with grant option`)
             }
             else {
-                decode = this.checkData(`grant ${arr[i]['dml']} on C##ADMIN.${table} to ${user}`)
+                decode = this.checkData(`grant ${arr[i]['dml']} on C##ADMIN.${table} to ${user}`);
             }
         }
 
@@ -461,26 +722,35 @@ module.exports = {
         }
     },
 
-    createOBJRole: function () {
-        let arr = [];
-        for (let i = 0; i < 7; i++) {
+    createOBJRole: async function () {
+        let decode = await this.getCheckData(`select distinct(role) from dba_roles where role like upper('role_qlbenhvien_%')`)
+        let arr = [[], []];
+        console.log(decode)
+        for (let i = 0; i < decode.length; i++) {
             let obj = {
                 GRANTED_ROLE: 0,
                 ADMIN_OPTION: 0
             };
-            arr.push(obj);
+            arr[1].push(obj);
+            obj = {
+                ROLE: decode[i]['ROLE'].slice(16),
+            }
+            arr[0].push(obj);
         }
         return arr;
     },
 
     setUpdateRole: async function (user, arr) {
+        let allR = await this.getCheckData(`select distinct(role) from dba_roles where role like upper('role_qlbenhvien_%')`)
         let decode;
-        for (let i of this.allRole) {
-            decode = await this.checkData(`revoke ${i} from ${user}`);
+        console.log(allR);
+        for (let i = 0; i < allR.length; i++) {
+            decode = await this.checkData(`revoke ${allR[i]['ROLE']} from ${user}`);
         }
         for (let i = 0; i < arr.length; i++) {
             decode = await this.checkData(`grant ${arr[i]} to ${user}`);
             let check = arr[i].slice(0, 1);
+
             if (check != 'g') {
                 decode = await this.checkData(`grant ${arr[i]} to ${user}`);
             }
@@ -490,5 +760,402 @@ module.exports = {
         }
     },
 
+    // Dành cho user
+    getDataOfUser: function (user, password, query) {
+        return new Promise(async function (resolve, reject) {
+            let connection;
 
+            try {
+                connection = await oracledb.connectUser(user, password);
+
+                const result = await connection.execute(
+                    query
+                );
+                resolve(result.rows);
+
+            } catch (error) {
+
+                reject(error);
+            } finally {
+                if (connection) {
+                    try {
+                        await connection.release();
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+            }
+        });
+    },
+
+    getCheckDataOfUser: async function (user, password, query) {
+        try {
+            let decoded = await this.getDataOfUser(user, password, query);
+
+            return decoded;
+        } catch (error) {
+            return [];
+        }
+    },
+
+    setDataOfUser: function (user, password, query, obj) {
+        return new Promise(async function (resolve, reject) {
+            let connection;
+
+            try {
+                connection = await oracledb.connectUser(user, password);
+                const result = await connection.execute(query, obj);
+                await connection.commit();
+                resolve(1);
+                
+            } catch (error) {
+
+                reject(error);
+            } finally {
+                if (connection) {
+                    try {
+                        await connection.release();
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+            }
+        });
+    },
+
+    setCheckDataOfUser: async function (user, password, query, obj) {
+        try {
+            let decoded = await this.setDataOfUser(user, password, query, obj);
+            return decoded == 1 ? 1 : 0;
+        } catch (error) {
+            return 0;
+        }
+    },
+
+    // Dành cho role
+    getAllRoleTableRole: async function (role, table) {
+        let data = this.createOBJTable();
+        if (this.allTable.indexOf(table) > -1) {
+            // let hasRole =  await this.getData(`select granted_role from dba_role_privs where grantee = upper('${user}')`);
+            // let flag = 0;
+            // let temp = [];
+            // for (let i = 0; i < hasRole.length; i++)
+            // {
+            //     let hasColRole = await this.getData(`select * from role_tab_privs where role = upper('${hasRole[i]['GRANTED_ROLE']}') and table_name = upper('${table}')`)
+            //     if (hasColRole.length > 0) {
+            //         temp = hasColRole;
+            //         flag = 1;
+            //         break;
+            //     }
+            // }
+            
+            // let query;
+            // if (flag == 1) {
+            //     if (hasRole.length > 0) {
+            //         for (let k = 0; k < hasRole.length; k++) {
+                        // let check = 0;
+                        // let decode = await this.getCheckData(`select GRANTED_ROLE, ADMIN_OPTION from dba_role_privs where grantee = '${user}'`);
+                        // for (let i = 0; i < decode.length; i++) {
+                        //     if (decode[i]['GRANTED_ROLE'] == hasRole[k]['GRANTED_ROLE']) {
+                        //         if (decode[i]['ADMIN_OPTION'] == 'YES') {
+                        //             check = 1;
+                        //         }
+                        //     }
+                        // }
+                        let allR = await this.getCheckData(`select distinct(role) from dba_roles where role like upper('role_qlbenhvien_%')`)
+                        console.log(allR)
+                        for (let m = 0; m < allR.length; m++) {
+                            if ('ROLE_QLBENHVIEN_' + role.toUpperCase() == allR[m]['ROLE']) {
+                                query = `select column_name, privilege, grantable from sys.role_tab_privs
+                                where role = upper('${'ROLE_QLBENHVIEN_' + role.toUpperCase()}') and table_name = upper('${table}')`;
+                                let decode = await this.getCheckData(query);
+                                for (let i = 0; i < decode.length; i++) {
+                                    if (decode[i]['COLUMN_NAME'] == null)
+                                    {
+                                        let priv = decode[i]['PRIVILEGE'];
+                                        let grant = decode[i]['GRANTABLE'];
+                                        let pos = this.DML.indexOf(priv);
+                                        if (pos > -1) {
+                                            data[pos]['PRIVILEGE'] = 1;
+                                            data[pos]['ALLOW'] = 0;
+                                            if (grant == 'YES') {
+                                                data[pos]['GRANTABLE'] = 1;
+                                            }
+                                            // if (check == 1) {
+                                            //     data[pos]['GRANTABLE'] = 1;
+                                            //     data[pos]['ALLOWG'] = 0;
+                                            // }
+                                        }
+                                    }  
+                                }
+                                break;
+                            }
+                            
+                        }
+
+                            
+
+
+            //         } 
+            //     }
+            // }
+
+            // query = `select privilege, grantable from sys.DBA_TAB_PRIVS
+            // where grantee = '${user}' and table_name = '${table}'`;
+
+            // let decode = await this.getData(query);
+            // for (let i = 0; i < decode.length; i++) {
+            //     let priv = decode[i]['PRIVILEGE'];
+            //     let grant = decode[i]['GRANTABLE'];
+            //     let pos = this.DML.indexOf(priv);
+            //     if (pos > -1) {
+            //         data[pos]['PRIVILEGE'] = 1;
+            //         if (grant == 'YES') {
+            //             data[pos]['GRANTABLE'] = 1;
+            //         }
+            //     }
+            // }
+
+            // let isData = await this.getCheckData(`select column_name, privilege, grantable from dba_col_privs where
+            // grantee = '${user}' and table_name = '${table}'`);
+            // if (isData.length > 0) {
+            //     for (let i = 0; i < isData.length; i++) {
+            //         if (isData[i]['PRIVILEGE'] == 'UPDATE') {
+            //             data[3]['PRIVILEGE'] = 1;
+            //         }
+            //         if (isData[i]['GRANTABLE'] == 'YES') {
+            //             data[3]['GRANTABLE'] = 1;
+            //         }
+            //     }
+            // }
+
+        
+            return data;
+        }
+        else return [];
+    },
+
+    setAllRoleTableRole: async function (role, table, arr) {
+        let saveData = await this.getData(`select column_name, privilege from role_tab_privs where role = '${role.toUpperCase() + '_ROLE'}' and table_name = '${table.toUpperCase()}'`);
+        let decode = this.checkData(`revoke insert on C##ADMIN.${table} from ${'role_qlbenhvien_' + role}`);
+        decode = this.checkData(`revoke delete on C##ADMIN.${table} from ${'role_qlbenhvien_' + role}`);
+        decode = this.checkData(`revoke update on C##ADMIN.${table} from ${'role_qlbenhvien_' + role}`);
+        decode = this.checkData(`revoke select on C##ADMIN.${table} from ${'role_qlbenhvien_' + role}`);
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i]['grant']) {
+                decode = this.checkData(`grant ${arr[i]['dml']} on C##ADMIN.${table} to ${'role_qlbenhvien_' + role} with grant option`)
+            }
+            else {
+                decode = this.checkData(`grant ${arr[i]['dml']} on C##ADMIN.${table} to ${'role_qlbenhvien_' + role}`);
+            }
+        }
+
+        for (let i = 0; i < saveData.length; i++) {
+            if (saveData[i]['COLUMN_NAME'] != null)
+            {
+                if (saveData[i]['PRIVILEGE'] == 'UPDATE' || saveData[i]['PRIVILEGE'] == 'INSERT') {        
+                    decode = await this.checkData(`grant ${saveData[i]['PRIVILEGE']} (${saveData[i]['COLUMN_NAME']}) on C##ADMIN.${table} to ${'role_qlbenhvien_' + role}`);
+                }
+            }
+            
+        }
+    },
+
+    createOBJ2: function (num, arr) {
+        let obj = [[arr], []];
+        for (let i = 0; i < num; i++) {
+            let item = {
+                column: '',
+                allowU: 1,
+                allowI: 1,
+                allowgU: 1,
+                allowgI: 1,
+                insert: 0,
+                grantI: 0,
+                update: 0,
+                grantU: 0
+            };
+            obj[1].push(item);
+        }
+        return obj;
+    },
+
+    getAllRoleColRole: async function (role, table) {
+        //let data = this.createOBJ(allCol.length, this.allColumn[pos]);
+        let pos = this.allTable.indexOf(table.toUpperCase());
+        //let hasRole =  await this.getData(`select granted_role from dba_role_privs where grantee = upper('${user}')`);
+        let allCol = await this.getCheckData(`select column_name from all_tab_columns where table_name = '${this.allTable[pos]}' and owner = 'C##ADMIN'`);
+        let data = this.createOBJ2(allCol.length, this.allColumn[pos]);
+        let flag = 0;
+        let temp = [];
+        //for (let i = 0; i < hasRole.length; i++)
+        //{
+            let hasColRole = await this.getCheckData(`select * from role_tab_privs where role = upper('${'ROLE_QLBENHVIEN_' + role.toUpperCase()}') and table_name = upper('${this.allTable[pos]}')`);
+            //if (hasColRole.length > 0) {
+                temp = hasColRole;
+                //flag = 1;
+                //break;
+            //}
+        //}
+        console.log(allCol)
+        // if (flag == 1) {
+        //     if (hasRole.length > 0) {
+                for (let i = 0; i < allCol.length; i++) {
+                    data[1][i]['column'] = allCol[i]['COLUMN_NAME'];
+                    for (let j = 0; j < temp.length; j++) {   
+                        let check = 0;
+                        // let decode = await this.getCheckData(`select GRANTED_ROLE, ADMIN_OPTION from dba_role_privs where grantee = '${user}'`);
+                        // for (let l = 0; l < decode.length; l++) {
+                        //     if (decode[l]['GRANTED_ROLE'] == temp[j]['ROLE']) {
+                        //         if (decode[l]['ADMIN_OPTION'] == 'YES') {
+                        //             check = 1;
+                        //         }
+                        //     }
+                        // }
+
+                        if (temp[j]['COLUMN_NAME'] == allCol[i]['COLUMN_NAME']) {
+                            if (temp[j]['PRIVILEGE'] == 'UPDATE') {
+                                data[1][i]['update'] = 1;
+                                data[1][i]['allowU'] = 0;
+                            }
+                            else if (temp[j]['PRIVILEGE'] == 'INSERT') {
+                                data[1][i]['insert'] = 1;
+                                data[1][i]['allowI'] = 0;
+                            }
+
+                            if (temp[j]['GRANTABLE'] == 'YES') {
+                                data[1][i]['grantU'] = 1;
+                            }
+                            else if (temp[j]['GRANTABLE'] == 'YES') {
+                                data[1][i]['grantI'] = 1;
+                            }
+
+                            // if (check == 1) {
+                            //     data[1][i]['allowgS'] = 0;
+                            //     data[1][i]['allowgU'] = 0;
+                            //     data[1][i]['grantU'] = 1;
+                            //     data[1][i]['grantS'] = 1;
+                            // }
+                        }
+                        // else if (temp[j]['COLUMN_NAME'] == null) {
+                        //     if (temp[j]['PRIVILEGE'] == 'UPDATE') {
+                        //         data[1][i]['update'] = 1;
+                        //         data[1][i]['allowU'] = 0;
+                        //     }
+                        //     else if (temp[j]['PRIVILEGE'] == 'SELECT') {
+                        //         data[1][i]['select'] = 1;
+                        //         data[1][i]['allowS'] = 0;
+                        //     }
+
+                        //     if (temp[j]['GRANTABLE'] == 'YES') {
+                        //         data[1][i]['grantU'] = 1;
+                        //     }
+                        //     else if (temp[j]['GRANTABLE'] == 'YES') {
+                        //         data[1][i]['grantS'] = 1;
+                        //     }
+
+                        //     // if (check == 1) {
+                        //     //     data[1][i]['allowgS'] = 0;
+                        //     //     data[1][i]['allowgU'] = 0;
+                        //     //     data[1][i]['grantU'] = 1;
+                        //     //     data[1][i]['grantS'] = 1;
+                        //     // }
+                        // }
+                    }
+                }
+
+                console.log(data)
+            //}
+        //}
+
+        // let isData = await this.getCheckData(`select column_name, privilege, grantable from dba_col_privs where
+        // grantee = '${user}' and table_name = '${this.allTable[pos]}'`);     
+        
+        // for (let i = 0; i < allCol.length; i++) {
+        //     data[1][i]['column'] = allCol[i]['COLUMN_NAME'];
+        //     for (let j = 0; j < isData.length; j++) {     
+        //         if (isData[j]['COLUMN_NAME'] == allCol[i]['COLUMN_NAME']) {
+        //             let res = '';
+        //             if (isData[j]['PRIVILEGE'] == 'UPDATE') {
+        //                 data[1][i]['update'] = 1;
+        //             }
+        //             else if (isData[j]['PRIVILEGE'] == 'SELECT') {
+        //                 data[1][i]['select'] = 1;
+        //             }
+
+        //             if (isData[j]['GRANTABLE'] == 'YES') {
+        //                 data[1][i]['grantU'] = 1;
+        //             }
+        //             else if (isData[j]['GRANTABLE'] == 'YES') {
+        //                 data[1][i]['grantS'] = 1;
+        //             }
+        //         }
+        //     }
+        // }
+
+        // query = `select privilege, grantable from sys.DBA_TAB_PRIVS
+        //     where grantee = '${user}' and table_name = '${this.allTable[pos]}'`;
+        // isData = await this.getCheckData(query);
+
+        // for (let i = 0; i < isData.length; i++) {
+        //     if (isData[i]['PRIVILEGE'] == 'SELECT') {
+        //         if (isData[i]['GRANTABLE'] == 'NO') {
+        //             for (let j = 0; j < allCol.length; j++) {
+        //                 data[1][j]['select'] = 1;
+        //             }
+        //         }
+        //         else {
+        //             for (let j = 0; j < allCol.length; j++) {
+        //                 data[1][j]['select'] = 1;
+        //                 data[1][j]['grantS'] = 1;
+        //             }
+        //         }
+        //     }
+        //     else if (isData[i]['PRIVILEGE'] == 'UPDATE') {
+        //         if (isData[i]['GRANTABLE'] == 'NO') {
+        //             for (let j = 0; j < allCol.length; j++) {
+        //                 data[1][j]['update'] = 1;
+        //             }
+        //         }
+        //         else {
+        //             for (let j = 0; j < allCol.length; j++) {
+        //                 data[1][j]['update'] = 1;
+        //                 data[1][j]['grantU'] = 1;
+        //             }
+        //         }
+        //     }
+        // }
+
+        return data;
+    },
+
+    setRoleColRole: async function (role, table, arrDML) {
+        let pos = this.allTable.indexOf(table.toUpperCase());
+        let decode;
+        let saveData = await this.getCheckData(`select column_name, privilege, grantable from role_tab_privs
+        where role = upper('${'role_qlbenhvien_' + role}') and table_name = upper('${this.allTable[pos]}')`);
+
+        if (pos > -1) {
+            let count = 0;
+            //let data = await this.getData(`select column_name, privilege from DBA_COL_PRIVS where grantee = '${user.toUpperCase()}' and table_name = '${this.allTable[pos]}'`);
+            decode = await this.checkData(`revoke update on C##ADMIN.${this.allTable[pos]} from ${'role_qlbenhvien_' + role}`);
+            decode = await this.checkData(`revoke insert on C##ADMIN.${this.allTable[pos]} from ${'role_qlbenhvien_' + role}`);
+
+            for (let i = 0; i < arrDML.length; i++) {
+
+                if (arrDML[i]['grant']) {
+                    decode = await this.checkData(`grant update (${arrDML[i]['col']}) on C##ADMIN.${this.allTable[pos]} to ${'role_qlbenhvien_' + role} with grant option`);
+                }
+                else {
+                    decode = await this.checkData(`grant ${arrDML[i]['dml']} (${arrDML[i]['col']}) on C##ADMIN.${this.allTable[pos]} to ${'role_qlbenhvien_' + role}`);
+                }
+            }
+        }
+
+        for (let i = 0; i < saveData.length; i++) {
+            if (saveData[i]['COLUMN_NAME'] == null) {
+                decode = await this.checkData(`grant ${saveData[i]['PRIVILEGE']} on C##ADMIN.${this.allTable[pos]} to ${'role_qlbenhvien_' + role}`);
+            }
+        }
+    },
 };
