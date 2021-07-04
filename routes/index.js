@@ -345,6 +345,7 @@ router.post('/admin/user/:username/detail/column/:tablename', async function (re
         res.redirect('/login');
     }
 });
+
 // ================================= Set Role => Role =================================
 
 router.get('/admin/role', async function (req, res, next) {
@@ -588,6 +589,85 @@ router.post('/admin/user/add', async function (req, res, next) {
     }
 });
 
+// ===================================== Audit ========================================
+
+router.get('/admin/audit/fga', async function (req, res, next) {
+    let flag = req.cookies.flag;
+    let tokenFlag = jwt.verify(flag, 'abcd1234', function (err, result) {
+        if (err) {
+            return 0;
+        }
+        else {
+            return 1;
+        }
+    });
+    if (tokenFlag == 1) {
+        let getItem = req.query, data = [];
+        let date = new Date(getItem['addDate']);
+        let getDay = date.getDate();
+        if (getDay < 10) {
+            getDay = '0' + getDay.toString();
+        }
+        let getMonth = date.getMonth() + 1;
+        if (getMonth < 10) {
+            getMonth = '0' + getMonth.toString();
+        }
+    
+        data = await oracledb.getCheckData(`select TIMESTAMP, DB_USER, OBJECT_SCHEMA, 
+        OBJECT_NAME, POLICY_NAME, SQL_TEXT from dba_fga_audit_trail
+        where to_char(timestamp, 'dd') = '${getDay}'
+        and to_char(timestamp, 'mm') = '${getMonth}'
+        and to_char(timestamp, 'yyyy') = '${date.getFullYear()}' and object_name = '${getItem['addTable']}'`);
+        setup.convertDate(data);
+
+        let table = await oracledb.getCheckData(`select table_name from all_tables where owner = 'C##ADMIN'`);
+
+        res.render('audit', { data, table });
+    }
+    else {
+        res.clearCookie('flag');
+        res.redirect('/login');
+    }
+});
+
+router.get('/admin/audit/standand', async function (req, res, next) {
+    let flag = req.cookies.flag;
+    let tokenFlag = jwt.verify(flag, 'abcd1234', function (err, result) {
+        if (err) {
+            return 0;
+        }
+        else {
+            return 1;
+        }
+    });
+    if (tokenFlag == 1) {
+        let getItem = req.query, data = [];
+        let date = new Date(getItem['addDate']);
+        let getDay = date.getDate();
+        if (getDay < 10) {
+            getDay = '0' + getDay.toString();
+        }
+        let getMonth = date.getMonth() + 1;
+        if (getMonth < 10) {
+            getMonth = '0' + getMonth.toString();
+        }
+
+        data = await oracledb.getCheckData(`select TIMESTAMP, USERNAME, OWNER, OBJ_NAME, ACTION_NAME from DBA_AUDIT_TRAIL
+        where to_char(timestamp, 'dd') = '${getDay}'
+        and to_char(timestamp, 'mm') = '${getMonth}'
+        and to_char(timestamp, 'yyyy') = '${date.getFullYear()}'`);
+        setup.convertDate(data);
+        // and object_name = '${getItem['addTable']}'
+        //let table = await oracledb.getCheckData(`select table_name from all_tables where owner = 'C##ADMIN'`);
+
+        res.render('audit-standand', { data });
+    }
+    else {
+        res.clearCookie('flag');
+        res.redirect('/login');
+    }
+});
+
 // ====================================================================================
 
 router.get('/logout', function (req, res, next) {
@@ -616,6 +696,7 @@ router.get('/user', async function (req, res, next) {
                 if (getData.length > 0) {
                     getData[0]['USERNAME'] = getData[0]['USERNAME'].slice(3).toLowerCase();
                     setup.convertDate(getData);
+                    getData[0]['LUONG'] = setup.setMoney(getData[0]['LUONG']);
                 }
                 console.log(getData)
                 res.render('my-user', { idUser, redir, getData });
@@ -654,7 +735,7 @@ router.post('/user/update', async function (req, res, next) {
                         dt: getItem['addPhone'],
                         ngay: getItem['addDate']
                     });
-
+                    console.log(decode)
                 if (getItem['addP'].length > 0) {
                     //let decode = await oracledb.changePass(user, password);
                     let update = await oracledb.changePass(user, password, getItem['addP']);
@@ -678,7 +759,114 @@ router.post('/user/update', async function (req, res, next) {
 
 });
 
-// =======================================================================
+// ======================== Lich truc =====================================
+
+router.get('/schedule', async function (req, res, next) {
+    try {
+        let token = await req.cookies.flag;
+        let reToken = jwt.verify(token, 'abcd1234');
+        reToken = reToken['megreUser'];
+        let user = 'C##' + reToken['userName'], password = reToken['passWord'];
+
+        token = await req.cookies.is_;
+        reToken = jwt.verify(token, 'abcd1234');
+        reToken = reToken['getUser'];
+        let redir = setup.getRedirect(reToken);
+
+        for (let k = 0; k < reToken.length; k++) {
+            if (reToken[k]['GRANTED_ROLE'] != '') {
+                let idUser = reToken[k]['IDNHANVIEN'], query, getItem = req.query;
+                query = `select distinct(nv.vaitro) from c##admin.lichtruc lt, c##admin.nhanvien nv where lt.idnhanvien = nv.idnhanvien`;
+                
+                let vaitro = await oracledb.getCheckDataOfUser(user, password, query);
+                console.log(vaitro);
+
+                let getMonth = getItem['addMon'];
+                if (getItem['addMon'] < 10) {
+                    getMonth = '0' + getItem['addMon'].toString();
+                }
+                query = `select * from c##admin.lichtruc where`;
+                
+                if (getItem['addEmp'] != 'all') {
+                    query += ` idnhanvien = ${getItem['addEmp']}`;
+                }
+                else {
+                    query += ` 1 = 1`;
+                }
+                query += ` and to_char(ngaybatdau, 'mm') = '${getMonth}'
+                and to_char(ngaybatdau, 'yyyy') = '${getItem['addY']}'`;
+                
+                console.log(query)
+
+                let data = await oracledb.getCheckDataOfUser(user, password ,query);
+                console.log(data);
+
+                if (data.length > 0) {
+                    setup.convertDate(data);
+                }
+
+                res.render('lichtruc', { idUser, redir, vaitro, data });
+                break;
+            }
+        }     
+    } catch (error) {
+        //res.clearCookie('flag');
+        res.redirect('/login');
+    }
+
+});
+
+router.post('/schedule', async function (req, res, next) {
+    try {
+        let token = await req.cookies.flag;
+        let reToken = jwt.verify(token, 'abcd1234');
+        reToken = reToken['megreUser'];
+        let user = 'C##' + reToken['userName'], password = reToken['passWord'];
+
+        token = await req.cookies.is_;
+        reToken = jwt.verify(token, 'abcd1234');
+        reToken = reToken['getUser'];
+        let redir = setup.getRedirect(reToken);
+
+        for (let k = 0; k < reToken.length; k++) {
+            if (reToken[k]['GRANTED_ROLE'] != '') {
+                let idUser = reToken[k]['IDNHANVIEN'], query;
+                let hint = '';
+                let search = req.body.query.toLowerCase();
+                console.log(req.body)
+                if (search.length > 0) {
+                    if (reToken[k]['GRANTED_ROLE'] == 'ROLE_QLBENHVIEN_QUANLYTAINGUYENNHANSU') {
+                        query = `select tt.idnhanvien from c##admin.lichtruc tt, c##admin.nhanvien nv where nv.idnhanvien = tt.idnhanvien and upper(nv.vaitro) = '${search.toUpperCase()}' group by tt.idnhanvien order by idnhanvien asc`;
+                        console.log(query)
+                    }
+                    else {
+                        query = `select tt.idnhanvien from c##admin.lichtruc tt group by tt.idnhanvien order by idnhanvien asc`;
+                    }
+                    let data = await oracledb.getCheckDataOfUser(user, password, query);
+                    if (data.length > 0) {
+                        hint += `<option value="all">Tất cả</option>`;
+                        for (let i = 0; i < data.length; i++) {
+                            hint += `<option value="${data[i]['IDNHANVIEN']}">${data[i]['IDNHANVIEN']}</option>`;
+                        }
+                    }
+                    else {
+                        hint += `<option value="all">Tất cả</option>`;
+                    }
+                    console.log(hint)
+                    res.send(hint);
+                }
+                break;
+            }
+        }     
+    } catch (error) {
+        //res.clearCookie('flag');
+        res.redirect('/login');
+    }
+
+});
+
+
+// ====================================================================
 
 
 router.get('/doctor/patient/page-:number', async function (req, res, next) {
@@ -1514,7 +1702,7 @@ router.get('/finance', async function (req, res, next) {
                                 group by nv.idnhanvien, nv.tennhanvien, nv.luong order by nv.idnhanvien asc`;
                     console.log(query);
                     data = await oracledb.getCheckDataOfUser(user, password, query);
-                    console.log(data);
+                    //console.log(data);
                     setup.getMoney(data);
                 }
                 

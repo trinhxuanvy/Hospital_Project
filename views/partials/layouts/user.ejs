@@ -5,6 +5,7 @@
                 <img src="/images/no-user.jpg" alt="">
             </div>
             <a href="/user" class="link-detail-user">Trang cá nhân</a>
+            <a href="/schedule" class="link-detail-user">Lịch trực</a>
             <% if (idUser != '') { %>
                 <% if (redir[0] == 1) { %>
                     <a href="" class="link-detail-user">Quản lý tn & ns</a>
@@ -23,7 +24,7 @@
                 <% } %>
                 <% if (redir[5] == 1) { %>
                     <a href="/doctor/patient/page-1" class="link-detail-user">Bác sĩ</a>
-                    <a href="/service/1" class="link-detail-user">Dịch vụ khám bệnh</a>
+                    <!-- <a href="/service/1" class="link-detail-user">Dịch vụ khám bệnh</a> -->
                 <% } %>
                 <% if (redir[6] == 1) { %>
                     <a href="" class="link-detail-user">Tài vụ</a>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/layouts/head') %>
+
+        <%- include('partials/layouts/styles') %>
+</head>
+
+<body>
+    <div class="admin-page audit-page">
+        <div class="container">
+            <div class="header-top">
+                <div class="nav-top">
+                    <div class="bar-top">
+                        <i class="fa fa-bars" aria-hidden="true"></i>
+                    </div>
+                    <div class="logo-top">
+                        <p class="brand">Adminstrator</p>
+                    </div>
+                </div>
+                <div class="menu-top">
+                    <%- include('partials/layouts/admin-sidebar.ejs')  %> 
+                </div>
+            </div>
+            
+            <div class="body">
+                <div class="header">
+                    <form action="" method="get">
+                        <div class="box-form">
+                            <div class="form-item">
+                                <p class="title">Thời gian</p>
+                                <input type="date" value="" id="addDate" name="addDate">
+                                <label for="addDate"></label>
+                            </div>
+                            <div class="form-item">
+                                <p class="title">Bảng</p>
+                                <select name="addTable" id="addTbale">
+                                    <% table.forEach(item => { %>
+                                     <option value="<%= item['TABLE_NAME'] %>"><%= item['TABLE_NAME'] %></option>
+                                    <% }) %>
+                                </select>
+                                <label for="addTable"></label>
+                            </div>
+                        </div>
+                        <div class="box-btn">
+                            <button class="btn-submit"><i class="fa fa-eye" aria-hidden="true"></i> Xem</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="main">
+                    <div class="box-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>TIMESTAMP</th>
+                                    <th>DB_USER</th>
+                                    <th>OBJECT_SCHEMA</th>
+                                    <th>OBJECT_NAME</th>
+                                    <th>POLICY_NAME</th>
+                                    <th>SQL_TEXT</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% data.forEach(item => { %>
+                                    <tr>
+                                        <td>
+                                            <p><%= item['TIMESTAMP'] %></p>
+                                        </td>
+                                        <td>
+                                            <p><%= item['DB_USER'] %></p>
+                                        </td>
+                                        <td>
+                                            <p><%= item['OBJECT_SCHEMA'] %></p>
+                                        </td>
+                                        <td>
+                                            <p><%= item['OBJECT_NAME'] %></p>
+                                        </td>
+                                        <td>
+                                            <p><%= item['POLICY_NAME'] %></p>
+                                        </td>
+                                        <td>
+                                            <p><%= item['SQL_TEXT'] %></p>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/layouts/scripts') %>
+</body>
+
+</html>

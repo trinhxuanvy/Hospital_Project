@@ -568,6 +568,50 @@ $(document).ready(function () {
         });
     }
 
+    function ChangeEmp() {
+        let select = $('.audit-page .body .header form .box-form .form-item #addBp');
+        let selectOut = $('#addEmp');
+        $(select[0]).change(function (e) { 
+            e.preventDefault();
+            let str = $(select[0]).val();
+            if (str.length > 0) {
+                let href = window.location.href;
+                $.ajax({
+                    url: href,
+                    contentType: "application/json",
+                    method: "POST",
+                    data: JSON.stringify({ query: str }),
+                    success: function (response) {
+                        $(selectOut).html(response);
+                    }
+                });
+            }
+        });
+        
+        // $(inputBox).keyup(function (e) {
+        //     let str = $(this).val();
+        //     let href = window.location.href;
+
+        //     if (str.length === 0) {
+        //         $(searchBox).css('display', 'none');
+        //     }
+        //     else {
+        //         $(searchBox).css('display', 'flex');
+        //     }
+
+        //     $.ajax({
+        //         url: href,
+        //         contentType: "application/json",
+        //         method: "POST",
+        //         data: JSON.stringify({ query: str }),
+        //         success: function (response) {
+        //             $(searchBox).html(response);
+        //         }
+        //     });
+        // });
+    }
+
+    ChangeEmp();
     GetInputDoctor();
     GetInputPharmacy();
 });

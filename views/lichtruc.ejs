@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/layouts/head') %>
+
+    <%- include('partials/layouts/styles') %>
+</head>
+
+<body>
+    <%- include('partials/layouts/header') %>
+
+    <%- include('partials/layouts/user.ejs') %> 
+
+    <div class="admin-page audit-page">
+        <div class="container">
+            
+            <div class="body">
+                <div class="header">
+                    <form action="/schedule" method="get">
+                        <div class="box-form">
+                            <div class="form-item">
+                                <p class="title">Tháng</p>
+                                <select name="addMon" id="addMon">
+                                    <% for( let index = 0; index < 12; index++ ) { %>
+                                        <option value="<%= index + 1 %>"><%= index + 1 %></option>
+                                    <% } %>
+                                </select>
+                                <label for="addMon"></label>
+                            </div>
+                            <div class="form-item">
+                                <p class="title">Năm</p>
+                                <select name="addY" id="addY">
+                                    <% for( let index = 1999; index < 2030; index++ ) { %>
+                                        <option value="<%= index %>"><%= index %></option>
+                                    <% } %>
+                                </select>
+                                <label for="addY"></label>
+                            </div>
+                            <div class="form-item">
+                                <p class="title">Bộ phận</p>
+                                <select name="addBp" id="addBp">
+                                    <option value="">Chọn</option>
+                                    <% vaitro.forEach(item => { %>
+                                     <option value="<%= item['VAITRO'] %>"><%= item['VAITRO'] %></option>
+                                    <% }) %>
+                                </select>
+                                <label for="addBp"></label>
+                            </div>
+                            <div class="form-item">
+                                <p class="title">Nhân viên</p>
+                                <select name="addEmp" id="addEmp">
+                                </select>
+                                <label for="addEmp"></label>
+                            </div>
+                        </div>
+                        <div class="box-btn">
+                            <button class="btn-submit"><i class="fa fa-eye" aria-hidden="true"></i> Xem</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="main">
+                    <div class="box-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Mã phòng</th>
+                                    <th>Mã nhân viên</th>
+                                    <th>Ngày bắt đầu</th>
+                                    <th>Ngày kết thúc</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% data.forEach(item => { %>
+                                 <tr>
+                                     <td>
+                                         <p><%= item['IDPHONG'] %></p>
+                                     </td>
+                                     <td>
+                                         <p><%= item['IDNHANVIEN'] %></p>
+                                     </td>
+                                     <td>
+                                         <p><%= item['NGAYBATDAU'] %></p>
+                                     </td>
+                                     <td>
+                                         <p><%= item['NGAYKETTHUC'] %></p>
+                                     </td>
+                                 </tr>
+                                <% }) %> 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/layouts/footer')  %> 
+
+    <%- include('partials/layouts/scripts') %>
+</body>
+
+</html>

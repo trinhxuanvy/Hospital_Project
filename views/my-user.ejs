@@ -30,7 +30,7 @@
                                 <th>Mã nhân viên</th>
                                 <th>Đơn vị</th>
                                 <th>Vai trò</th>
-                                <th>Lương</th>
+                                <th>Lương cơ bản</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,7 +57,11 @@
                                         <p><%= getData[0]['VAITRO'] %></p>
                                     </div>
                                 </th>
-                                <th></th>
+                                <th>
+                                    <div class="item-form">
+                                        <p><%= getData[0]['LUONG'] %> VNĐ / <span style="font-size: 12px;">ngày</span></p>
+                                    </div>
+                                </th>
                             </tr>
                         </tbody>
                     </table>

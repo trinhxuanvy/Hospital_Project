@@ -320,6 +320,14 @@ module.exports = {
                 let date = new Date(obj[i]['NGAYLAP']);
                 obj[i]['NGAYLAP'] = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} - ${date.getDate().toString()}/${(date.getMonth() + 1).toString()}/${date.getFullYear().toString()}`;
             }
+            else if (obj[i]['TIMESTAMP'] != null) {
+                let date = new Date(obj[i]['TIMESTAMP']);
+                obj[i]['TIMESTAMP'] = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} - ${date.getDate().toString()}/${(date.getMonth() + 1).toString()}/${date.getFullYear().toString()}`;
+            }
+            if (obj[i]['NGAYKETTHUC'] != null) {
+                let date = new Date(obj[i]['NGAYKETTHUC']);
+                obj[i]['NGAYKETTHUC'] = `${date.getDate().toString()}/${(date.getMonth() + 1).toString()}/${date.getFullYear().toString()}`;
+            }
         }
     },
 
