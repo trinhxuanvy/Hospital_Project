@@ -2602,6 +2602,119 @@ $color_primary_b: #08974b;
     }
 }
 
+.view-hskb {
+    .body {
+        display: block !important;
+        .header {
+            form {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: flex-end;
+                margin: 32px auto;
+                .box-form {
+                    display: flex;
+                    .form-item {
+                        margin-right: 16px;
+                        .title {
+                            color: $color_primary;
+                            padding: 8px 0;
+                            font-weight: bolder;
+                            font-size: 20px;
+                        }
+                        select {
+                            border: 1px solid #dadada;
+                            padding: 15px 16px;
+                            width: 200px;
+                        }
+                    }
+                    
+                }
+                .box-btn {
+                    padding-bottom: 0 !important;
+                    .btn-submit {
+                        border: 1px solid $color_primary;
+                        background-color: $color_primary;
+                        color: #fff;
+                        width: 150px;
+                        padding: 16px 0;
+                        cursor: pointer;
+                        transition: 0.2s;
+                        &:hover {
+                            background-color: $color_primary_b;
+                        }
+                    }
+                }
+            }
+        }
+        .main {
+            padding: 0 32px 32px;
+            .box-table {
+                height: 400px;
+                overflow: scroll;
+                min-width: 100px;
+                table {
+                    border-collapse: collapse;
+                    width: 100%;
+                    //border: 1px solid #dadada;
+                    thead {
+                        tr {
+                            th {
+                                padding: 16px;
+                                border: 1px solid #dadada;
+                                color: $color_primary;
+                                &:nth-child(1) {
+                                    width: 8%;
+                                }
+                                &:nth-child(2) {
+                                    width: 8%;
+                                }
+                                &:nth-child(3) {
+                                    width: 8%;
+                                }
+                                &:nth-child(4) {
+                                    width: 14%;
+                                }
+                                &:nth-child(5) {
+                                    width: 8%;
+                                }
+                                &:nth-child(6) {
+                                    width: 14%;
+                                }
+                                &:nth-child(7) {
+                                    width: 10%;
+                                }
+                                &:nth-child(8) {
+                                    width: 10%;
+                                }
+                                &:nth-child(9) {
+                                    width: 20%;
+                                }
+                            }
+                        }
+                    }
+                    tbody {
+                        tr {
+                            td{
+                                border: 1px solid #dadada;
+                                p {
+                                    font-size: 13px;
+                                    padding: 8px;
+                                    white-space: nowrap;
+                                    text-overflow: ellipsis;
+                                    overflow: hidden;
+                                    display: block;
+                                    max-width: 200px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 // Audit page
 .audit-page {
     .body {

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/layouts/head') %>
+
+    <%- include('partials/layouts/styles') %>
+
+    
+</head>
+
+<body>
+    <%- include('partials/layouts/header') %>
+
+    <%- include('partials/layouts/user.ejs') %> 
+
+    <div class="container-item reception-page view-hskb">
+        <div class="categories-1">
+            <div class="content">
+                <div class="header">
+                    <p class="title">
+                        Quầy tiếp tân
+                        <img src="/images/logo-1.gif" alt="">
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="body">
+            <div class="header">
+                <form action="" method="get">
+                    <div class="box-form">
+                        <div class="form-item">
+                            <p class="title">Danh sách hồ sơ</p>
+                            <select name="addId" id="addId">
+                                <% allId.forEach(item => { %>
+                                    <option value="<%= item['IDHOSOBENHAN'] %>"><%= item['NGAYKHAM'] %></option>
+                                <% }) %>
+                            </select>
+                            <label for="addId"></label>
+                        </div>
+                    </div>
+                    <div class="box-btn">
+                        <button class="btn-submit"><i class="fa fa-eye" aria-hidden="true"></i> Xem</button>
+                    </div>
+                </form>
+            </div>
+            <div class="main">
+                <div class="box-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mã hồ sơ</th>
+                                <th>Mã bệnh nhân</th>
+                                <th>Mã BS điều trị</th>
+                                <th>Tên BS điều trị</th>
+                                <th>Mã NV điểu phối</th>
+                                <th>Tên NV điều phối</th>
+                                <th>Tình trạng ban đầu</th>
+                                <th>Ngày khám</th>
+                                <th>Kết luận bác sĩ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% decode.forEach(item => { %>
+                                <tr>
+                                    <td>
+                                        <p><%= item['IDHOSOBENHAN'] %></p>
+                                    </td>
+                                    <td>
+                                        <p><%= item['IDBENHNHAN'] %></p>
+                                    </td>
+                                    <td>
+                                        <p><%= item['BSDIEUTRI'] %></p>
+                                    </td>
+                                    <td>
+                                        <p><%= item['BACSI'] %></p>
+                                    </td>
+                                    <td>
+                                        <p><%= item['NVDIEUPHOI'] %></p>
+                                    </td>
+                                    <td>
+                                        <p><%= item['TIEPTAN'] %></p>
+                                    </td>
+                                    <td>
+                                        <p><%= item['TINHTRANGBANDAU'] %></p>
+                                    </td>
+                                    <td>
+                                        <p><%= item['NGAYKHAM'] %></p>
+                                    </td>
+                                    <td>
+                                        <p><%= item['KETLUANBS'] %></p>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <a href="/reception" style="display: block; background-color: #00AC4F; color: #fff; text-align: center; border: 1px solid #00AC4F; width: 150px; padding: 16px 0; margin: 32px auto;">Quay lại</a>
+    </div>
+
+    <%- include('partials/layouts/footer')  %> 
+
+    <%- include('partials/layouts/scripts') %>
+</body>
+
+</html>

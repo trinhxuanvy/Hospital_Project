@@ -580,7 +580,7 @@ router.post('/admin/user/add', async function (req, res, next) {
         console.log(insert)
         let idU = await oracledb.getCheckData(`select idnhanvien from c##admin.nhanvien where username = upper('${role['addUName']}')`)
         insert = await oracledb.setData(`begin create_user(:name, :pass); end;`, { name: role['addUName'], pass: getID[0]['MAX'] + 1 });
-
+        insert = await oracledb.setData(`begin PRO_NHANVIEN_OLS(:id); end;`, { id: getID[0]['MAX'] + 1 });
         res.redirect(`/admin/user`);
     }
     else {
@@ -653,7 +653,7 @@ router.get('/admin/audit/standand', async function (req, res, next) {
         }
 
         data = await oracledb.getCheckData(`select TIMESTAMP, USERNAME, OWNER, OBJ_NAME, ACTION_NAME from DBA_AUDIT_TRAIL
-        where to_char(timestamp, 'dd') = '${getDay}'
+        where action_name = 'EXECUTE PROCEDURE' and to_char(timestamp, 'dd') = '${getDay}'
         and to_char(timestamp, 'mm') = '${getMonth}'
         and to_char(timestamp, 'yyyy') = '${date.getFullYear()}'`);
         setup.convertDate(data);
@@ -688,7 +688,7 @@ router.get('/user', async function (req, res, next) {
         reToken = jwt.verify(token, 'abcd1234');
         reToken = reToken['getUser'];
         let redir = setup.getRedirect(reToken);
-
+        
         for (let k = 0; k < reToken.length; k++) {
             if (reToken[k]['GRANTED_ROLE'] != '') {
                 let idUser = reToken[k]['IDNHANVIEN'];
@@ -696,7 +696,8 @@ router.get('/user', async function (req, res, next) {
                 if (getData.length > 0) {
                     getData[0]['USERNAME'] = getData[0]['USERNAME'].slice(3).toLowerCase();
                     setup.convertDate(getData);
-                    getData[0]['LUONG'] = setup.setMoney(getData[0]['LUONG']);
+
+                    getData[0]['LUONG'] = getData[0]['LUONG'] != null ? setup.setMoney(getData[0]['LUONG']) : 0;
                 }
                 console.log(getData)
                 res.render('my-user', { idUser, redir, getData });
@@ -776,7 +777,8 @@ router.get('/schedule', async function (req, res, next) {
         for (let k = 0; k < reToken.length; k++) {
             if (reToken[k]['GRANTED_ROLE'] != '') {
                 let idUser = reToken[k]['IDNHANVIEN'], query, getItem = req.query;
-                query = `select distinct(nv.vaitro) from c##admin.lichtruc lt, c##admin.nhanvien nv where lt.idnhanvien = nv.idnhanvien`;
+                query = `select distinct(nv.vaitro) from c##admin.nhanvien nv`;
+                
                 
                 let vaitro = await oracledb.getCheckDataOfUser(user, password, query);
                 console.log(vaitro);
@@ -835,9 +837,13 @@ router.post('/schedule', async function (req, res, next) {
                 let search = req.body.query.toLowerCase();
                 console.log(req.body)
                 if (search.length > 0) {
-                    if (reToken[k]['GRANTED_ROLE'] == 'ROLE_QLBENHVIEN_QUANLYTAINGUYENNHANSU') {
+                    if (reToken[k]['GRANTED_ROLE'] == 'ROLE_QLBENHVIEN_QUANLYTAINGUYENNHANSU' 
+                    || reToken[k]['GRANTED_ROLE'] == 'ROLE_QLBENHVIEN_QUANLYTAIVU' 
+                    || reToken[k]['GRANTED_ROLE'] == 'ROLE_QLBENHVIEN_QUANLYCHUYENMON' 
+                    || reToken[k]['GRANTED_ROLE'] == 'ROLE_QLBENHVIEN_KETOAN'
+                    || reToken[k]['GRANTED_ROLE'] == 'ROLE_QLBENHVIEN_TIEPTAN') {
                         query = `select tt.idnhanvien from c##admin.lichtruc tt, c##admin.nhanvien nv where nv.idnhanvien = tt.idnhanvien and upper(nv.vaitro) = '${search.toUpperCase()}' group by tt.idnhanvien order by idnhanvien asc`;
-                        console.log(query)
+                        console.log(query, 'dsadsdsadasdsad')
                     }
                     else {
                         query = `select tt.idnhanvien from c##admin.lichtruc tt group by tt.idnhanvien order by idnhanvien asc`;
@@ -1551,6 +1557,53 @@ router.get('/reception/patient/:id/delete', async function (req, res, next) {
                 let query = `delete from C##ADMIN.benhnhan where idbenhnhan = :idbn`;
                 let decode = await oracledb.setCheckDataOfUser(user, password, query, { idbn: idPat });
                 res.redirect(`/reception`)
+
+                break;
+            }
+        }
+    } catch (error) {
+        res.clearCookie('flag');
+        res.redirect('/login');
+    }
+});
+
+router.get('/reception/patient/:id/hosokhambenh', async function (req, res, next) {
+    try {
+        let token = await req.cookies.flag;
+        let reToken = jwt.verify(token, 'abcd1234');
+        reToken = reToken['megreUser'];
+        let user = 'C##' + reToken['userName'], password = reToken['passWord'];
+
+        token = await req.cookies.is_;
+        reToken = jwt.verify(token, 'abcd1234');
+        reToken = reToken['getUser'];
+        let redir = setup.getRedirect(reToken);
+
+        if (redir[7] == 0) {
+            res.clearCookie('flag');
+            res.redirect('/login');
+        }
+
+        for (let k = 0; k < reToken.length; k++) {
+            if (reToken[k]['GRANTED_ROLE'] == 'ROLE_QLBENHVIEN_TIEPTAN') {
+                let idPat = req.params.id || '', idUser = reToken[k]['IDNHANVIEN'];
+                let query = `select hsba.*, bs.tennhanvien as bacsi, tt.tennhanvien as tieptan
+                from c##admin.hosobenhan hsba, c##admin.nhanvien bs, c##admin.nhanvien tt
+                where hsba.bsdieutri = bs.idnhanvien
+                and hsba.nvdieuphoi = tt.idnhanvien and hsba.idbenhnhan = ${idPat}
+                and hsba.idhosobenhan = ${req.query['addId']}`;
+                let decode = await oracledb.getCheckDataOfUser(user, password, query);
+
+                if (decode.length > 0) {
+                    setup.convertDate(decode);
+                }
+                console.log(decode)
+                query = `select * from c##admin.hosobenhan where idbenhnhan = ${idPat}`;
+                let allId = await oracledb.getCheckDataOfUser(user, password, query);
+                if (allId.length > 0) {
+                    setup.convertDate(allId);
+                }
+                res.render(`view-hskb`, { redir, idUser, decode, allId });
 
                 break;
             }
